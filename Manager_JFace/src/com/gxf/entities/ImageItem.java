@@ -26,6 +26,14 @@ public class ImageItem {
 	private boolean isBold;									// «∑Ò–±ÃÂ°¢º”¥÷
 	private boolean isItalic;
 	
+	private String imageItemName;
+	
+	public String getImageItemName() {
+		return imageItemName;
+	}
+	public void setImageItemName(String imageItemName) {
+		this.imageItemName = imageItemName;
+	}
 	public boolean isBold() {
 		return isBold;
 	}

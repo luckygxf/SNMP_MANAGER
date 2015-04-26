@@ -1,7 +1,10 @@
 package com.gxf.composite;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.action.MenuManager;
@@ -21,6 +24,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -78,6 +82,9 @@ public class WordPicEditTool extends ApplicationWindow {
 	private Button btn_deleteWord;
 	private Button btn_deleteAllWord;
 	private Shell curShell;
+	
+	//播放方案名称
+	public String solutionName;
 
 	
 	/**
@@ -267,6 +274,7 @@ public class WordPicEditTool extends ApplicationWindow {
 			}
 		});
 		
+		
 		//list_word添加监听事件
 		list_word.addSelectionListener(new WordsListenerImpl());
 		//删除文字添加监听事件
@@ -275,6 +283,14 @@ public class WordPicEditTool extends ApplicationWindow {
 		btn_deleteAllWord.addSelectionListener(new ButtonSelectionListenerImp());
 		//添加图片添加监听事件
 		btn_addImage.addSelectionListener(new ButtonSelectionListenerImp());
+		//删除图片添加监听事件
+		btn_delImage.addSelectionListener(new ButtonSelectionListenerImp());
+		//删除所有图片
+		btn_deleteAllImage.addSelectionListener(new ButtonSelectionListenerImp());
+		//添加到播放方案
+		btn_imageCreate.addSelectionListener(new ButtonSelectionListenerImp());
+		//关闭窗口
+		btn_close.addSelectionListener(new ButtonSelectionListenerImp());
 	}
 	/**
 	 * Create the actions.
@@ -381,13 +397,40 @@ public class WordPicEditTool extends ApplicationWindow {
 					messageBox.open();
 					return;
 				}				
-				deleteWorld(index);
+				deleteWorld(list_word.getItem(index));
 			}
 			else if(e.getSource() == btn_deleteAllWord){				//删除所有文字
 				deleteAllWord();
 			}
 			else if(e.getSource() == btn_addImage){						//添加图片
 				addImage();
+			}
+			else if(e.getSource() == btn_delImage){						//删除图片
+				int index = list_image.getSelectionIndex();
+				
+				if(index == -1){
+					MessageBox messageBox = new MessageBox(curShell, SWT.OK);
+					messageBox.setText("提示");
+					messageBox.setMessage("请选择要删除的图片");
+					messageBox.open();
+					return;
+				}
+				
+				deleteImage(list_image.getItem(list_image.getSelectionIndex()));
+			}
+			else if(e.getSource() == btn_deleteAllImage){				//删除所有图片
+				deleteAllImage();
+			}
+			else if(e.getSource() == btn_imageCreate){					//添加到播放方案
+				saveToPlaySolution("海贼王");
+				
+				MessageBox messageBox = new MessageBox(curShell, SWT.OK);
+				messageBox.setText("提示");
+				messageBox.setMessage("图片添加成功!");
+				messageBox.open();
+			}
+			else if(e.getSource() == btn_close){						//关闭窗口
+				closeWindow();
 			}
 		}		
 	}
@@ -487,6 +530,8 @@ public class WordPicEditTool extends ApplicationWindow {
 	 */
 	public void getImageItem(){
 		ImageItem imageItem = new ImageItem();
+		//添加imageItemName区分图片和文字
+		imageItem.setImageItemName(txt_addWord.getText());
 		String style = combo_wordStyles.getItem(combo_wordStyles.getSelectionIndex());
 		imageItem.setFontNameIndex(combo_wordStyles.getSelectionIndex());
 		int height = Integer.valueOf(combo_wordSize.getItem(combo_wordSize.getSelectionIndex()));
@@ -612,12 +657,13 @@ public class WordPicEditTool extends ApplicationWindow {
 	 * 删除文字
 	 * @param index
 	 */
-	public void deleteWorld(int index){
-		imageItems.remove(index);
-		Label label = labelItems.get(index);
-		labelItems.remove(index);
+	private void deleteWorld(String imageItemName){
+		int imageItemIndex = getImageItemIndex(imageItemName);
+		imageItems.remove(imageItemIndex);
+		Label label = labelItems.get(imageItemIndex);
+		labelItems.remove(imageItemIndex);
 		label.dispose();
-		list_word.remove(index);
+		list_word.remove(list_word.getSelectionIndex());
 		txt_addWord.setText("");
 		canvas_show.redraw();
 	}
@@ -625,12 +671,18 @@ public class WordPicEditTool extends ApplicationWindow {
 	/**
 	 * 删除所有的文字
 	 */
-	public void deleteAllWord(){
-		imageItems.clear();
-		for(Label label : labelItems){
-			label.dispose();
+	private void deleteAllWord(){
+		Iterator<Label> it_lb = labelItems.iterator();
+		for(Iterator<ImageItem> it = imageItems.iterator(); it.hasNext();){
+			ImageItem imageItem = it.next();
+			Label label = it_lb.next();
+			if(imageItem.getImageData() == null){
+				it.remove();
+				it_lb.remove();
+				label.dispose();
+			}//if
+			
 		}
-		labelItems.clear();
 		list_word.removeAll();
 		txt_addWord.setText("");
 		canvas_show.redraw();
@@ -644,6 +696,7 @@ public class WordPicEditTool extends ApplicationWindow {
 		imageDialog.setFilterExtensions(new String[]{"*.bmp"});
 		
 		String imagePath = imageDialog.open();
+
 		if(imagePath != null){
 			ImageData imageData = new ImageData(imagePath);
 			ImageItem imageItem = new ImageItem();
@@ -659,9 +712,107 @@ public class WordPicEditTool extends ApplicationWindow {
 			
 			//添加监听事件
 			label.addMouseListener(new LabelMoveListenerImpl());
-			
+			//向list中添加文件名
+			int lastFileSeparatporIndex = imagePath.lastIndexOf(File.separator);
+			String imageName = imagePath.substring(lastFileSeparatporIndex + 1, imagePath.length());
+			//添加imageItemName区分文字和图片
+			imageItem.setImageItemName(imageName);
+			list_image.add(imageName);
 			//刷新画布显示
 			canvas_show.redraw();
 		}
+	}
+	
+	/**
+	 * 删除图片
+	 */
+	private void deleteImage(String imageItemName){
+		int imageItemIndex = getImageItemIndex(imageItemName);
+		
+		imageItems.remove(imageItemIndex);
+		Label label = labelItems.get(imageItemIndex);
+		labelItems.remove(imageItemIndex);
+		label.dispose();
+		list_image.remove(list_image.getSelectionIndex());
+		canvas_show.redraw();
+	}
+	
+	/**
+	 * 根据imageItemName查找在imageItems中索引
+	 * @param imageItemName
+	 * @return
+	 */
+	private int getImageItemIndex(String imageItemName){
+		int index = -1;
+		for(int i = 0; i < imageItems.size(); i++){
+			ImageItem imageItem = imageItems.get(i);
+			if(imageItem.getImageItemName().equals(imageItemName))
+			{
+				index = i;
+				break;
+			}//if
+		}//for
+		
+		return index;
+	}
+	
+	/**
+	 * 删除所有添加的image
+	 */
+	private void deleteAllImage(){
+		Iterator<Label> it_lb = labelItems.iterator();
+		for(Iterator<ImageItem> it = imageItems.iterator(); it.hasNext();){
+			ImageItem imageItem = it.next();
+			Label label = it_lb.next();
+			if(imageItem.getImageData() != null){
+				it.remove();
+				it_lb.remove();
+				label.dispose();
+			}//if
+			
+		}
+		list_image.removeAll();
+
+		canvas_show.redraw();
+	}
+	
+	/**
+	 * 保存到播放方案路径下
+	 * @param solutionName
+	 */
+	private void saveToPlaySolution(String solutionName){
+//		GC gc = arg0.gc;
+//		gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+//		gc.drawString("test", xToDraw, yToDraw, true);
+//		Image image = new Image(Display.getCurrent(), canvas_1.getSize().x, canvas_1.getSize().y);
+//		gc.copyArea(image, 0, 0);
+//		ImageData imageData = image.getImageData();
+//		ImageLoader imageLoader = new ImageLoader();
+//		imageLoader.data = new ImageData[]{imageData};
+////		imageLoader.save("d:\\newPic.JPG", SWT.IMAGE_JPEG);
+		GC gc = new GC(canvas_show);
+		Image image = new Image(Display.getCurrent(), canvas_show.getSize().x, canvas_show.getSize().y);
+		gc.copyArea(image, 0, 0);
+		ImageData imageData = image.getImageData();
+		ImageLoader imageLoader = new ImageLoader();
+		imageLoader.data = new ImageData[]{imageData};
+		
+		//图片名字用时间戳，精确到毫秒，确保不重复
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+		Date date = new Date();
+		String date_str = sdf.format(date);
+		//设置图片路径
+		String imagePath = util.getCurrentProjectPath() + File.separator + "playSolutions" 
+							+ File.separator  + solutionName + File.separator + date_str + ".bmp";
+		System.out.println("imagePath = " + imagePath);
+		//保存图片
+		imageLoader.save(imagePath, SWT.IMAGE_BMP);		
+	}
+	
+	/**
+	 * 关闭窗口
+	 */
+	public void closeWindow(){
+		curShell.dispose();
 	}
 }
