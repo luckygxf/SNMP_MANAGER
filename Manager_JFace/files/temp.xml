@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<style>1</style>
+	<timeInterval>1</timeInterval>
+	<date_start>
+		<day>6</day>
+		<month>7</month>
+		<year>1990</year>
+	</date_start>
+	<date_end>
+		<day>20</day>
+		<month>3</month>
+		<year>2015</year>
+	</date_end>
+	<time_start>
+		<second>0</second>
+		<minute>0</minute>
+		<hour>0</hour>
+	</time_start>
+	<time_end>
+		<second>27</second>
+		<minute>22</minute>
+		<hour>15</hour>
+	</time_end>
+	<weekdays>
+		<weekday0>1</weekday0>
+		<weekday1>1</weekday1>
+		<weekday2>0</weekday2>
+		<weekday3>1</weekday3>
+		<weekday4>1</weekday4>
+		<weekday5>1</weekday5>
+		<weekday6>0</weekday6>
+	</weekdays>
+</config>
