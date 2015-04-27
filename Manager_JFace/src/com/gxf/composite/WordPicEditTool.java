@@ -781,15 +781,6 @@ public class WordPicEditTool extends ApplicationWindow {
 	 * @param solutionName
 	 */
 	private void saveToPlaySolution(String solutionName){
-//		GC gc = arg0.gc;
-//		gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-//		gc.drawString("test", xToDraw, yToDraw, true);
-//		Image image = new Image(Display.getCurrent(), canvas_1.getSize().x, canvas_1.getSize().y);
-//		gc.copyArea(image, 0, 0);
-//		ImageData imageData = image.getImageData();
-//		ImageLoader imageLoader = new ImageLoader();
-//		imageLoader.data = new ImageData[]{imageData};
-////		imageLoader.save("d:\\newPic.JPG", SWT.IMAGE_JPEG);
 		GC gc = new GC(canvas_show);
 		Image image = new Image(Display.getCurrent(), canvas_show.getSize().x, canvas_show.getSize().y);
 		gc.copyArea(image, 0, 0);

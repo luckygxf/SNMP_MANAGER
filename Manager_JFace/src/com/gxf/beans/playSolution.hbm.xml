@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.gxf.beans">
+
+    <class name="com.gxf.beans.PlaySolution" table="playSolution">
+        <id name="id" type="integer">
+        	<column name="id"></column> 
+        	<generator class ="identity"></generator>
+        </id>
+        <property name="name" type="string">
+        	<column name="name" length="50"/>
+        </property>
+        <property name="createTime" type="date">
+        	<column name="createTime"/>
+        </property>
+        <property name="updateTime" type="date">
+        	<column name="updatetime"/>
+        </property>
+        <property name="updateCount" type="integer">
+        	<column name="updateCount"/>
+        </property>
+        <property name="comment" type="string">
+        	<column name="comment" length="100"/>
+        </property>
+        
+        <set name="displays" inverse="false" lazy="true" cascade="delete" table = "displayandsolution">
+             <key>
+                  <column name="solutionId"/>
+             </key>
+             <many-to-many column="displayId" class="com.gxf.beans.Display" />
+        </set>
+    </class>
+
+</hibernate-mapping>

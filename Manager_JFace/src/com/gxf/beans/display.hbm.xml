@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.gxf.beans">
+
+    <class name="com.gxf.beans.Display" table="display">
+        <id name="id" type="integer">
+        	<column name="id"></column> 
+        	<generator class ="identity"></generator>
+        </id>
+        <property name="name" type="string">
+        	<column name="name" length="50"/>
+        </property>
+       	<property name="type" type="string">
+        	<column name="type" length="50"/>
+        </property>
+        <property name="comment" type="string">
+        	<column name="comment" length="100"/>
+        </property>
+        <many-to-one name="curPlaySolution" column="curPlaySolutionId">
+        
+        </many-to-one> 
+        <set name="solutions" inverse="false" lazy="false" cascade="delete" table = "displayandsolution">
+             <key>
+                  <column name="displayId"/>
+             </key>
+             <many-to-many column="solutionId" class="com.gxf.beans.PlaySolution" />
+        </set>
+        
+        <set name="communications" inverse="false" lazy="false" cascade="delete" table = "displayandcommunication">
+             <key>
+                  <column name="displayId"/>
+             </key>
+             <many-to-many column="communicationId" class="com.gxf.beans.Communication" />
+        </set>
+    </class>
+
+</hibernate-mapping>
