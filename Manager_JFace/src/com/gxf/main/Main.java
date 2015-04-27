@@ -130,6 +130,10 @@ public class Main extends ApplicationWindow {
 		btn_sendSolution.addSelectionListener(new ButtonListenerImpl());
 		btn_sendMessage.addSelectionListener(new ButtonListenerImpl());
 		btn_hostList.addSelectionListener(new ButtonListenerImpl());
+		
+		//初始化显示发送播放方案面面板
+		Composite composite_playSoltion = new SendPlaySolution(tabFolder_workspace, SWT.NONE);
+		addTabItem("发送播放方案", composite_playSoltion);
 	}
 	/**
 	 * Create the menu manager.

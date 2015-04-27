@@ -291,6 +291,8 @@ public class WordPicEditTool extends ApplicationWindow {
 		btn_imageCreate.addSelectionListener(new ButtonSelectionListenerImp());
 		//¹Ø±Õ´°¿Ú
 		btn_close.addSelectionListener(new ButtonSelectionListenerImp());
+		//Ë«»÷»­²¼Ô¤ÀÀ
+		canvas_show.addMouseListener(new MouseListenerImplForPreviewImage());
 	}
 	/**
 	 * Create the actions.
@@ -601,6 +603,7 @@ public class WordPicEditTool extends ApplicationWindow {
 		label.addMouseListener(new LabelMoveListenerImpl());
 		//¸üÐÂ»­²¼ÏÔÊ¾
 		canvas_show.redraw();
+		
 	}
 	
 	/**
@@ -806,4 +809,38 @@ public class WordPicEditTool extends ApplicationWindow {
 	public void closeWindow(){
 		curShell.dispose();
 	}
+	
+	/**
+	 * Ë«»÷Ô¤ÀÀÍ¼Æ¬
+	 * @author Administrator
+	 *
+	 */
+	class MouseListenerImplForPreviewImage implements MouseListener{
+		@Override
+		public void mouseDoubleClick(MouseEvent arg0) {
+			GC gc = new GC(canvas_show);
+			Image image = new Image(Display.getCurrent(), canvas_show.getSize().x, canvas_show.getSize().y);
+			gc.copyArea(image, 0, 0);
+			ImageData imageData = image.getImageData();
+
+			PreviewPic previewPic = new PreviewPic();
+			previewPic.setImageData(imageData);
+			previewPic.open();
+			
+		}
+
+		@Override
+		public void mouseDown(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseUp(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+
+	
 }
