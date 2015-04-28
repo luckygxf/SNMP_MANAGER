@@ -45,4 +45,30 @@ public class CommunicationDaoImpl implements CommunicationDao {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.CommunicationDao#deleteCommunication(com.gxf.beans.Communication)
+	 */
+	@Override
+	public void deleteCommunication(Communication communication) {
+		Session session = baseDao.getSession();
+		session.beginTransaction();
+		session.delete(communication);
+		session.getTransaction().commit();
+		session.close();
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.CommunicationDao#queryCommunicationById(int)
+	 */
+	@Override
+	public Communication queryCommunicationById(int id) {
+		Session session = baseDao.getSession();
+		session.beginTransaction();
+		Communication com = (Communication) session.get(Communication.class, id);
+		session.getTransaction().commit();
+		session.close();
+		return com;
+	}
+
 }

@@ -7,7 +7,7 @@
 
     <class name="com.gxf.beans.Communication" table="communication">
         <id name="id" type="integer">
-        	<column name="id"></column> 
+        	<column name="communicationId"></column> 
         	<generator class ="identity"></generator>
         </id>
         <property name="name" type="string">

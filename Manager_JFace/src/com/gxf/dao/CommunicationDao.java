@@ -16,4 +16,17 @@ public interface CommunicationDao {
 	 * @return
 	 */
 	public Communication queryCommunicatioByName(String name);
+	
+	/**
+	 * 删除通信方式
+	 * @param communication
+	 */
+	public void deleteCommunication(Communication communication);
+	
+	/**
+	 * 根据id查询通信方式
+	 * @param id
+	 * @return
+	 */
+	public Communication queryCommunicationById(int id);
 }

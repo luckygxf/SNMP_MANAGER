@@ -10,11 +10,14 @@ import org.hibernate.Transaction;
 
 import com.gxf.beans.Display;
 import com.gxf.dao.BaseDao;
+import com.gxf.dao.CommunicationDao;
 import com.gxf.dao.DisplayDao;
 
 public class DisplayDaoImpl implements DisplayDao {
 	
 	private BaseDao baseDao = new BaseDao();
+	private CommunicationDao communicationDao = new CommunicationDaoImpl();
+	
 	
 	/* (non-Javadoc)
 	 * @see com.gxf.dao.DisplayDao#addDisplay(com.gxf.beans.Display)
@@ -53,14 +56,19 @@ public class DisplayDaoImpl implements DisplayDao {
 	@Override
 	public void deleteDisplayById(int displayId) {
 		Session session = baseDao.getSession();
+		//获取display对象
+		Display display = (Display)session.get(Display.class, displayId);
+		int communicationId = display.getCommunication().getId();
+		
 		String hql = "delete Display d where d.id = ?";
 		Transaction tx = session.beginTransaction();
 		Query query = session.createQuery(hql);
 		query.setString(0, String.valueOf(displayId));
 		query.executeUpdate();
-		
 		tx.commit();
 		session.close();
+		//删除对应的通信方式
+		communicationDao.deleteCommunication(communicationDao.queryCommunicationById(communicationId));
 	}
 
 	/* (non-Javadoc)
@@ -76,8 +84,35 @@ public class DisplayDaoImpl implements DisplayDao {
 		List<Display> listOfDisplays = query.list();
 		tx.commit();
 		session.close();
-		
+		if(listOfDisplays == null || listOfDisplays.size() == 0)
+			return null;
 		return listOfDisplays.get(0);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.DisplayDao#updateDisplay(com.gxf.beans.Display)
+	 */
+	@Override
+	public void updateDisplay(Display display) {
+		Session session = baseDao.getSession();
+		session.beginTransaction();
+		session.update(display);
+		session.getTransaction().commit();
+		session.close();
+	}
+
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.DisplayDao#queryDisplayById(int)
+	 */
+	@Override
+	public Display queryDisplayById(int id) {
+		Session session = baseDao.getSession();
+		session.beginTransaction();
+		Display display = (Display)session.get(Display.class, id);
+		session.getTransaction().commit();
+		session.close();
+		
+		return display;
 	}
 	
 }

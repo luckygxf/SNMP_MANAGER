@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -48,9 +50,10 @@ public class HostListComposite extends Composite {
 	
 	//显示屏DAO
 	private static DisplayDao displayDao = new DisplayDaoImpl();
-	//显示屏列表，从数据库中读取出来的
-	
+	//显示屏列表，从数据库中读取出来的	
 	private static List<com.gxf.beans.Display> listOfDisplay = new ArrayList<com.gxf.beans.Display>();
+	private static List<com.gxf.entities.TableItem> listOfItems = new ArrayList<com.gxf.entities.TableItem>();
+	
 	
 	public HostListComposite(Composite parent, int style) {
 		super(parent, style);
@@ -159,6 +162,7 @@ public class HostListComposite extends Composite {
 		//添加监听器
 		tltm_add.addSelectionListener(new ButtonSelectionListener());
 		tltm_del.addSelectionListener(new ButtonSelectionListener());
+		tltm_save.addSelectionListener(new ButtonSelectionListener());
 	}
 	
 	/**
@@ -199,8 +203,16 @@ public class HostListComposite extends Composite {
 		//获取表格所有行
 		TableItem tableItems[] = table_display.getItems();
 		
+		//每次执行之前先清空
+		for(int i = 0; i < listOfItems.size(); i++){
+			listOfItems.get(i).dispose();
+		}
+		listOfItems.clear();
+		
 		for(int i = 0; i < tableItems.length; i++){
 			int columNums = 1;
+			com.gxf.entities.TableItem temp = new com.gxf.entities.TableItem();
+			listOfItems.add(temp);
 			//设置名称
 			final Text txt_displayName = new Text(table_display, SWT.NONE);
 			final TableEditor editor_displayName = new TableEditor(table_display);
@@ -215,6 +227,7 @@ public class HostListComposite extends Composite {
 					
 				}
 			});
+			temp.setTxt_displayName(txt_displayName);
 			columNums++;
 			//设置类型
 			final Text txt_displayType = new Text(table_display, SWT.NONE);
@@ -230,6 +243,7 @@ public class HostListComposite extends Composite {
 					
 				}
 			});
+			temp.setTxt_displayType(txt_displayType);
 			columNums++;
 			
 			//设置通信方式
@@ -249,6 +263,7 @@ public class HostListComposite extends Composite {
 					
 				}
 			});
+			temp.setCombo_communityType(combo_communityType);
 			columNums++;
 			
 			//设置ip
@@ -265,6 +280,7 @@ public class HostListComposite extends Composite {
 					
 				}
 			});
+			temp.setTxt_displayIp(txt_displayIp);
 			columNums++;
 			
 			//设置端口号
@@ -281,6 +297,7 @@ public class HostListComposite extends Composite {
 					
 				}
 			});
+			temp.setTxt_displayPort(txt_displayPort);
 			columNums++;
 			
 			//设置说明
@@ -297,10 +314,49 @@ public class HostListComposite extends Composite {
 					
 				}
 			});
+			temp.setTxt_displayComment(txt_displayComment);
 		}
 	}
+	/**
+	 * 删除显示屏信息
+	 */
 	private void deleteDisplay(){
-		
+		//检查有没有选中显示屏
+		if(!isSelected()){
+			MessageBox messageBox = new MessageBox(Display.getDefault().getShells()[0]);
+			messageBox.setText("提示");
+			messageBox.setMessage("先选择要删除的显示屏!");
+			messageBox.open();
+			
+			return;
+		}
+		TableItem tableItems[] = table_display.getItems();
+		for(int i = 0; i < tableItems.length; i++){
+			if(!tableItems[i].getChecked()){					//没有被选中
+				continue;
+			}
+			int index = table_display.indexOf(tableItems[i]);
+			if(index < 0)										//如果没有该行
+				continue;
+			String id_str = tableItems[i].getText(0);
+			//从数据库中删除
+			displayDao.deleteDisplayById(Integer.valueOf(id_str));
+			System.out.println("index = " + index);
+			System.out.println("size of list = " + listOfItems.size());
+			//释放表格中添加的控件
+			com.gxf.entities.TableItem tableItem = listOfItems.get(index);
+			tableItem.dispose();
+			listOfItems.remove(index);
+			
+			//从表中删除
+			table_display.remove(index);
+			
+		}
+		//提示删除成功
+		MessageBox messageBox = new MessageBox(Display.getDefault().getShells()[0]);
+		messageBox.setText("提示");
+		messageBox.setMessage("显示屏信息删除成功!");
+		messageBox.open();
 	}
 	
 	/**
@@ -329,7 +385,12 @@ public class HostListComposite extends Composite {
 			if(e.getSource() == tltm_add){							//添加显示屏
 				addDisplay();
 			}
-			
+			else if(e.getSource() == tltm_del){						//删除显示屏
+				deleteDisplay();
+			}
+			else if(e.getSource() == tltm_save){					//保存按钮
+				saveDisplay();
+			}
 		}
 		
 	}
@@ -382,5 +443,59 @@ public class HostListComposite extends Composite {
 		
 		//表格可以编辑
 		makeTableEditable();
+	}
+	
+	/**
+	 * 删除之前判断是否有选中显示屏
+	 * @return
+	 */
+	private boolean isSelected(){
+		TableItem tableItems[] = table_display.getItems();
+		boolean isSelected = false;
+		for(int i = 0; i < tableItems.length; i++){
+			if(!tableItems[i].getChecked()){					//没有被选中
+				continue;
+			}
+			int index = table_display.indexOf(tableItems[i]);
+			if(index < 0)										//如果没有该行
+				continue;
+			
+			isSelected = true;
+			break;
+		}
+		
+		return isSelected;
+	}
+	
+	/**
+	 * 保存显示屏
+	 */
+	public void saveDisplay(){
+		TableItem tableItems[] = table_display.getItems();
+		for(int i = 0; i < tableItems.length; i++){
+			//从数据库中查询出来，修改，更新到数据库 
+			int displayId = Integer.valueOf(tableItems[i].getText(0));
+			com.gxf.beans.Display display = displayDao.queryDisplayById(displayId);
+			//设置
+			display.setName(tableItems[i].getText(1));
+			display.setType(tableItems[i].getText(2));
+			
+			Communication communication = display.getCommunication();
+			communication.setName(tableItems[i].getText(3));
+			System.out.println("ip = " + tableItems[i].getText(4));
+			communication.setIp(tableItems[i].getText(4));
+			communication.setPort(Integer.valueOf(tableItems[i].getText(5)));
+			
+			display.setComment(tableItems[i].getText());
+			
+			//更新到数据库
+			displayDao.updateDisplay(display);
+			
+		}
+		//提示用户保存成功
+		MessageBox messageBox = new MessageBox(Display.getDefault().getShells()[0]);
+		messageBox.setText("提示");
+		messageBox.setMessage("保存屏信息成功!");
+		messageBox.open();
 	}
 }

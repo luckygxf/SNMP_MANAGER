@@ -35,4 +35,17 @@ public interface DisplayDao {
 	 * @return
 	 */
 	public Display queryDisplayByName(String name);
+	
+	/**
+	 * 更新显示屏信息
+	 * @param display
+	 */
+	public void updateDisplay(Display display);
+	
+	/**
+	 * 根据id查询显示屏
+	 * @param id
+	 * @return
+	 */
+	public Display queryDisplayById(int id);
 }
