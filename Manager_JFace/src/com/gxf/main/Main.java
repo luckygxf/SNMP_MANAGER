@@ -59,6 +59,7 @@ public class Main extends ApplicationWindow {
 	 */
 	public Main() {
 		super(null);
+		setShellStyle(SWT.MIN);
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();											//添加菜单栏
 		addStatusLine();
@@ -79,33 +80,49 @@ public class Main extends ApplicationWindow {
 		composite_left.setBounds(0, 10, 139, 518);
 		
 		Label lb_hostlist = new Label(composite_left, SWT.NONE);
-		lb_hostlist.setImage(SWTResourceManager.getImage(projectPath + "\\icons\\hostlist.png"));
-		lb_hostlist.setBounds(0, 10, 45, 34);
+		lb_hostlist.setBounds(0, 134, 45, 34);
+		lb_hostlist.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\sendSolutionIcon.jpg")));
 		
 		//主机列表按键被按下
 		btn_hostList = new Button(composite_left, SWT.NONE);
 		
-		btn_hostList.setBounds(44, 10, 95, 34);
-		btn_hostList.setText("主机列表");
+		btn_hostList.setBounds(44, 134, 95, 34);
+		btn_hostList.setText("显示屏管理");
 		
 		Label label = new Label(composite_left, SWT.NONE);
 		label.setImage(SWTResourceManager.getImage(projectPath + "\\icons\\sendMessage.png"));
-		label.setBounds(0, 46, 45, 34);
+		label.setBounds(0, 185, 45, 34);
 		
 		//发送消息按钮
 		btn_sendMessage = new Button(composite_left, SWT.NONE);
 		
 		btn_sendMessage.setText("发送消息");
-		btn_sendMessage.setBounds(44, 46, 95, 34);
+		btn_sendMessage.setBounds(44, 185, 95, 34);
 		
 		//发送播放方案
 		Label lb_sendSolution = new Label(composite_left, SWT.NONE);
-		lb_sendSolution.setImage(SWTResourceManager.getImage(projectPath + "\\icons\\settingIcon.png"));
-		lb_sendSolution.setBounds(0, 86, 45, 34);
+		lb_sendSolution.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\sendSolutionIcon.jpg")));
+		lb_sendSolution.setBounds(0, 10, 45, 34);
 		
 		btn_sendSolution = new Button(composite_left, SWT.NONE);
 		btn_sendSolution.setText("发送播放方案");
-		btn_sendSolution.setBounds(44, 86, 95, 34);
+		btn_sendSolution.setBounds(44, 10, 95, 34);
+		
+		Label lb_querySolution = new Label(composite_left, SWT.NONE);
+		lb_querySolution.setBounds(0, 50, 45, 34);
+		lb_querySolution.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\query.png")));
+		
+		Button btn_querySolution = new Button(composite_left, SWT.NONE);
+		btn_querySolution.setText("查询播放方案");
+		btn_querySolution.setBounds(44, 50, 95, 34);
+		
+		Label lb_updateSolution = new Label(composite_left, SWT.NONE);
+		lb_updateSolution.setBounds(0, 94, 45, 34);
+		lb_updateSolution.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\update.png")));
+		
+		Button btn_updateSolution = new Button(composite_left, SWT.NONE);
+		btn_updateSolution.setText("修改播放方案");
+		btn_updateSolution.setBounds(44, 94, 95, 34);
 		
 		Composite composite_right = new Composite(container, SWT.NONE);
 		composite_right.setBounds(145, 10, 600, 518);
@@ -132,8 +149,8 @@ public class Main extends ApplicationWindow {
 		btn_hostList.addSelectionListener(new ButtonListenerImpl());
 		
 		//初始化显示发送播放方案面面板
-		Composite composite_playSoltion = new SendPlaySolution(tabFolder_workspace, SWT.NONE);
-		addTabItem("发送播放方案", composite_playSoltion);
+		Composite composite_hostList = new HostListComposite(tabFolder_workspace, SWT.NONE);
+		addTabItem("主机列表", composite_hostList);
 	}
 	/**
 	 * Create the menu manager.

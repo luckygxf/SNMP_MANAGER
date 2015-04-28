@@ -19,22 +19,16 @@
         <property name="comment" type="string">
         	<column name="comment" length="100"/>
         </property>
-        <many-to-one name="curPlaySolution" column="curPlaySolutionId">
-        
-        </many-to-one> 
+        <many-to-one name="curPlaySolution"  column="curPlaySolutionId" lazy="false"/>
         <set name="solutions" inverse="false" lazy="false" cascade="delete" table = "displayandsolution">
              <key>
                   <column name="displayId"/>
              </key>
              <many-to-many column="solutionId" class="com.gxf.beans.PlaySolution" />
         </set>
+        <many-to-one name="communication" column="communicationId" lazy="false">
         
-        <set name="communications" inverse="false" lazy="false" cascade="delete" table = "displayandcommunication">
-             <key>
-                  <column name="displayId"/>
-             </key>
-             <many-to-many column="communicationId" class="com.gxf.beans.Communication" />
-        </set>
+        </many-to-one> 
     </class>
 
 </hibernate-mapping>

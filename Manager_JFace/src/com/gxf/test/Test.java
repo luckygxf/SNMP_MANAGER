@@ -42,7 +42,7 @@ public class Test {
 		display.setType("双色屏");
 		display.setCurPlaySolution(playSolutionDao.querySolutionByNanme("火影忍者"));
 		display.getSolutions().add(playSolutionDao.querySolutionByNanme("火影忍者"));
-		display.getCommunications().add(comuCommunicationDao.queryCommunicatioByName("网络通讯"));
+	
 		
 		displayDao.addDisplay(display);
 	}

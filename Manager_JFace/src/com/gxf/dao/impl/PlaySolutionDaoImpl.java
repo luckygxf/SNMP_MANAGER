@@ -1,5 +1,6 @@
 package com.gxf.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -38,5 +39,22 @@ public class PlaySolutionDaoImpl implements PlaySolutionDao {
 		Transaction tx = session.beginTransaction();
 		session.save(playSolution);
 		tx.commit();		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.PlaySolutionDao#queryAllSolutions()
+	 */
+	@Override
+	public List<PlaySolution> queryAllSolutions() {
+		List<PlaySolution> playSolutions = new ArrayList<PlaySolution>();
+		Session session = baseDao.getSession();
+		Transaction tx =  session.beginTransaction();
+		String hql = "from PlaySolution";
+		Query query = session.createQuery(hql);
+		playSolutions = query.list();
+		tx.commit();
+		session.close();
+		
+		return playSolutions;
 	}
 }

@@ -26,7 +26,7 @@
         	<column name="comment" length="100"/>
         </property>
         
-        <set name="displays" inverse="false" lazy="true" cascade="delete" table = "displayandsolution">
+        <set name="displays" inverse="false" lazy="false" cascade="delete" table = "displayandsolution">
              <key>
                   <column name="solutionId"/>
              </key>

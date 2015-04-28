@@ -9,8 +9,8 @@ public class Display {
 	private String type;
 	private String comment;
 	private PlaySolution curPlaySolution;												//当前播放方案
-	private Set<PlaySolution> solutions = new HashSet<PlaySolution>();			//一个显示屏有多个播放方案
-	private Set<Communication> communications = new HashSet<Communication>();
+	private Set<PlaySolution> solutions = new HashSet<PlaySolution>();					//一个显示屏有多个播放方案
+	private Communication communication;												//通信方式
 	
 	public int getId() {
 		return id;
@@ -50,12 +50,13 @@ public class Display {
 	public void setSolutions(Set<PlaySolution> solutions) {
 		this.solutions = solutions;
 	}
-	public Set<Communication> getCommunications() {
-		return communications;
+	public Communication getCommunication() {
+		return communication;
 	}
-	public void setCommunications(Set<Communication> communications) {
-		this.communications = communications;
+	public void setCommunication(Communication communication) {
+		this.communication = communication;
 	}
+
 
 
 	
