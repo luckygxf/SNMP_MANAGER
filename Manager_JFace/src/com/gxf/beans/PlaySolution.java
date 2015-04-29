@@ -16,7 +16,7 @@ public class PlaySolution {
 	private Date updateTime;
 	private int updateCount;
 	private String comment;
-	private Set<Display> displays = new HashSet<Display>();
+	private Display display;
 	
 	public int getId() {
 		return id;
@@ -54,14 +54,11 @@ public class PlaySolution {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
-	public Set<Display> getDisplays() {
-		return displays;
+	public Display getDisplay() {
+		return display;
 	}
-	public void setDisplays(Set<Display> displays) {
-		this.displays = displays;
-	}
-
-
-	
+	public void setDisplay(Display display) {
+		this.display = display;
+	}	
 	
 }

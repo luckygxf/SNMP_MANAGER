@@ -36,6 +36,7 @@
 		<mapping resource="com/gxf/beans/playSolution.hbm.xml"/>
 		<mapping resource="com/gxf/beans/display.hbm.xml"/>
 		<mapping resource="com/gxf/beans/communication.hbm.xml"/>
+		<mapping resource="com/gxf/beans/picture.hbm.xml"/>
     </session-factory>
 
 </hibernate-configuration>

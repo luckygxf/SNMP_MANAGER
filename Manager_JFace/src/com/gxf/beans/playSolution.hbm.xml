@@ -26,12 +26,7 @@
         	<column name="comment" length="100"/>
         </property>
         
-        <set name="displays" inverse="false" lazy="false" cascade="delete" table = "displayandsolution">
-             <key>
-                  <column name="solutionId"/>
-             </key>
-             <many-to-many column="displayId" class="com.gxf.beans.Display" />
-        </set>
+        <many-to-one name="display"	column = "displayId"/>
     </class>
 
 </hibernate-mapping>

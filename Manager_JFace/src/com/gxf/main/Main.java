@@ -21,6 +21,7 @@ import com.gxf.actions.HelpAction;
 import com.gxf.actions.SystemAction;
 import com.gxf.actions.ToolAction;
 import com.gxf.composite.HostListComposite;
+import com.gxf.composite.PlaySolutionComposite;
 import com.gxf.composite.SendMessageComposite;
 import com.gxf.composite.SendPlaySolution;
 import com.gxf.util.Util;
@@ -48,6 +49,7 @@ public class Main extends ApplicationWindow {
 	private Button btn_sendSolution;
 	private Button btn_hostList;
 	private Button btn_sendMessage;
+	private Button btn_manageSolution;
 	
 	//工作区间tabfolder
 	private CTabFolder tabFolder_workspace;
@@ -120,9 +122,9 @@ public class Main extends ApplicationWindow {
 		lb_updateSolution.setBounds(0, 94, 45, 34);
 		lb_updateSolution.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\update.png")));
 		
-		Button btn_updateSolution = new Button(composite_left, SWT.NONE);
-		btn_updateSolution.setText("修改播放方案");
-		btn_updateSolution.setBounds(44, 94, 95, 34);
+		btn_manageSolution = new Button(composite_left, SWT.NONE);
+		btn_manageSolution.setText("播放方案管理");
+		btn_manageSolution.setBounds(44, 94, 95, 34);
 		
 		Composite composite_right = new Composite(container, SWT.NONE);
 		composite_right.setBounds(145, 10, 600, 518);
@@ -147,10 +149,11 @@ public class Main extends ApplicationWindow {
 		btn_sendSolution.addSelectionListener(new ButtonListenerImpl());
 		btn_sendMessage.addSelectionListener(new ButtonListenerImpl());
 		btn_hostList.addSelectionListener(new ButtonListenerImpl());
+		btn_manageSolution.addSelectionListener(new ButtonListenerImpl());
 		
 		//初始化显示发送播放方案面面板
-		Composite composite_hostList = new HostListComposite(tabFolder_workspace, SWT.NONE);
-		addTabItem("主机列表", composite_hostList);
+		Composite composite_solutionList = new PlaySolutionComposite(tabFolder_workspace, SWT.NONE);
+		addTabItem("播放方案管理", composite_solutionList);
 	}
 	/**
 	 * Create the menu manager.
@@ -262,20 +265,49 @@ public class Main extends ApplicationWindow {
 		public void widgetSelected(SelectionEvent e) {
 			
 			if(e.getSource() == btn_sendSolution){					//发送播放方案
-				Composite composite_playSoltion = new SendPlaySolution(tabFolder_workspace, SWT.NONE);
-				addTabItem("发送播放方案", composite_playSoltion);
-			}
-			else if(e.getSource() == btn_sendMessage){				//发送消息					
-				Composite composite_sendMessage = new SendMessageComposite(tabFolder_workspace, SWT.NONE);
-				addTabItem("发送消息", composite_sendMessage);
-			}
-			else if(e.getSource() == btn_hostList){					//主机列表	
 				//先查找tabitem,如果没有再添加
-				int index = getTabItemIndex("主机列表");
+				int index = getTabItemIndex("发送播放方案");
+				//如果没有，创建新的tabitem
+				if(index == -1){					
+					Composite composite_playSoltion = new SendPlaySolution(tabFolder_workspace, SWT.NONE);
+					addTabItem("发送播放方案", composite_playSoltion);
+				}
+				else{												//如果已经出现过
+					tabFolder_workspace.setSelection(index);
+				}			
+				
+			}
+			else if(e.getSource() == btn_sendMessage){				//发送消息	
+				//先查找tabitem,如果没有再添加
+				int index = getTabItemIndex("发送消息");
+				//如果没有，创建新的tabitem
+				if(index == -1){					
+					Composite composite_sendMessage = new SendMessageComposite(tabFolder_workspace, SWT.NONE);
+					addTabItem("发送消息", composite_sendMessage);
+				}
+				else{												//如果已经出现过
+					tabFolder_workspace.setSelection(index);
+				}
+			}
+			else if(e.getSource() == btn_hostList){					//屏幕管理列表	
+				//先查找tabitem,如果没有再添加
+				int index = getTabItemIndex("显示屏管理");
 				//如果没有，创建新的tabitem
 				if(index == -1){					
 					Composite composite_hostList = new HostListComposite(tabFolder_workspace, SWT.NONE);
-					addTabItem("主机列表", composite_hostList);
+					addTabItem("显示屏管理", composite_hostList);
+				}
+				else{												//如果已经出现过
+					tabFolder_workspace.setSelection(index);
+				}
+			}
+			else if(e.getSource() == btn_manageSolution){			//播放方案管理
+				//先查找tabitem,如果没有再添加
+				int index = getTabItemIndex("播放方案管理");
+				//如果没有，创建新的tabitem
+				if(index == -1){					
+					Composite composite_solutionList = new PlaySolutionComposite(tabFolder_workspace, SWT.NONE);
+					addTabItem("播放方案管理", composite_solutionList);
 				}
 				else{												//如果已经出现过
 					tabFolder_workspace.setSelection(index);

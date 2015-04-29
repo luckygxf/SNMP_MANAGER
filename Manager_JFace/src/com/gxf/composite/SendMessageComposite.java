@@ -167,12 +167,12 @@ public class SendMessageComposite extends Composite {
 		}
 		combo_fontColor.select(0);
 		//只有主机IPS为空时才重新加载
-		if(AllIP.IPS == null || AllIP.IPS.size() == 0){
-			//获取局域网所有主机ip
-			ipTool.getAllIP();			
-		}
-		for(int i = 0; i < AllIP.IPS.size(); i++)
-			listOfHost.add(AllIP.IPS.get(i));
+//		if(AllIP.IPS == null || AllIP.IPS.size() == 0){
+//			//获取局域网所有主机ip
+//			ipTool.getAllIP();			
+//		}
+//		for(int i = 0; i < AllIP.IPS.size(); i++)
+//			listOfHost.add(AllIP.IPS.get(i));
 		
 		
 		//为按钮添加监控事件

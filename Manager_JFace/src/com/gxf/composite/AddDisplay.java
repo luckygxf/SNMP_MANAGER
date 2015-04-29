@@ -39,7 +39,7 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Button;
 
 /**
- * 添加显示屏信息
+ * 添加显示屏信息窗口
  * @author Administrator
  *
  */
