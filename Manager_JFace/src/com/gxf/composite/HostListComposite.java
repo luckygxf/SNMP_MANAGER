@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -51,8 +53,8 @@ public class HostListComposite extends Composite {
 	//显示屏DAO
 	private static DisplayDao displayDao = new DisplayDaoImpl();
 	//显示屏列表，从数据库中读取出来的	
-	private static List<com.gxf.beans.Display> listOfDisplay = new ArrayList<com.gxf.beans.Display>();
-	private static List<com.gxf.entities.TableItem> listOfItems = new ArrayList<com.gxf.entities.TableItem>();
+	private  List<com.gxf.beans.Display> listOfDisplay = new ArrayList<com.gxf.beans.Display>();
+	private static  List<com.gxf.entities.TableItem> listOfItems = new ArrayList<com.gxf.entities.TableItem>();
 	
 	
 	public HostListComposite(Composite parent, int style) {
@@ -130,7 +132,7 @@ public class HostListComposite extends Composite {
 		
 		TableColumn tblclmn_comment = new TableColumn(table_display, SWT.NONE);
 		tblclmn_comment.setWidth(135);
-		tblclmn_comment.setText("\u8BF4\u660E");
+		tblclmn_comment.setText("说明");
 		scrolledComposite.setContent(composite);
 		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
 		
@@ -398,7 +400,7 @@ public class HostListComposite extends Composite {
 	/**
 	 * 刷新表格内容
 	 */
-	public static void refreshTable(){
+	public void refreshTable(){
 		listOfDisplay = displayDao.queryAllDisplay();
 
 		//向table中添加数据
@@ -498,4 +500,5 @@ public class HostListComposite extends Composite {
 		messageBox.setMessage("保存屏信息成功!");
 		messageBox.open();
 	}
+	
 }

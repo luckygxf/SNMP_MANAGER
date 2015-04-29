@@ -270,8 +270,16 @@ public class Main extends ApplicationWindow {
 				addTabItem("发送消息", composite_sendMessage);
 			}
 			else if(e.getSource() == btn_hostList){					//主机列表	
-				Composite composite_hostList = new HostListComposite(tabFolder_workspace, SWT.NONE);
-				addTabItem("主机列表", composite_hostList);
+				//先查找tabitem,如果没有再添加
+				int index = getTabItemIndex("主机列表");
+				//如果没有，创建新的tabitem
+				if(index == -1){					
+					Composite composite_hostList = new HostListComposite(tabFolder_workspace, SWT.NONE);
+					addTabItem("主机列表", composite_hostList);
+				}
+				else{												//如果已经出现过
+					tabFolder_workspace.setSelection(index);
+				}
 			}
 		}
 		
@@ -283,7 +291,23 @@ public class Main extends ApplicationWindow {
 	 */
 	private void addTabItem(String tabItemName, Composite composite){
 		CTabItem ctabItems[] = tabFolder_workspace.getItems();
+		
+		CTabItem ctabItem = new CTabItem(tabFolder_workspace, SWT.CLOSE);
+		ctabItem.setText(tabItemName);
+		tabFolder_workspace.setSelection(ctabItems.length);						//选中了，才会显示tab页中的内容
+		ctabItem.setControl(composite);
+
+	}
+	
+	/**
+	 * 查询tab分页在tabFolder中的索引
+	 * 没有出现过返回-1
+	 * @param tabItemName
+	 * @return
+	 */
+	private int getTabItemIndex(String tabItemName){
 		int index = 0;
+		CTabItem ctabItems[] = tabFolder_workspace.getItems();
 		boolean isExist = false;
 		for(CTabItem element : ctabItems){
 			if(element.getText().equals(tabItemName))
@@ -294,19 +318,6 @@ public class Main extends ApplicationWindow {
 			index ++;
 		}//for
 		
-		index = isExist ? index : index++;
-		//tab也没有出现
-		if(isExist == false){			
-			CTabItem ctabItem = new CTabItem(tabFolder_workspace, SWT.CLOSE);
-			ctabItem.setText(tabItemName);
-			tabFolder_workspace.setSelection(index);
-			ctabItem.setControl(composite);
-		}		
-		//tab页出现
-		if(isExist){
-			tabFolder_workspace.setSelection(index);
-		}
-		tabFolder_workspace.redraw();
+		return isExist ? index : -1;
 	}
-	
 }
