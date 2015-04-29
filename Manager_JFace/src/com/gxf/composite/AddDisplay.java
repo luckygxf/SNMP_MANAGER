@@ -340,7 +340,14 @@ public class AddDisplay extends ApplicationWindow {
 			//commment字段
 			display.setComment(txt_comment.getText());
 			
+			//向数据库中写入数据
 			displayDao.addDisplay(display);
+			
+			//在当前工程目录下创建一个文件夹
+			String displayPath = curProjectPath + File.separator + txt_displayName.getText();
+			File displayFile = new File(displayPath);
+			//创建文件夹
+			displayFile.mkdir();
 			
 			//刷新前面表格的显示
 			HostListComposite.addTableItem(display);

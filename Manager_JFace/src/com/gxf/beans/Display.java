@@ -8,7 +8,7 @@ public class Display {
 	private String name;
 	private String type;
 	private String comment;
-	private PlaySolution curPlaySolution;												//当前播放方案
+	private String curPlaySolutionName;													//当前播放方案
 	private Set<PlaySolution> solutions = new HashSet<PlaySolution>();					//一个显示屏有多个播放方案
 	private Communication communication;												//通信方式
 	
@@ -30,13 +30,12 @@ public class Display {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
 
-	public PlaySolution getCurPlaySolution() {
-		return curPlaySolution;
+	public String getCurPlaySolutionName() {
+		return curPlaySolutionName;
 	}
-	public void setCurPlaySolution(PlaySolution curPlaySolution) {
-		this.curPlaySolution = curPlaySolution;
+	public void setCurPlaySolutionName(String curPlaySolutionName) {
+		this.curPlaySolutionName = curPlaySolutionName;
 	}
 	public String getComment() {
 		return comment;

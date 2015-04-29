@@ -84,7 +84,7 @@ public class WordPicEditTool extends ApplicationWindow {
 	private Shell curShell;
 	
 	//播放方案名称
-	public String solutionName;
+	public static String solutionName;
 
 	
 	/**
@@ -345,7 +345,18 @@ public class WordPicEditTool extends ApplicationWindow {
 			e.printStackTrace();
 		}
 	}
-
+	//提供接口对外部调用
+	public void openEditWindow(){
+		try {
+			WordPicEditTool window = new WordPicEditTool();
+			window.setBlockOnOpen(true);
+			window.open();
+			Display.getCurrent().dispose();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Configure the shell.
 	 * @param newShell

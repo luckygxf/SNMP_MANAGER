@@ -347,6 +347,13 @@ public class HostListComposite extends Composite {
 			tableItem.dispose();
 			listOfItems.remove(index);
 			
+			//获取显示屏名字
+			String displayName = tableItems[i].getText(1);
+			String displayPath = curProjectPath + File.separator + displayName;
+			File displayFile = new File(displayPath);
+			//删除屏幕信息所在文件夹
+			displayFile.delete();
+			
 			//从表中删除
 			table_display.remove(index);
 			

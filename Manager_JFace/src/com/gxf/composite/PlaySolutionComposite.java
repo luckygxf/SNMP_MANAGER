@@ -4,6 +4,8 @@ import java.io.File;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.custom.ViewForm;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.graphics.Image;
@@ -23,7 +25,7 @@ import com.gxf.util.Util;
 public class PlaySolutionComposite extends Composite {
 	//面板上控件
 	private Table table_playSolution;	
-	
+	private ToolItem tltm_add;
 	
 	//工具类
 	private Util util = new Util();
@@ -38,7 +40,7 @@ public class PlaySolutionComposite extends Composite {
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		viewForm.setTopLeft(toolBar);
 		//添加
-		ToolItem tltm_add = new ToolItem(toolBar, SWT.NONE);
+		tltm_add = new ToolItem(toolBar, SWT.NONE);
 		tltm_add.setText("添加");
 		//设置图标
 		String iconPath = curProjectPath + File.separator + "icons" + File.separator + "addDisplayIcon.png";		
@@ -104,7 +106,47 @@ public class PlaySolutionComposite extends Composite {
 		tblclmn_comment.setWidth(100);
 		tblclmn_comment.setText("说明");
 
+		//初始化控件，加载数据到控件上
+		init();
+	}
+	
+	/**
+	 * 初始化控件
+	 */
+	private void init(){
+		//按钮添加监听事件
+		tltm_add.addSelectionListener(new ButtonSelectionListener());
+	}
+	
+	/**
+	 * 按钮监听器
+	 * @author Administrator
+	 *
+	 */
+	class ButtonSelectionListener implements SelectionListener{
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			if(e.getSource() == tltm_add){							//添加按钮
+				addPlaySolution();
+			}
+			
+		}
 		
+		
+		/**
+		 * 打开添加播放方案面板
+		 */
+		private void addPlaySolution(){
+			AddPlaySolution addComposite = new AddPlaySolution();
+			addComposite.showWindow();
+		}
 	}
 	
 }

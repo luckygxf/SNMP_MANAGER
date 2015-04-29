@@ -1,38 +1,53 @@
 package com.gxf.composite;
 
 import java.io.File;
+import java.util.Date;
+import java.util.List;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-
-import com.gxf.util.Util;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Button;
 
-/**
- * 添加播放方案窗口
- * @author Administrator
- *
- */
+import com.gxf.beans.PlaySolution;
+import com.gxf.dao.DisplayDao;
+import com.gxf.dao.PlaySolutionDao;
+import com.gxf.dao.impl.DisplayDaoImpl;
+import com.gxf.dao.impl.PlaySolutionDaoImpl;
+import com.gxf.util.Util;
+
 public class AddPlaySolution extends ApplicationWindow {
-	//工具类
+	//各种控件
+	private Text txt_displaySolutionName;
+	private Text txt_comment;
+	private Button btn_add;
+	private Button btn_close;
+	
+	//各种工具类
 	private Util util = new Util();
 	private final String curProjectPath = util.getCurrentProjectPath();
-	private Text txt_playSolutinName;
+	private Combo combo_display;
+	private Shell curShell;
+	
+	
+	//数据库访问类
+	private DisplayDao displayDao = new DisplayDaoImpl();
+	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
 	
 	/**
 	 * Create the application window.
@@ -53,61 +68,59 @@ public class AddPlaySolution extends ApplicationWindow {
 	protected Control createContents(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		
-		Composite composite_head = new Composite(container, SWT.NONE);
-		composite_head.setBounds(10, 0, 574, 28);
+		Composite composite = new Composite(container, SWT.NONE);
+		composite.setBounds(10, 10, 432, 187);
 		
-		Label lb_display = new Label(composite_head, SWT.NONE);
-		lb_display.setBounds(60, 6, 54, 12);
-		lb_display.setText("\u663E\u793A\u5C4F");
+		Label lb_displayName = new Label(composite, SWT.NONE);
+		lb_displayName.setBounds(24, 32, 54, 12);
+		lb_displayName.setText("显示屏");
 		
-		Combo combo_display = new Combo(composite_head, SWT.NONE);
-		combo_display.setBounds(130, 3, 86, 20);
+		combo_display = new Combo(composite, SWT.NONE);
+		combo_display.setBounds(84, 29, 109, 20);
 		
-		Label lb_playSolution = new Label(composite_head, SWT.NONE);
-		lb_playSolution.setBounds(260, 6, 70, 12);
-		lb_playSolution.setText("\u64AD\u653E\u65B9\u6848\u540D");
+		Label lb_playSolutionName = new Label(composite, SWT.NONE);
+		lb_playSolutionName.setBounds(219, 32, 71, 12);
+		lb_playSolutionName.setText("播放方案名");
 		
-		txt_playSolutinName = new Text(composite_head, SWT.BORDER);
-		txt_playSolutinName.setBounds(370, 3, 91, 20);
+		txt_displaySolutionName = new Text(composite, SWT.BORDER);
+		txt_displaySolutionName.setBounds(296, 29, 115, 18);
 		
-		Group group_picsToChoose = new Group(container, SWT.NONE);
-		group_picsToChoose.setText("\u53EF\u9009\u56FE\u7247");
-		group_picsToChoose.setBounds(10, 30, 574, 147);
+		Label lb_comment = new Label(composite, SWT.NONE);
+		lb_comment.setBounds(24, 75, 54, 12);
+		lb_comment.setText("说明");
 		
-		ScrolledComposite sc_picsToChoose = new ScrolledComposite(group_picsToChoose, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		sc_picsToChoose.setBounds(10, 20, 554, 117);
-		sc_picsToChoose.setExpandHorizontal(true);
-		sc_picsToChoose.setExpandVertical(true);
+		txt_comment = new Text(composite, SWT.BORDER);
+		txt_comment.setBounds(84, 69, 109, 18);
 		
-		Group group_picsChosed = new Group(container, SWT.NONE);
-		group_picsChosed.setText("\u5DF2\u6DFB\u52A0\u56FE\u7247");
-		group_picsChosed.setBounds(10, 183, 574, 147);
+		btn_add = new Button(composite, SWT.NONE);
+		btn_add.setBounds(121, 120, 72, 22);
+		btn_add.setText("添加");
 		
-		ScrolledComposite sc_picsChosed = new ScrolledComposite(group_picsChosed, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		sc_picsChosed.setBounds(10, 20, 554, 117);
-		sc_picsChosed.setExpandHorizontal(true);
-		sc_picsChosed.setExpandVertical(true);
+		btn_close = new Button(composite, SWT.NONE);
+		btn_close.setBounds(219, 120, 72, 22);
+		btn_close.setText("关闭");
 		
-		Group group_playSettings = new Group(container, SWT.NONE);
-		group_playSettings.setText("\u64AD\u653E\u8BBE\u7F6E");
-		group_playSettings.setBounds(10, 354, 574, 160);
-		
-		Composite composite_settings = new Composite(group_playSettings, SWT.NONE);
-		composite_settings.setBounds(10, 20, 554, 130);
-		
-		Button btn_editPic = new Button(container, SWT.NONE);
-		btn_editPic.setBounds(131, 524, 72, 22);
-		btn_editPic.setText("\u81EA\u5B9A\u4E49\u56FE\u7247");
-		
-		Button btn_addSolution = new Button(container, SWT.NONE);
-		btn_addSolution.setBounds(243, 524, 72, 22);
-		btn_addSolution.setText("\u6DFB\u52A0");
-		
-		Button btn_close = new Button(container, SWT.NONE);
-		btn_close.setBounds(359, 524, 72, 22);
-		btn_close.setText("\u5173\u95ED");
-
+		//加载数据到控件上
+		init();
 		return container;
+	}
+	
+	/**
+	 * 向加载数据到控件上
+	 */
+	private void init(){
+		//加载数据到显示屏框中
+		List<com.gxf.beans.Display> displays = displayDao.queryAllDisplay();
+		String displayNames[] = new String[displays.size()];
+		for(int i = 0; i < displays.size(); i++){
+			displayNames[i] = displays.get(i).getName();
+		}
+		combo_display.setItems(displayNames);
+		combo_display.select(0);
+		
+		//为按钮添加监听事件
+		btn_add.addSelectionListener(new ButtonSelectionListener());
+		btn_close.addSelectionListener(new ButtonSelectionListener());
 	}
 
 	/**
@@ -149,16 +162,16 @@ public class AddPlaySolution extends ApplicationWindow {
 	 * Launch the application.
 	 * @param args
 	 */
-	public static void main(String args[]) {
-		try {
-			AddPlaySolution window = new AddPlaySolution();
-			window.setBlockOnOpen(true);
-			window.open();
-			Display.getCurrent().dispose();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String args[]) {
+//		try {
+//			AddPlaySolution window = new AddPlaySolution();
+//			window.setBlockOnOpen(true);
+//			window.open();
+//			Display.getCurrent().dispose();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * Configure the shell.
@@ -167,10 +180,10 @@ public class AddPlaySolution extends ApplicationWindow {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
+		curShell = newShell;
 		newShell.setText("添加播放方案");
-		String logoPath = curProjectPath + File.separator + "icons" + File.separator 
-							+ "addDisplayIcon.png";
-		newShell.setImage(new Image(Display.getDefault(), new ImageData(logoPath)));
+		String iconPath = curProjectPath + File.separator + "icons" + File.separator + "addDisplayIcon.png";
+		newShell.setImage(new Image(Display.getDefault(), new ImageData(iconPath)));
 	}
 
 	/**
@@ -178,6 +191,88 @@ public class AddPlaySolution extends ApplicationWindow {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(608, 611);
+		return new Point(460, 252);
+	}
+	
+	/**
+	 * 按钮监听器
+	 * @author Administrator
+	 *
+	 */
+	class ButtonSelectionListener implements SelectionListener{
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			if(e.getSource() == btn_add){						//添加播放方案
+				addPlaySolution();
+			}
+			else if(e.getSource() == btn_close){				//关闭当前窗口
+				curShell.dispose();
+			}
+			
+		}
+		
+		/**
+		 * 添加播放方案
+		 */
+		private void addPlaySolution(){
+			//播放方案不能为空
+			if(txt_displaySolutionName.getText() == null){
+				MessageBox messageBox = new MessageBox(curShell);
+				messageBox.setText("提示");
+				messageBox.setMessage("请填写播放方案名!");
+				messageBox.open();
+				
+				return;
+			}
+			//构造要存放的播放方案
+			String solutionName = txt_displaySolutionName.getText();
+			PlaySolution playSolution = new PlaySolution();
+			playSolution.setName(solutionName);
+			playSolution.setCreateTime(new Date());
+			playSolution.setUpdateTime(new Date());
+			playSolution.setUpdateCount(0);
+			playSolution.setComment(txt_comment.getText());
+			//获取关联的显示屏
+			String displayName = combo_display.getItem(combo_display.getSelectionIndex());
+			com.gxf.beans.Display display = displayDao.queryDisplayByName(displayName);
+			playSolution.setDisplay(display);
+			
+			//存放到数据库中
+			playSolutionDao.addPlaySolution(playSolution);
+			
+			//创建播放方案文件夹
+			String playSolutionPath = curProjectPath + File.separator + displayName + File.separator 
+					+  solutionName;
+			File playSolutionFile = new File(playSolutionPath);
+			playSolutionFile.mkdir();
+			
+			//提示创建成功
+			MessageBox messageBox = new MessageBox(curShell);
+			messageBox.setText("提示");
+			messageBox.setMessage("播放方案创建成功!");
+			messageBox.open();
+		}
+		
+	}
+
+	/**
+	 * 显示窗口
+	 */
+	public void showWindow(){
+		try {
+			AddPlaySolution window = new AddPlaySolution();
+			window.setBlockOnOpen(true);
+			window.open();
+//			Display.getCurrent().dispose();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

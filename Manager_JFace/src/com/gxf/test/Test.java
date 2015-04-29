@@ -32,18 +32,6 @@ public class Test {
 		CommunicationDao comuCommunicationDao  = new CommunicationDaoImpl();
 		PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
 		DisplayDao displayDao = new DisplayDaoImpl();
-//		Communication communication = new Communication();
-//		communication.setName("串口通信");
-//		communication.setPort(5100);
-//		comuCommunicationDao.addCommunication(communication);
-		Display display = new Display();
-		display.setName("孙文路");
-		display.setComment("孙文路播放方案");
-		display.setType("双色屏");
-		display.setCurPlaySolution(playSolutionDao.querySolutionByNanme("火影忍者"));
-		display.getSolutions().add(playSolutionDao.querySolutionByNanme("火影忍者"));
-	
-		
-		displayDao.addDisplay(display);
+
 	}
 }
