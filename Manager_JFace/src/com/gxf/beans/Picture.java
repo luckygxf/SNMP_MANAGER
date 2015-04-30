@@ -4,6 +4,7 @@ public class Picture {
 	private int id;
 	private String picName;
 	private String picPath;
+	private PlaySolution playSolution;
 	
 	public int getId() {
 		return id;
@@ -22,6 +23,12 @@ public class Picture {
 	}
 	public void setPicPath(String picPath) {
 		this.picPath = picPath;
+	}
+	public PlaySolution getPlaySolution() {
+		return playSolution;
+	}
+	public void setPlaySolution(PlaySolution playSolution) {
+		this.playSolution = playSolution;
 	}
 	
 }

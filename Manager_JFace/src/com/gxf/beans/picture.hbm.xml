@@ -16,6 +16,10 @@
        <property name="picPath" type="string">
         	<column name="picPath" length="50"/>
         </property>
+        
+        <many-to-one name="playSolution" class="com.gxf.beans.PlaySolution" 
+                         column="playSolutionId" >
+        </many-to-one>
     </class>
 
 </hibernate-mapping>

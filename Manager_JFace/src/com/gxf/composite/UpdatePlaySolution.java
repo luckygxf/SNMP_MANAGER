@@ -2,6 +2,7 @@ package com.gxf.composite;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.StatusLineManager;
@@ -18,6 +19,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import com.gxf.beans.PlaySolution;
 import com.gxf.dao.DisplayDao;
 import com.gxf.dao.PlaySolutionDao;
 import com.gxf.dao.impl.DisplayDaoImpl;
@@ -40,8 +42,8 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	//工具类
 	private Util util = new Util();
 	private final String curProjectPath = util.getCurrentProjectPath();
-	private Text txt_playSolutinName;
 	private Combo combo_display;
+	private Combo combo_playSolutionName;
 	
 	private Button btn_editPic;
 	
@@ -76,14 +78,14 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		
 		//显示屏
 		combo_display = new Combo(composite_head, SWT.NONE);
-		combo_display.setBounds(130, 3, 86, 20);
+		combo_display.setBounds(130, 3, 122, 20);
 		
 		Label lb_playSolution = new Label(composite_head, SWT.NONE);
-		lb_playSolution.setBounds(260, 6, 70, 12);
-		lb_playSolution.setText("播放方案名");
+		lb_playSolution.setBounds(318, 6, 70, 12);
+		lb_playSolution.setText("播放方案");
 		
-		txt_playSolutinName = new Text(composite_head, SWT.BORDER);
-		txt_playSolutinName.setBounds(370, 3, 91, 20);
+		combo_playSolutionName = new Combo(composite_head, SWT.NONE);
+		combo_playSolutionName.setBounds(394, 3, 122, 20);
 		
 		Group group_picsToChoose = new Group(container, SWT.NONE);
 		group_picsToChoose.setText("可选图片");
@@ -143,6 +145,8 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		
 		//为按钮注册监听器
 		btn_editPic.addSelectionListener(new ButtonSelectionListener());
+		combo_display.addSelectionListener(new ComboSelectionListenerImpl());
+		queryDisplayNamesToCombo();
 	}
 
 	/**
@@ -202,7 +206,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("添加播放方案");
+		newShell.setText("设置播放方案");
 		String logoPath = curProjectPath + File.separator + "icons" + File.separator 
 							+ "addDisplayIcon.png";
 		newShell.setImage(new Image(Display.getDefault(), new ImageData(logoPath)));
@@ -232,11 +236,57 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		public void widgetSelected(SelectionEvent e) {
 			if(e.getSource() == btn_editPic){							//编辑图片按钮,打开文字图片编辑器
 				WordPicEditTool wordPicEditTool = new WordPicEditTool();
-//				WordPicEditTool.solutionName = 
+				String displayName = combo_display.getItem(combo_display.getSelectionIndex());
+				String playSolutionName = combo_playSolutionName.getItem(combo_playSolutionName.getSelectionIndex());
+				String playSolutionPath = curProjectPath + File.separator + 
+											displayName + File.separator + playSolutionName;
+				WordPicEditTool.solutionPath = playSolutionPath;
+				WordPicEditTool.playSolutionName = playSolutionName;
 				wordPicEditTool.open();
 			}
 			
 		}
 		
+	}
+	/**
+	 * 显示屏下拉组合框事件
+	 * @author Administrator
+	 *
+	 */
+	class ComboSelectionListenerImpl implements SelectionListener{
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent arg0) {
+			//查询播放方案名到组合框中
+			queryDisplayNamesToCombo();
+		}
+		
+	}
+	
+	/**
+	 * 查询播放方案名到组合框中
+	 */
+	private void queryDisplayNamesToCombo(){
+		//查询显示屏对应的播放方案
+		String displayName = combo_display.getItem(combo_display.getSelectionIndex());
+		com.gxf.beans.Display display = displayDao.queryDisplayByName(displayName);
+		Set<PlaySolution> solutions = display.getSolutions();
+//		System.out.println("solutions.size() = " + solutions.size());
+		String solutionNams[] = new String[solutions.size()];
+		int index = 0;
+		for(PlaySolution playSolution : solutions){
+			solutionNams[index++] = playSolution.getName();
+		}
+		
+		//绑定到播放方案组合框中
+		combo_playSolutionName.setItems(solutionNams);
+		if(solutionNams.length > 0)
+			combo_playSolutionName.select(0);
 	}
 }

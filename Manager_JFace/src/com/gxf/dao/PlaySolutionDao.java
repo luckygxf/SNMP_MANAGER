@@ -24,4 +24,16 @@ public interface PlaySolutionDao {
 	 * @return
 	 */
 	public List<PlaySolution> queryAllSolutions();
+	
+	/**
+	 * 删除播放方案
+	 * @param playSolution
+	 */
+	public void deletePlaySolution(PlaySolution playSolution);
+	
+	/**
+	 * 根据播放方案ID删除播放方案
+	 * @param playSolutionId
+	 */
+	public void deletePlaySolutinById(int playSolutionId);
 }

@@ -253,6 +253,8 @@ public class AddPlaySolution extends ApplicationWindow {
 			File playSolutionFile = new File(playSolutionPath);
 			playSolutionFile.mkdir();
 			
+			//向原来的窗口表格添加记录
+			PlaySolutionComposite.addTableItem(displayName, solutionName);
 			//提示创建成功
 			MessageBox messageBox = new MessageBox(curShell);
 			messageBox.setText("提示");

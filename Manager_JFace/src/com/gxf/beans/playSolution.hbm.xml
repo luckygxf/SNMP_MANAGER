@@ -25,8 +25,11 @@
         <property name="comment" type="string">
         	<column name="comment" length="100"/>
         </property>
-        
-        <many-to-one name="display"	column = "displayId"/>
+        <set name="pictures" inverse="false" cascade="delete">
+                <key column="playSolutionId" ></key>
+                <one-to-many class="com.gxf.beans.Picture"/>
+        </set>
+        <many-to-one name="display"	column = "displayId" lazy = "false"/>
     </class>
 
 </hibernate-mapping>

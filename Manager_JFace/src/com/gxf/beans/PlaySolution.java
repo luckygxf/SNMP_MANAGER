@@ -1,6 +1,8 @@
 package com.gxf.beans;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -16,6 +18,7 @@ public class PlaySolution {
 	private int updateCount;
 	private String comment;
 	private Display display;
+	private Set<Picture> pictures = new HashSet<Picture>();
 	
 	public int getId() {
 		return id;
@@ -58,6 +61,12 @@ public class PlaySolution {
 	}
 	public void setDisplay(Display display) {
 		this.display = display;
+	}
+	public Set<Picture> getPictures() {
+		return pictures;
+	}
+	public void setPictures(Set<Picture> pictures) {
+		this.pictures = pictures;
 	}	
 	
 }

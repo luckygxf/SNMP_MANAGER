@@ -57,4 +57,33 @@ public class PlaySolutionDaoImpl implements PlaySolutionDao {
 		
 		return playSolutions;
 	}
+
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.PlaySolutionDao#deletePlaySolution(com.gxf.beans.PlaySolution)
+	 */
+	@Override
+	public void deletePlaySolution(PlaySolution playSolution) {
+		Session session = baseDao.getSession();
+		session.beginTransaction();
+		session.delete(playSolution);
+		session.getTransaction().commit();
+		session.close();
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.PlaySolutionDao#deletePlaySolutinById(int)
+	 */
+	@Override
+	public void deletePlaySolutinById(int playSolutionId) {
+		Session session = baseDao.getSession();
+		String hql = "delete from PlaySolution p where p.id = ?";
+		session.beginTransaction();
+		Query query = session.createQuery(hql);
+		query.setString(0, String.valueOf(playSolutionId));
+		query.executeUpdate();
+		
+		session.getTransaction().commit();
+		session.close();
+	}
 }

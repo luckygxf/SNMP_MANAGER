@@ -41,6 +41,12 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.gxf.beans.Picture;
+import com.gxf.beans.PlaySolution;
+import com.gxf.dao.PictureDao;
+import com.gxf.dao.PlaySolutionDao;
+import com.gxf.dao.impl.PictureDaoImpl;
+import com.gxf.dao.impl.PlaySolutionDaoImpl;
 import com.gxf.entities.ImageItem;
 import com.gxf.util.Util;
 
@@ -84,7 +90,12 @@ public class WordPicEditTool extends ApplicationWindow {
 	private Shell curShell;
 	
 	//播放方案名称
-	public static String solutionName;
+	public static String solutionPath;
+	public static String playSolutionName;
+	
+	//数据库访问类
+	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
+	private PictureDao pictureDao = new PictureDaoImpl();
 
 	
 	/**
@@ -435,7 +446,7 @@ public class WordPicEditTool extends ApplicationWindow {
 				deleteAllImage();
 			}
 			else if(e.getSource() == btn_imageCreate){					//添加到播放方案
-				saveToPlaySolution("海贼王");
+				saveToPlaySolution();
 				
 				MessageBox messageBox = new MessageBox(curShell, SWT.OK);
 				messageBox.setText("提示");
@@ -794,7 +805,7 @@ public class WordPicEditTool extends ApplicationWindow {
 	 * 保存到播放方案路径下
 	 * @param solutionName
 	 */
-	private void saveToPlaySolution(String solutionName){
+	private void saveToPlaySolution(){
 		GC gc = new GC(canvas_show);
 		Image image = new Image(Display.getCurrent(), canvas_show.getSize().x, canvas_show.getSize().y);
 		gc.copyArea(image, 0, 0);
@@ -807,9 +818,18 @@ public class WordPicEditTool extends ApplicationWindow {
 		Date date = new Date();
 		String date_str = sdf.format(date);
 		//设置图片路径
-		String imagePath = util.getCurrentProjectPath() + File.separator + "playSolutions" 
-							+ File.separator  + solutionName + File.separator + date_str + ".bmp";
+		String imageName = date_str + ".bmp";
+		String imagePath = solutionPath + File.separator + imageName;
+		
+		//图片信息保存到数据库中
+		Picture picture = new Picture();
+		picture.setPicName(imageName);
+		picture.setPicPath(imagePath);
 		System.out.println("imagePath = " + imagePath);
+		PlaySolution playSolution = playSolutionDao.querySolutionByNanme(WordPicEditTool.playSolutionName);
+		picture.setPlaySolution(playSolution);		
+		pictureDao.addPicture(picture);
+		
 		//保存图片
 		imageLoader.save(imagePath, SWT.IMAGE_BMP);		
 	}
