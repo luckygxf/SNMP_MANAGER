@@ -214,7 +214,8 @@ public class Main extends ApplicationWindow {
 			Main window = new Main();
 			window.setBlockOnOpen(true);
 			window.open();
-			Display.getCurrent().dispose();
+			if(Display.getCurrent() != null)
+				Display.getCurrent().dispose();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

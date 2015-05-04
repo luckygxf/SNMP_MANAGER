@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.custom.ViewForm;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.SWT;
@@ -12,6 +13,8 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -134,6 +137,14 @@ public class PlaySolutionComposite extends Composite {
 		tltm_moveDown.addSelectionListener(new ButtonSelectionListener());
 		tltm_moveUp.addSelectionListener(new ButtonSelectionListener());
 		tltm_del.addSelectionListener(new ButtonSelectionListener());
+		
+		//为表格添加上下文菜单
+		Menu contextMenu = new Menu(Display.getDefault().getShells()[0], SWT.POP_UP);
+		MenuItem queryDetailItem = new MenuItem(contextMenu, SWT.NONE);
+		queryDetailItem.setText("设置");
+		queryDetailItem.addSelectionListener(new MenuItemListenerImpl());
+		
+		table_playSolution.setMenu(contextMenu);
 		
 		//显示播放方案信息
 		fillTable();
@@ -306,4 +317,30 @@ public class PlaySolutionComposite extends Composite {
 		
 		tableItem.setText(itemText);
 	}
+	
+	/**
+	 * 上下文菜单监听器
+	 * @author Administrator
+	 *
+	 */
+	class MenuItemListenerImpl extends SelectionAdapter{
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			MenuItem item = (MenuItem) e.getSource();
+			if(item.getText() == "设置"){						//查看播放方案详细信息
+				UpdatePlaySolution updatePlaySolution = new UpdatePlaySolution();
+				TableItem tableItemSelectedIndex = table_playSolution.getItem(table_playSolution.getSelectionIndex());
+				String displayName = tableItemSelectedIndex.getText(2);
+				String playSolutionName = tableItemSelectedIndex.getText(1);
+				
+				UpdatePlaySolution.displayName = displayName;
+				UpdatePlaySolution.playSolutionName = playSolutionName;
+				
+				updatePlaySolution.showWindow();
+			}
+		}
+		
+	}	
+	
 }

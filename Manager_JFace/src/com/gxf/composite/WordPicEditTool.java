@@ -96,6 +96,9 @@ public class WordPicEditTool extends ApplicationWindow {
 	//数据库访问类
 	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
 	private PictureDao pictureDao = new PictureDaoImpl();
+	
+	//获取UpdatePlaySolution用于刷新表格
+	private UpdatePlaySolution updatePlaySolution;
 
 	
 	/**
@@ -447,6 +450,9 @@ public class WordPicEditTool extends ApplicationWindow {
 			}
 			else if(e.getSource() == btn_imageCreate){					//添加到播放方案
 				saveToPlaySolution();
+				//刷新前面窗口显示
+				updatePlaySolution.addImageToChoose();
+				updatePlaySolution.addSc_picsChosed();
 				
 				MessageBox messageBox = new MessageBox(curShell, SWT.OK);
 				messageBox.setText("提示");
@@ -870,6 +876,13 @@ public class WordPicEditTool extends ApplicationWindow {
 			
 		}
 	}
-
+	
+	/**
+	 * 将UpdatePlaySolution注册
+	 * @param updatePlaySolution
+	 */
+	public void addUpdatePlaySolution(UpdatePlaySolution updatePlaySolution){
+		this.updatePlaySolution = updatePlaySolution;
+	}
 	
 }

@@ -16,6 +16,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.internal.ole.win32.COMObject;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -68,12 +69,20 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	private ScrolledComposite sc_picsChosed;
 	private Text txt_playInteraval;
 	private Button btn_editPic;
+	private Button btn_close;
 	
 	
 	//数据库访问类
 	private DisplayDao displayDao = new DisplayDaoImpl();
 	private PictureDao pictureDao = new PictureDaoImpl();
 	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
+	
+	//显示屏和播放方案
+	public static String displayName;
+	public static String playSolutionName;
+	
+	//当前窗口对象
+	private UpdatePlaySolution curUpdatePlaySolution;
 	
 	//上下文菜单
 //	private Menu contextMenu;
@@ -83,6 +92,8 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	 */
 	public UpdatePlaySolution() {
 		super(null);
+		//获取当前对象
+		curUpdatePlaySolution = this;
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();
@@ -199,7 +210,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		btn_addSolution.setBounds(244, 550, 72, 22);
 		btn_addSolution.setText("添加");
 		
-		Button btn_close = new Button(container, SWT.NONE);
+		btn_close = new Button(container, SWT.NONE);
 		btn_close.setBounds(360, 550, 72, 22);
 		btn_close.setText("关闭");
 		
@@ -219,12 +230,31 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		for(int i = 0; i < displayItems.length; i++)
 			displayItems[i] = listOfDisplay.get(i).getName();
 		combo_display.setItems(displayItems);
-		combo_display.select(0);
+		
+		for(int i = 0; i < combo_display.getItems().length; i++){
+			String itemString = combo_display.getItem(i);
+			if(itemString.equals(UpdatePlaySolution.displayName))
+			{
+				combo_display.select(i);
+				break;
+			}
+		}
+//		combo_display.select(0);
 		
 		//为按钮注册监听器
 		btn_editPic.addSelectionListener(new ButtonSelectionListener());
-
+		btn_close.addSelectionListener(new ButtonSelectionListener());
+		
 		queryDisplayNamesToCombo();
+		
+		//设置从前一个页面传过来的播放方案
+		for(int i = 0; i < combo_playSolutionName.getItemCount(); i++){
+			String itemString = combo_playSolutionName.getItem(i);
+			if(itemString.equals(UpdatePlaySolution.playSolutionName)){
+				combo_playSolutionName.select(i);
+				break;
+			}
+		}
 		
 		//初始化星期控件
 		//初始化星期复选框
@@ -353,12 +383,24 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	 * Launch the application.
 	 * @param args
 	 */
-	public static void main(String args[]) {
+//	public static void main(String args[]) {
+//		try {
+//			UpdatePlaySolution window = new UpdatePlaySolution();
+//			window.setBlockOnOpen(true);
+//			window.open();
+//			Display.getCurrent().dispose();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+	
+	//对外提供显示窗口的接口
+	public void showWindow(){
 		try {
 			UpdatePlaySolution window = new UpdatePlaySolution();
 			window.setBlockOnOpen(true);
 			window.open();
-			Display.getCurrent().dispose();
+//			Display.getCurrent().dispose();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -410,9 +452,13 @@ public class UpdatePlaySolution extends ApplicationWindow {
 											displayName + File.separator + playSolutionName;
 				WordPicEditTool.solutionPath = playSolutionPath;
 				WordPicEditTool.playSolutionName = playSolutionName;
+				//向编辑器注册
+				wordPicEditTool.addUpdatePlaySolution(curUpdatePlaySolution);
 				wordPicEditTool.open();
 			}
-			
+			else if(e.getSource() == btn_close){						//关闭窗口
+				curShell.dispose();			
+			}
 		}
 		
 	}
@@ -441,7 +487,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	/**
 	 * 从数据库读取所有图片路径，加载到滚动面板中，供用户选择
 	 */
-	private void addImageToChoose(){
+	public void addImageToChoose(){
 		Composite composite_pics = new Composite(sc_picsToChoose, SWT.NONE);
 		sc_picsToChoose.setContent(composite_pics);
 		//初始化滚动面板布局等每行显示4张图片
@@ -495,7 +541,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	/**
 	 * 显示已经添加到播放方案中的图片
 	 */
-	private void addSc_picsChosed(){
+	public void addSc_picsChosed(){
 		Composite composite_pics = new Composite(sc_picsChosed, SWT.NONE);
 		sc_picsChosed.setContent(composite_pics);
 		//初始化滚动面板布局等每行显示4张图片
@@ -612,4 +658,5 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		}
 		
 	}
+	
 }
