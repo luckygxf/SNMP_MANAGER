@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <config>
-  <style>1</style>
+  <style>0</style>
   <timeInterval>1</timeInterval>
   <date_start>
     <day_start>6</day_start>
@@ -9,8 +9,8 @@
     <year_start>1990</year_start>
   </date_start>
   <date_end>
-    <day_end>23</day_end>
-    <month_end>3</month_end>
+    <day_end>2</day_end>
+    <month_end>4</month_end>
     <year_end>2015</year_end>
   </date_end>
   <time_start>
@@ -19,9 +19,9 @@
     <hour_start>0</hour_start>
   </time_start>
   <time_end>
-    <second_end>43</second_end>
-    <minute_end>32</minute_end>
-    <hour_end>11</hour_end>
+    <second_end>51</second_end>
+    <minute_end>2</minute_end>
+    <hour_end>10</hour_end>
   </time_end>
   <weekdays>
     <weekday0>0</weekday0>

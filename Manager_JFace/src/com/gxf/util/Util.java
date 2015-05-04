@@ -9,13 +9,16 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.Collator;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -367,6 +370,56 @@ public class Util {
     	return file.exists();
     }
     
-   
+    /**
+     * 拷贝文件
+     * @param srcFile
+     * @param dstFile
+     */
+    public void copyFile(String srcFilePath, String dstFilePath){
+    	File srcFile = new File(srcFilePath);
+    	File dstFile = new File(dstFilePath);
+    	
+    	//源文件不存在
+    	if(!srcFile.exists()){
+    		System.out.println(srcFilePath + " is not exist!");
+    		return;
+    		
+    	}
+    	//字节流缓冲区
+    	byte buffer[] = new byte[1024];
+    	
+    	try {
+			FileInputStream srcIS = new FileInputStream(srcFile);
+			FileOutputStream dstOS = new FileOutputStream(dstFile);
+			
+			int read = srcIS.read(buffer);
+			
+			//别读边写
+			while(read != -1){
+				dstOS.write(buffer, 0 , read);
+				read = srcIS.read(buffer);
+			}
+			
+			//关闭输入输出流
+	    	srcIS.close();
+	    	dstOS.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}    	
+    }
+    
+    /**
+     * 获取当前系统时间，用于文件命名，精确到毫秒
+     * @return
+     */
+    public String getCurTime(){
+    	//图片名字用时间戳，精确到毫秒，确保不重复
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+		Date date = new Date();
+		String date_str = sdf.format(date);
+		
+		return date_str;
+    }
     
 }

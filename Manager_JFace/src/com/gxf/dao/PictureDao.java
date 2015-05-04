@@ -17,4 +17,10 @@ public interface PictureDao {
 	 * @return
 	 */
 	public List<Picture> queryAllPicture();
+	
+	/**
+	 * ¸ù¾ÝpicPathÉ¾³ýÍ¼Æ¬
+	 * @param picPath
+	 */
+	public void deletePictureByPicPath(String picPath);
 }

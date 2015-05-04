@@ -219,11 +219,11 @@ public class SendPlaySolution extends Composite {
 		combo_solutions.addSelectionListener(new SolutionChangeListener());
 		
 		//初始化主机列表
-//		if(AllIP.IPS == null || AllIP.IPS.size() == 0)
-//			new AllIP().getAllIP();
-//		for(int i = 0; i < AllIP.IPS.size(); i++){
-//			list_hostList.add(AllIP.IPS.get(i));
-//		}
+		if(AllIP.IPS == null || AllIP.IPS.size() == 0)
+			new AllIP().getAllIP();
+		for(int i = 0; i < AllIP.IPS.size(); i++){
+			list_hostList.add(AllIP.IPS.get(i));
+		}
 	}
 	
 	/**

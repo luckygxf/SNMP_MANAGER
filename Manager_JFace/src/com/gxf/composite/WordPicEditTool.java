@@ -813,10 +813,8 @@ public class WordPicEditTool extends ApplicationWindow {
 		ImageLoader imageLoader = new ImageLoader();
 		imageLoader.data = new ImageData[]{imageData};
 		
-		//图片名字用时间戳，精确到毫秒，确保不重复
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
-		Date date = new Date();
-		String date_str = sdf.format(date);
+		//获取当前系统时间,用于命名时间
+		String date_str = util.getCurTime();
 		//设置图片路径
 		String imageName = date_str + ".bmp";
 		String imagePath = solutionPath + File.separator + imageName;

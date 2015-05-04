@@ -10,6 +10,7 @@ import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -21,6 +22,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.gxf.beans.Picture;
@@ -50,6 +54,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	//工具类
 	private Util util = new Util();
 	private final String curProjectPath = util.getCurrentProjectPath();
+	private Shell curShell;
 	
 	//控件类
 	private Combo combo_display;
@@ -69,6 +74,9 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	private DisplayDao displayDao = new DisplayDaoImpl();
 	private PictureDao pictureDao = new PictureDaoImpl();
 	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
+	
+	//上下文菜单
+//	private Menu contextMenu;
 	
 	/**
 	 * Create the application window.
@@ -301,6 +309,9 @@ public class UpdatePlaySolution extends ApplicationWindow {
 				
 			}
 		});
+		
+		//初始化上下文菜单
+//		contextMenu = new Menu(curShell);
 	}
 
 	/**
@@ -364,6 +375,9 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		String logoPath = curProjectPath + File.separator + "icons" + File.separator 
 							+ "addDisplayIcon.png";
 		newShell.setImage(new Image(Display.getDefault(), new ImageData(logoPath)));
+		
+		//获取当前shell
+		curShell = newShell;
 	}
 
 	/**
@@ -448,10 +462,23 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		
 		for(int i = 0; i < labels_pic.length; i++){
 			labels_pic[i] = new Label(composite_pics, SWT.NONE);
+			//添加上下文菜单
+			Menu contextMenu = new Menu(curShell, SWT.POP_UP);
+			MenuItem addItem = new MenuItem(contextMenu, SWT.PUSH);
+			addItem.setText("添加");
+
+			labels_pic[i].setMenu(contextMenu);
+			//添加图片信息到label上
 			ImageData imageData = new ImageData(listOfPics.get(i).getPicPath());
 			imageData = imageData.scaledTo(picWidth, picHeight);
 			Image image = new Image(Display.getDefault(), imageData);
 			labels_pic[i].setImage(image);
+			//将图片路径放到event.data中
+			addItem.setData(listOfPics.get(i).getPicPath());
+			
+			//上下文菜单添加监听器
+			addItem.addSelectionListener(new MenuItemListenerImpl());
+			
 			labels_pic[i].addListener(SWT.MouseDown, new Listener() {
 				
 				@Override
@@ -491,10 +518,26 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		
 		for(int i = 0; i < labels_pic.length; i++){
 			labels_pic[i] = new Label(composite_pics, SWT.NONE);
+			
+			//添加上下文菜单
+			Menu contextMenu = new Menu(curShell, SWT.POP_UP);
+
+			MenuItem delItem = new MenuItem(contextMenu, SWT.PUSH);
+			delItem.setText("删除");
+			
+			labels_pic[i].setMenu(contextMenu);
+			
+			//在标签上显示图片
 			ImageData imageData = new ImageData(listOfPics.get(i).getPicPath());
 			imageData = imageData.scaledTo(picWidth, picHeight);
 			Image image = new Image(Display.getDefault(), imageData);
 			labels_pic[i].setImage(image);
+			//将图片路径放到event.data中
+			delItem.setData(listOfPics.get(i).getPicPath());
+			
+			//上下文菜单添加监听器
+			delItem.addSelectionListener(new MenuItemListenerImpl());
+			
 			labels_pic[i].addListener(SWT.MouseDown, new Listener() {
 				
 				@Override
@@ -508,6 +551,65 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		composite_pics.layout();
 	}
 	
+	/**
+	 * MenuItem监听器
+	 * @author Administrator
+	 *
+	 */
+	class MenuItemListenerImpl extends SelectionAdapter{
 
-
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			MenuItem item = (MenuItem) e.getSource();
+			if(item.getText() == "添加"){						//添加图片到播放方案中
+				//1.复制文件到播放方案文件夹中
+				//2.向数据库中写入数据
+				//3.更新显示
+				String scrFilePath = (String) item.getData();
+				String curTime = util.getCurTime();
+				String playSolutionName = combo_playSolutionName.getItem(combo_playSolutionName.getSelectionIndex());
+				String displayName = combo_display.getItem(combo_display.getSelectionIndex());
+				
+				String dstFilePath = curProjectPath + File.separator + displayName + File.separator + playSolutionName
+										+ File.separator + curTime + ".bmp";
+				//复制文件
+				util.copyFile(scrFilePath, dstFilePath);
+				
+				//图片信息写入到数据库中
+				PlaySolution playSolution = playSolutionDao.querySolutionByNanme(playSolutionName);
+				Picture picture = new Picture();
+				picture.setPicName(curTime + ".bmp");
+				picture.setPicPath(dstFilePath);
+				picture.setPlaySolution(playSolution);
+				
+				pictureDao.addPicture(picture);
+				
+				//更新显示
+				addSc_picsChosed();
+				
+				//提示用户添加成功
+				MessageBox messageBox = new MessageBox(curShell);
+				messageBox.setText("提示");
+				messageBox.setMessage("添加图片成功!");
+				messageBox.open();
+			}
+			else if(item.getText() == "删除"){				//从播放方案中红删除图片
+				//1.从数据库中删除数据
+				//2.删除文件
+				//3.更新显示
+				//从数据库中删除数据
+				String picPath = (String) item.getData();
+				pictureDao.deletePictureByPicPath(picPath);
+				
+				//删除文件
+				File picFile = new File(picPath);
+				picFile.delete();
+				
+				//更新显示，两个面板都要更新
+				addImageToChoose();
+				addSc_picsChosed();
+			}
+		}
+		
+	}
 }

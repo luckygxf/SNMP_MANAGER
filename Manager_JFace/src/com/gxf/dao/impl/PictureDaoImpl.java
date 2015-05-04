@@ -46,4 +46,22 @@ public class PictureDaoImpl implements PictureDao {
 		return listOfPicture;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.PictureDao#deletePictureByPicPath(java.lang.String)
+	 */
+	@Override
+	public void deletePictureByPicPath(String picPath) {
+		Session session = baseDao.getSession();
+		String hql = "delete Picture p where p.picPath = ?";
+		Query query = session.createQuery(hql);
+		query.setString(0, picPath);
+		session.beginTransaction();
+		query.executeUpdate();
+		
+		//提交事务，关闭session
+		session.getTransaction().commit();
+		session.close();
+		
+	}
+
 }
