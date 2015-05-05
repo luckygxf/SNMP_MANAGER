@@ -1,6 +1,8 @@
 package com.gxf.composite;
 
 import java.io.File;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +18,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.internal.ole.win32.COMObject;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -29,6 +30,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.gxf.beans.Picture;
+import com.gxf.beans.PlayControl;
 import com.gxf.beans.PlaySolution;
 import com.gxf.dao.DisplayDao;
 import com.gxf.dao.PictureDao;
@@ -65,6 +67,8 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	private Combo combo_playType;
 	private DateTime dateTime_start;
 	private DateTime time_start;
+	private DateTime time_end;
+	private DateTime dateTime_end;
 	private ScrolledComposite sc_picsToChoose;
 	private ScrolledComposite sc_picsChosed;
 	private Text txt_playInteraval;
@@ -180,7 +184,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		lb_toIcon.setBounds(248, 43, 54, 12);
 		lb_toIcon.setText("到");
 		
-		DateTime dateTime_end = new DateTime(composite_settings, SWT.BORDER);
+		dateTime_end = new DateTime(composite_settings, SWT.BORDER);
 		dateTime_end.setBounds(372, 35, 84, 20);
 		
 		Label lb_playTime = new Label(composite_settings, SWT.NONE);
@@ -194,7 +198,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		lb_toIcon1.setBounds(248, 69, 54, 12);
 		lb_toIcon1.setText("到");
 		
-		DateTime time_end = new DateTime(composite_settings, SWT.BORDER | SWT.TIME);
+		time_end = new DateTime(composite_settings, SWT.BORDER | SWT.TIME);
 		time_end.setBounds(372, 61, 84, 20);
 		
 		Label lb_week = new Label(composite_settings, SWT.NONE);
@@ -261,6 +265,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		btn_weekdays = new Button[7];
 		for(int i = 0; i < btn_weekdays.length; i++){
 			btn_weekdays[i] = new Button(composite_settings, SWT.CHECK);
+			btn_weekdays[i].setSelection(true);
 		}		
 		
 		btn_weekdays[0].setBounds(85, 95, 57, 16);
@@ -293,13 +298,17 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		txt_playInteraval.setText(String.valueOf(1));
 		
 		//初始化日期和时间
-		dateTime_start.setYear(1990);
-		dateTime_start.setMonth(7);
-		dateTime_start.setDay(6);
+		dateTime_end.setYear(3000);
+		dateTime_end.setMonth(7);
+		dateTime_end.setDay(6);
 		
 		time_start.setHours(0);
 		time_start.setMinutes(0);
 		time_start.setSeconds(0);
+		
+		time_end.setHours(23);
+		time_end.setMinutes(59);
+		time_end.setSeconds(59);
 		
 		//显示所有已有图片，供用户选择
 		addImageToChoose();
@@ -452,6 +461,8 @@ public class UpdatePlaySolution extends ApplicationWindow {
 											displayName + File.separator + playSolutionName;
 				WordPicEditTool.solutionPath = playSolutionPath;
 				WordPicEditTool.playSolutionName = playSolutionName;
+				//或播放控制信息，传递给文字图片编辑器
+				WordPicEditTool.playControl = getPlayControl();
 				//向编辑器注册
 				wordPicEditTool.addUpdatePlaySolution(curUpdatePlaySolution);
 				wordPicEditTool.open();
@@ -659,4 +670,62 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		
 	}
 	
+	/**
+	 * 获取面板上面控制播放信息
+	 * @return
+	 */
+	private PlayControl getPlayControl(){
+		PlayControl playControl = new PlayControl();
+		String playType = combo_playType.getItem(combo_playType.getSelectionIndex());
+		if(playType.equals("普通播放"))
+			playControl.setPlayType(1);
+		else
+			playControl.setPlayType(2);
+		int timeInterval = Integer.valueOf(txt_playInteraval.getText());
+		playControl.setTimeInterval(timeInterval);
+		
+		//设置开始播放日期 格式 yyyy-mm-dd
+		int year = this.dateTime_start.getYear();
+		int month = this.dateTime_start.getMonth();
+		int day = this.dateTime_start.getDay();
+		
+		String dateStr = year + "-" + month + "-" + day;
+		playControl.setDateTimeStart(Date.valueOf(dateStr));
+		
+		//设置结束播放日期
+		year = this.dateTime_end.getYear();
+		month = this.dateTime_end.getMonth();
+		day = this.dateTime_end.getDay();
+		
+		dateStr = year + "-" + month + "-" + day;
+		playControl.setDateTimeEnd(Date.valueOf(dateStr));
+		
+		//设置开始播放时间 格式hh:mm:ss
+		int hour = this.time_start.getHours();
+		int minute = this.time_start.getMinutes();
+		int second = this.time_start.getSeconds();
+		
+		String timeStr = hour + ":" + minute + ":" + second;
+		playControl.setTimeStart(Time.valueOf(timeStr));
+		
+		//设置结束播放时间
+		hour = this.time_end.getHours();
+		minute = this.time_end.getMinutes();
+		second = this.time_end.getSeconds();
+		
+		timeStr = hour + ":" + minute + ":" + second;
+		playControl.setTimeEnd(Time.valueOf(timeStr));
+		
+		//获取播放星期
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < btn_weekdays.length; i++){
+			if(btn_weekdays[i].getSelection())
+				sb.append("1");
+			else
+				sb.append("0");				
+		}
+		
+		playControl.setWeekdays(sb.toString());
+		return playControl;
+	}
 }

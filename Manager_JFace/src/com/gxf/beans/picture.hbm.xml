@@ -20,6 +20,10 @@
         <many-to-one name="playSolution" class="com.gxf.beans.PlaySolution" 
                          column="playSolutionId" >
         </many-to-one>
+        
+        <many-to-one name="playControl" class="com.gxf.beans.PlayControl" 
+                         column="playControlId"  lazy= "false" cascade="all" unique="true">
+        </many-to-one>
     </class>
 
 </hibernate-mapping>

@@ -7,12 +7,15 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.gxf.beans.Picture;
+import com.gxf.beans.PlayControl;
 import com.gxf.dao.BaseDao;
 import com.gxf.dao.PictureDao;
+import com.gxf.dao.PlayControlDao;
 
 public class PictureDaoImpl implements PictureDao {
 	
 	private BaseDao baseDao = new BaseDao();
+	private PlayControlDao playControlDao = new PlayControlDaoImpl();
 	
 	/* (non-Javadoc)
 	 * @see com.gxf.dao.PictureDao#addPicture(com.gxf.beans.Picture)
@@ -52,10 +55,19 @@ public class PictureDaoImpl implements PictureDao {
 	@Override
 	public void deletePictureByPicPath(String picPath) {
 		Session session = baseDao.getSession();
+		session.beginTransaction();
+		//先删除对应的控制信息
+		String hql_query = "from Picture p where p.picPath = ?";
+		Query queryControl = session.createQuery(hql_query);
+		queryControl.setString(0, picPath);
+		Picture picture = (Picture) queryControl.list().get(0);
+		PlayControl playControl = picture.getPlayControl();
+		playControlDao.deletePlayControl(playControl);
+		
+		//删除图片
 		String hql = "delete Picture p where p.picPath = ?";
 		Query query = session.createQuery(hql);
 		query.setString(0, picPath);
-		session.beginTransaction();
 		query.executeUpdate();
 		
 		//提交事务，关闭session

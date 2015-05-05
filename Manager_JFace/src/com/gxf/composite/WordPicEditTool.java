@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.gxf.beans.Picture;
+import com.gxf.beans.PlayControl;
 import com.gxf.beans.PlaySolution;
 import com.gxf.dao.PictureDao;
 import com.gxf.dao.PlaySolutionDao;
@@ -99,6 +100,9 @@ public class WordPicEditTool extends ApplicationWindow {
 	
 	//获取UpdatePlaySolution用于刷新表格
 	private UpdatePlaySolution updatePlaySolution;
+	
+	//方案播放控制
+	public static PlayControl playControl;
 
 	
 	/**
@@ -829,9 +833,12 @@ public class WordPicEditTool extends ApplicationWindow {
 		Picture picture = new Picture();
 		picture.setPicName(imageName);
 		picture.setPicPath(imagePath);
-		System.out.println("imagePath = " + imagePath);
+//		System.out.println("imagePath = " + imagePath);
 		PlaySolution playSolution = playSolutionDao.querySolutionByNanme(WordPicEditTool.playSolutionName);
+		//设置播放方案和控制信息
 		picture.setPlaySolution(playSolution);		
+		picture.setPlayControl(WordPicEditTool.playControl);
+		
 		pictureDao.addPicture(picture);
 		
 		//保存图片

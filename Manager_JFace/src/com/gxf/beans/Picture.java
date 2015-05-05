@@ -5,6 +5,7 @@ public class Picture {
 	private String picName;
 	private String picPath;
 	private PlaySolution playSolution;
+	private PlayControl playControl;
 	
 	public int getId() {
 		return id;
@@ -29,6 +30,12 @@ public class Picture {
 	}
 	public void setPlaySolution(PlaySolution playSolution) {
 		this.playSolution = playSolution;
+	}
+	public PlayControl getPlayControl() {
+		return playControl;
+	}
+	public void setPlayControl(PlayControl playControl) {
+		this.playControl = playControl;
 	}
 	
 }

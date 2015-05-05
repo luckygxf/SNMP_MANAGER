@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="com.gxf.beans">
+
+    <class name="com.gxf.beans.PlayControl" table="playControl">
+        <id name="id" type="integer">
+        	<column name="id"></column> 
+        	<generator class ="identity"></generator>
+        </id>
+        <property name="playType" type="integer">
+        	<column name="playType" length="2"/>
+        </property>
+        <property name="timeInterval" type="integer">
+        	<column name="timeInterval" length="11"/>
+        </property>
+        <property name="dateTimeStart" type="date">
+        	<column name="dateTimeStart"/>
+        </property>
+        <property name="dateTimeEnd" type="date">
+        	<column name="dateTimeEnd"/>
+        </property>
+        <property name="timeStart" type="time">
+        	<column name="timeStart"/>
+        </property>
+        <property name="timeEnd" type="time">
+        	<column name="timeEnd"/>
+        </property>
+        <property name="weekdays" type="string">
+        	<column name="weekdays"/>
+        </property>
+    </class>
+
+</hibernate-mapping>
