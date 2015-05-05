@@ -1,6 +1,8 @@
 package com.gxf.composite;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -22,6 +24,16 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.DateTime;
 
+
+
+
+
+
+import com.gxf.beans.PlaySolution;
+import com.gxf.dao.DisplayDao;
+import com.gxf.dao.PlaySolutionDao;
+import com.gxf.dao.impl.DisplayDaoImpl;
+import com.gxf.dao.impl.PlaySolutionDaoImpl;
 import com.gxf.util.AllIP;
 import com.gxf.util.Config;
 import com.gxf.util.PicFilenameFilter;
@@ -58,12 +70,17 @@ public class SendPlaySolution extends Composite {
 	public static Shell curShell;
 	
 	//存放所有播放方案的文件夹
-	private final String DIC_NAME_PLAY_SOLUTIONS = "playSolutions";
+//	private final String DIC_NAME_PLAY_SOLUTIONS = "playSolutions";
 	//显示选中播放方案所有图片
 	private ScrolledComposite scrolledComposite_pics;
+	private Label lb_chooseDisplay;
+	private Combo combo_display;
 //	private Composite composite_pics;
 //	private Label labels_pic[];
 	
+	//数据库访问类
+	private DisplayDao displayDao =  new DisplayDaoImpl();
+	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
 	
 	public SendPlaySolution(Composite parent, int style) {
 		super(parent, style);
@@ -170,15 +187,22 @@ public class SendPlaySolution extends Composite {
 		
 		//显示播放方案
 		Label lb_chooseSolution = new Label(this, SWT.NONE);
-		lb_chooseSolution.setBounds(10, 9, 54, 12);
+		lb_chooseSolution.setBounds(329, 9, 54, 12);
 		lb_chooseSolution.setText("播放方案");
 		
 		//显示播放方案
 		combo_solutions = new Combo(this, SWT.NONE);
-		combo_solutions.setBounds(109, 6, 86, 20);
+		combo_solutions.setBounds(428, 6, 86, 20);
 		
 		scrolledComposite_pics = new ScrolledComposite(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite_pics.setBounds(0, 27, 590, 189);
+		
+		lb_chooseDisplay = new Label(this, SWT.NONE);
+		lb_chooseDisplay.setBounds(22, 9, 54, 12);
+		lb_chooseDisplay.setText("显示屏");
+		
+		combo_display = new Combo(this, SWT.NONE);
+		combo_display.setBounds(109, 6, 86, 20);
 		
 //		scrolledComposite_pics.setLayout(new FillLayout());
 //		scrolledComposite_pics.setExpandHorizontal(true);
@@ -199,10 +223,19 @@ public class SendPlaySolution extends Composite {
 		combo_playStyle.select(0);
 		btn_sendSoluton.addSelectionListener(new ButtonListenerImpl());
 		
+		//初始化显示屏
+		String displayNames[] = getDisplayNames();
+		if(displayNames.length != 0){
+			combo_display.setItems(displayNames);			
+			combo_display.select(0);
+		}
+		
 		//初始化播放方案
 		String playSolutions[] = getSolutions();
-		combo_solutions.setItems(playSolutions);
-		combo_solutions.select(0);
+		if(playSolutions != null && playSolutions.length != 0){
+			combo_solutions.setItems(playSolutions);			
+			combo_solutions.select(0);
+		}
 		
 		//初始化日期和时间
 		dateTime_start.setYear(1990);
@@ -214,16 +247,18 @@ public class SendPlaySolution extends Composite {
 		time_start.setSeconds(0);				
 
 		//加载图片到滚动面板
-		addPicsToScrollComposite(combo_solutions.getItem(0));
+		addPicsToScrollComposite();
+		//显示屏combo添加监听器
+		combo_display.addSelectionListener(new ComboSelectionListener());
 		//播放方案list添加监听器
-		combo_solutions.addSelectionListener(new SolutionChangeListener());
+		combo_solutions.addSelectionListener(new ComboSelectionListener());
 		
 		//初始化主机列表
-		if(AllIP.IPS == null || AllIP.IPS.size() == 0)
-			new AllIP().getAllIP();
-		for(int i = 0; i < AllIP.IPS.size(); i++){
-			list_hostList.add(AllIP.IPS.get(i));
-		}
+//		if(AllIP.IPS == null || AllIP.IPS.size() == 0)
+//			new AllIP().getAllIP();
+//		for(int i = 0; i < AllIP.IPS.size(); i++){
+//			list_hostList.add(AllIP.IPS.get(i));
+//		}
 	}
 	
 	/**
@@ -292,31 +327,47 @@ public class SendPlaySolution extends Composite {
 	 * 发送播放方案
 	 */
 	public void sendPlaySolution(){
-		//主机ip在list中索引
-		int ipIndex = list_hostList.getSelectionIndex();
+		//发送播放方案步骤
+		//1.生成xml控制文件
+		//2.压缩图片和xml文件
+		//3.发送压缩文件
+		//4.设置当前播放方案，写入数据库 
 		
-		//没有选择目标主机ip
-		if(ipIndex == -1)
+		//如果没有可以发送的播放方案
+		if(combo_display.getItemCount() == 0|| combo_solutions.getItemCount() == 0)
 		{
 			MessageBox messageBox = new MessageBox(curShell);
 			messageBox.setText("选择主机");
-			messageBox.setMessage("请选择主机ip!");
+			messageBox.setMessage("没有可以发送的播放方案!");
 			messageBox.open();
 			return ;
 		}
-		String ip = list_hostList.getItem(list_hostList.getSelectionIndex());
 		
-		Config config = getConfig();												//获取配置信息
-		String solutionName = combo_solutions.getItem(combo_solutions.getSelectionIndex());
-		createConfigXml(solutionName, config); 										//生成配置文件
-		//压缩播放方案
-		util.compressPlaySoution(solutionName);
-		String solutionPath = util.getCurrentProjectPath() + File.separator + "playSolutions" 
-								+ File.separator + solutionName + ".zip";
+		//获取对应的显示屏和播放方案实体
+		com.gxf.beans.Display display = displayDao.queryDisplayByName(combo_display.getItem(combo_display.getSelectionIndex()));
+		Set<PlaySolution> setOfPlaySolution = display.getSolutions();
+		String playSolutionName = combo_solutions.getItem(combo_solutions.getSelectionIndex());
 		
+		PlaySolution playSolution = null;
+		for(Iterator<PlaySolution> it = setOfPlaySolution.iterator(); it.hasNext();){
+			playSolution = it.next();
+			if(playSolution.getName().equals(playSolutionName))
+				break;
+		}//for
+		
+		//目的主机IP
+		String ip = display.getCommunication().getIp();
+		
+		//生成xml控制文件
+		util.createConfigXml(display, playSolution);
+		//压缩图片
+		util.compressPlaySoution(display.getName(), playSolution.getName());
 		//发送解决方案
-		sendPic.send(ip, solutionPath);
-		
+//		String solutionPath = util.getCurrentProjectPath() + File.separator + display.getName() + File.separator  + playSolution.getName()
+//				+ File.separator + playSolution.getName() + ".zip";
+//		sendPic.send(ip, solutionPath);
+		//设置当前播放方案，写入到数据库中
+			
 		//提示发送成功
 		MessageBox messageBox = new MessageBox(curShell);
 		messageBox.setText("发送方案");
@@ -329,20 +380,21 @@ public class SendPlaySolution extends Composite {
 	 * @return
 	 */
 	private String[] getSolutions(){
-		//获取存放播放方案的路径
-		String solutionsPath = util.getCurrentProjectPath() + File.separator + DIC_NAME_PLAY_SOLUTIONS;
-		File solutionsFile = new File(solutionsPath);
-		//使用过滤器过滤压缩包
-		File solutionsFiles[] = solutionsFile.listFiles(new SolutionNameFilter());
+		int displayCount = combo_display.getItemCount();
+		if(displayCount == 0)
+			return null;
+//		String solutionNames[] = null;
+		String displayName = combo_display.getItem(combo_display.getSelectionIndex());
 		
-		String result[] = new String[solutionsFiles.length];
+		com.gxf.beans.Display display = displayDao.queryDisplayByName(displayName);
+		Set<PlaySolution> setOfSolution = display.getSolutions();
+		String solutionNames[] = new String[setOfSolution.size()];
+		int index = 0;
+		for(Iterator<PlaySolution> it = setOfSolution.iterator(); it.hasNext(); ){
+			solutionNames[index++] = it.next().getName();
+		}//for
 		
-		//获取播放方案名
-		for(int i = 0; i < result.length; i++){
-			result[i] = solutionsFiles[i].getName();
-		}
-		
-		return result;
+		return solutionNames;
 	}
 	
 	
@@ -351,7 +403,15 @@ public class SendPlaySolution extends Composite {
 	 * 加载播放方案的图片到滚动面板上
 	 * @param solutionName
 	 */
-	public void addPicsToScrollComposite(String solutionName){
+	public void addPicsToScrollComposite(){
+		//如果没有播放方案直接返回
+		if(combo_display.getItemCount() == 0 || combo_solutions.getItemCount() == 0)
+			return;
+		
+		//获取选中的显示屏和播放方案名
+		String displayName = combo_display.getItem(combo_display.getSelectionIndex());
+		String playSolutionName = combo_solutions.getItem(combo_solutions.getSelectionIndex());
+		
 		//显示播放方案的图片
 		Composite composite_pics = new Composite(scrolledComposite_pics, SWT.NONE);
 		scrolledComposite_pics.setContent(composite_pics);
@@ -361,8 +421,8 @@ public class SendPlaySolution extends Composite {
 		composite_pics.setLayout(gridLayout);
 		
 		String curProjectPath = util.getCurrentProjectPath();
-		String solutionPath = curProjectPath + File.separator + DIC_NAME_PLAY_SOLUTIONS 
-							+ File.separator + File.separator + solutionName;
+		String solutionPath = curProjectPath + File.separator + displayName 
+							+ File.separator  + playSolutionName;
 		File solutionPathFile = new File(solutionPath);
 		//获取所有图片文件
 		File pics[] = solutionPathFile.listFiles(new PicFilenameFilter());
@@ -393,26 +453,57 @@ public class SendPlaySolution extends Composite {
 		composite_pics.layout();
 		
 	}
+
 	
 	/**
-	 * 根据不同的播放方案，预览播放方式图片
+	 * 从数据库中读取显示屏名字
+	 * @return
+	 */
+	private String[] getDisplayNames(){
+		java.util.List<com.gxf.beans.Display> listOfDisplay = displayDao.queryAllDisplay();
+		String names[] = new String[listOfDisplay.size()];
+		
+		for(int i = 0; i <listOfDisplay.size(); i++){
+			names[i] = listOfDisplay.get(i).getName();
+		}//for
+		
+		return names;
+	}
+	
+	/**
+	 * 列表监听器
 	 * @author Administrator
 	 *
 	 */
-	class SolutionChangeListener implements SelectionListener{
+	class ComboSelectionListener extends SelectionAdapter{
 
 		@Override
-		public void widgetDefaultSelected(SelectionEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent arg0) {
-			//根据不同的播放方案加载不同的图片
-			String solutionName = combo_solutions.getItem(combo_solutions.getSelectionIndex());
-			addPicsToScrollComposite(solutionName);
-			
+		public void widgetSelected(SelectionEvent e) {
+			if(e.getSource() == combo_display){														//显示屏改变
+				if(combo_display.getItemCount() == 0)
+					return;
+				//获取显示屏名字
+				String displayName = combo_display.getItem(combo_display.getSelectionIndex());
+				com.gxf.beans.Display display = displayDao.queryDisplayByName(displayName);
+				Set<PlaySolution> listOfSolution = display.getSolutions();
+				
+				if(listOfSolution.size() == 0)
+					return;
+				int index = 0;
+				String solutionNames[] = new String[listOfSolution.size()];
+				for(Iterator<PlaySolution> it = listOfSolution.iterator(); it.hasNext();){
+					solutionNames[index++] = it.next().getName();
+				}
+				combo_solutions.setItems(solutionNames);
+				combo_solutions.select(0);
+				
+				//刷新图片显示
+				addPicsToScrollComposite();
+			}
+			else if(e.getSource() == combo_solutions){												//播放方案改变
+				//刷新图片显示
+				addPicsToScrollComposite();
+			}
 		}
 		
 	}

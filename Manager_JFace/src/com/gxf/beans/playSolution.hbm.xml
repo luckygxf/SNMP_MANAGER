@@ -25,7 +25,7 @@
         <property name="comment" type="string">
         	<column name="comment" length="100"/>
         </property>
-        <set name="pictures" inverse="false" cascade="delete">
+        <set name="pictures" inverse="false" cascade="delete" lazy = "false">
                 <key column="playSolutionId" ></key>
                 <one-to-many class="com.gxf.beans.Picture"/>
         </set>

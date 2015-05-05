@@ -32,6 +32,8 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
+import com.gxf.beans.Picture;
+import com.gxf.beans.PlayControl;
 import com.gxf.entities.DisplayDevice;
 import com.gxf.entities.FontFormat;
 
@@ -329,8 +331,8 @@ public class Util {
      * 根据播放方案名字压缩文件
      * @param solutionName
      */
-    public void compressPlaySoution(String solutionName) {
-		String dicPath = getCurrentProjectPath() + File.separator + "playSolutions" + File.separator + solutionName;
+    public void compressPlaySoution(String displayName, String solutionName) {
+		String dicPath = getCurrentProjectPath() + File.separator + displayName + File.separator + solutionName;
 		String targetPath = dicPath +  ".zip";
 		
 		File file = new File(dicPath) ;												// 定义要压缩的文件夹  
@@ -422,4 +424,79 @@ public class Util {
 		return date_str;
     }
     
+    /**
+     * 根据控制信息生成xml文件
+     * @param listOfPicture
+     */
+    public void createConfigXml(com.gxf.beans.Display display, com.gxf.beans.PlaySolution playSolution){
+    	//获取播放路径下面的图片
+    	List<Picture> listOfPicture = new ArrayList<Picture>(playSolution.getPictures());
+    	//没有图片
+    	if(listOfPicture == null || listOfPicture.size() == 0)
+    		return;
+    	//先生成根节点pictures
+    	Document document = DocumentHelper.createDocument();
+    	Element pictures = document.addElement("pictures");
+    	
+    	//生成xml内容
+    	for(int i = 0; i < listOfPicture.size(); i++){
+    		Picture pictureBean = (Picture) listOfPicture.get(i);
+    		PlayControl playControlBean = pictureBean.getPlayControl();
+    		
+    		//生成picture节点
+    		Element picture = pictures.addElement("picture");
+    		picture.addAttribute("name", pictureBean.getPicName());
+    		
+    		//生成type节点
+    		Element type = picture.addElement("type");
+    		type.addText(String.valueOf(playControlBean.getPlayType()));
+    		//生成timeInterval节点
+    		Element timeInterval = picture.addElement("timeInterval");
+    		timeInterval.addText(String.valueOf(playControlBean.getTimeInterval()));
+    		
+    		//生成date_start节点
+    		Element date_start  = picture.addElement("date_start");
+    		date_start.addText(playControlBean.getDateTimeStart().toString());
+    		
+    		//生成date_end节点
+    		Element date_end = picture.addElement("date_end");
+    		date_end.addText(playControlBean.getDateTimeEnd().toString());
+    		
+    		//生成time_start节点
+    		Element time_start = picture.addElement("time_start");
+    		time_start.addText(playControlBean.getTimeStart().toString());
+    		
+    		//生成time_end节点
+    		Element time_end = picture.addElement("time_end");
+    		time_end.addText(playControlBean.getTimeEnd().toString());
+    		
+    		//生成weekdays节点
+    		Element weekdays = picture.addElement("weekdays");
+    		weekdays.addText(playControlBean.getWeekdays());
+    	}//for
+    	
+        //向播放方案下面添加配置文件
+        String dic = getCurrentProjectPath() + File.separator + File.separator + display.getName() + File.separator + 
+        									playSolution.getName();
+        String configFilePath = dic + File.separator + playSolution.getName() + ".xml";
+//        FileWriter out;
+//		try {
+//			out = new FileWriter(new File(configFilePath));
+//			document.write(out);
+//			out.flush();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}        
+		
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        format.setEncoding("UTF-8");
+        File file = new File(configFilePath);
+        
+        try {
+        	XMLWriter writer = new  XMLWriter(new FileOutputStream(file), format);
+			writer.write(document);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 }
