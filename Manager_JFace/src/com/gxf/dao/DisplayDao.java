@@ -48,4 +48,11 @@ public interface DisplayDao {
 	 * @return
 	 */
 	public Display queryDisplayById(int id);
+	
+	/**
+	 * 更新当前播放方案
+	 * @param displayName
+	 * @param curPlaySolutionName
+	 */
+	public void updateCurPlaySolution(String displayName, String curPlaySolutionName);
 }

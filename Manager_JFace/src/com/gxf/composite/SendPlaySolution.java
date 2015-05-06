@@ -369,7 +369,7 @@ public class SendPlaySolution extends Composite {
 		
 		sendPic.send(ip, solutionPath);
 		//设置当前播放方案，写入到数据库中
-			
+		displayDao.updateCurPlaySolution(display.getName(), playSolution.getName());
 		//提示发送成功
 		MessageBox messageBox = new MessageBox(curShell);
 		messageBox.setText("发送方案");

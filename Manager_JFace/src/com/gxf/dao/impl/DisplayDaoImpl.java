@@ -114,5 +114,24 @@ public class DisplayDaoImpl implements DisplayDao {
 		
 		return display;
 	}
+
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.DisplayDao#updateCurPlaySolution(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void updateCurPlaySolution(String displayName,
+			String curPlaySolutionName) {
+		Session session = baseDao.getSession();
+		session.beginTransaction();
+		String hql = "update Display d set d.curPlaySolutionName = ? where d.name = ?";
+		Query query = session.createQuery(hql);
+		query.setString(0, displayName);
+		query.setString(1, curPlaySolutionName);
+		
+		query.executeUpdate();
+		session.getTransaction().commit();
+		
+		session.close();
+	}
 	
 }
