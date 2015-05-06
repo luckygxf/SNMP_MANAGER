@@ -136,8 +136,8 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		
 		sc_picsToChoose = new ScrolledComposite(group_picsToChoose, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		sc_picsToChoose.setBounds(10, 20, 554, 129);
-		sc_picsToChoose.setExpandHorizontal(true);
-		sc_picsToChoose.setExpandVertical(true);
+//		sc_picsToChoose.setExpandHorizontal(true);
+//		sc_picsToChoose.setExpandVertical(true);
 		
 		Group group_picsChosed = new Group(container, SWT.NONE);
 		group_picsChosed.setText("已添加图片");
@@ -145,8 +145,8 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		
 		sc_picsChosed = new ScrolledComposite(group_picsChosed, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		sc_picsChosed.setBounds(10, 20, 554, 142);
-		sc_picsChosed.setExpandHorizontal(true);
-		sc_picsChosed.setExpandVertical(true);
+//		sc_picsChosed.setExpandHorizontal(true);
+//		sc_picsChosed.setExpandVertical(true);
 		
 		Group group_playSettings = new Group(container, SWT.NONE);
 		group_playSettings.setText("播放设置");

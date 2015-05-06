@@ -88,102 +88,102 @@ public class SendPlaySolution extends Composite {
 		curShell = parent.getShell();
 		
 		//显示播放方式标签
-		lb_showPlayStyle = new Label(this, SWT.NONE);
-		lb_showPlayStyle.setBounds(10, 227, 54, 12);
-		lb_showPlayStyle.setText("播放方式");
-		
-		combo_playStyle = new Combo(this, SWT.NONE);
-		combo_playStyle.setBounds(109, 219, 86, 20);
-		
-		//显示播放时间间隔标签
-		Label lb_timeInterval = new Label(this, SWT.NONE);
-		lb_timeInterval.setBounds(241, 227, 82, 12);
-		lb_timeInterval.setText("播放时间间隔");
-		
-		//播放时间间隔设置文本框,默认为1s
-		txt_timeInterval = new Text(this, SWT.BORDER);
-		txt_timeInterval.setBounds(329, 224, 35, 18);
-		txt_timeInterval.setText(String.valueOf(1));
-		
-		//显示秒标签
-		Label lb_second = new Label(this, SWT.NONE);
-		lb_second.setBounds(370, 227, 54, 12);
-		lb_second.setText("秒");
-		
-		//显示播放日期标签
-		Label lb_playDate = new Label(this, SWT.NONE);
-		lb_playDate.setBounds(10, 254, 54, 12);
-		lb_playDate.setText("播放日期");
-		
-		//显示到标签
-		Label lb_dateTo = new Label(this, SWT.NONE);
-		lb_dateTo.setBounds(241, 254, 54, 12);
-		lb_dateTo.setText("到");
-		
-		//显示播放时间标签
-		Label lb_playTime = new Label(this, SWT.NONE);
-		lb_playTime.setBounds(10, 287, 54, 12);
-		lb_playTime.setText("播放时间");
-		
-		//显示到标签
-		Label lb_timeTo = new Label(this, SWT.NONE);
-		lb_timeTo.setBounds(241, 287, 54, 12);
-		lb_timeTo.setText("到");
-		
-		Label lb_week = new Label(this, SWT.NONE);
-		lb_week.setBounds(10, 315, 54, 12);
-		lb_week.setText("星期");
-		
-		//初始化星期复选框
-		btn_weekdays = new Button[7];
-		for(int i = 0; i < btn_weekdays.length; i++){
-			btn_weekdays[i] = new Button(this, SWT.CHECK);
-		}		
-		
-		btn_weekdays[0].setBounds(109, 315, 57, 16);
-		btn_weekdays[0].setText("星期一");
-		
-		btn_weekdays[1].setText("星期二");
-		btn_weekdays[1].setBounds(175, 315, 57, 16);
-
-		btn_weekdays[2].setText("星期三");
-		btn_weekdays[2].setBounds(238, 315, 57, 16);
-		
-		btn_weekdays[3].setText("星期四");
-		btn_weekdays[3].setBounds(301, 315, 57, 16);
-		
-		btn_weekdays[4].setText("星期五");
-		btn_weekdays[4].setBounds(109, 339, 57, 16);
-		
-		btn_weekdays[5].setText("星期六");
-		btn_weekdays[5].setBounds(175, 339, 57, 16);
-		
-		btn_weekdays[6].setText("星期天");
-		btn_weekdays[6].setBounds(238, 339, 57, 16);
-		
-		Label lb_hostList = new Label(this, SWT.NONE);
-		lb_hostList.setBounds(10, 362, 54, 12);
-		lb_hostList.setText("主机列表");
+//		lb_showPlayStyle = new Label(this, SWT.NONE);
+//		lb_showPlayStyle.setBounds(10, 227, 54, 12);
+//		lb_showPlayStyle.setText("播放方式");
+//		
+//		combo_playStyle = new Combo(this, SWT.NONE);
+//		combo_playStyle.setBounds(109, 219, 86, 20);
+//		
+//		//显示播放时间间隔标签
+//		Label lb_timeInterval = new Label(this, SWT.NONE);
+//		lb_timeInterval.setBounds(241, 227, 82, 12);
+//		lb_timeInterval.setText("播放时间间隔");
+//		
+//		//播放时间间隔设置文本框,默认为1s
+//		txt_timeInterval = new Text(this, SWT.BORDER);
+//		txt_timeInterval.setBounds(329, 224, 35, 18);
+//		txt_timeInterval.setText(String.valueOf(1));
+//		
+//		//显示秒标签
+//		Label lb_second = new Label(this, SWT.NONE);
+//		lb_second.setBounds(370, 227, 54, 12);
+//		lb_second.setText("秒");
+//		
+//		//显示播放日期标签
+//		Label lb_playDate = new Label(this, SWT.NONE);
+//		lb_playDate.setBounds(10, 254, 54, 12);
+//		lb_playDate.setText("播放日期");
+//		
+//		//显示到标签
+//		Label lb_dateTo = new Label(this, SWT.NONE);
+//		lb_dateTo.setBounds(241, 254, 54, 12);
+//		lb_dateTo.setText("到");
+//		
+//		//显示播放时间标签
+//		Label lb_playTime = new Label(this, SWT.NONE);
+//		lb_playTime.setBounds(10, 287, 54, 12);
+//		lb_playTime.setText("播放时间");
+//		
+//		//显示到标签
+//		Label lb_timeTo = new Label(this, SWT.NONE);
+//		lb_timeTo.setBounds(241, 287, 54, 12);
+//		lb_timeTo.setText("到");
+//		
+//		Label lb_week = new Label(this, SWT.NONE);
+//		lb_week.setBounds(10, 315, 54, 12);
+//		lb_week.setText("星期");
+//		
+//		//初始化星期复选框
+//		btn_weekdays = new Button[7];
+//		for(int i = 0; i < btn_weekdays.length; i++){
+//			btn_weekdays[i] = new Button(this, SWT.CHECK);
+//		}		
+//		
+//		btn_weekdays[0].setBounds(109, 315, 57, 16);
+//		btn_weekdays[0].setText("星期一");
+//		
+//		btn_weekdays[1].setText("星期二");
+//		btn_weekdays[1].setBounds(175, 315, 57, 16);
+//
+//		btn_weekdays[2].setText("星期三");
+//		btn_weekdays[2].setBounds(238, 315, 57, 16);
+//		
+//		btn_weekdays[3].setText("星期四");
+//		btn_weekdays[3].setBounds(301, 315, 57, 16);
+//		
+//		btn_weekdays[4].setText("星期五");
+//		btn_weekdays[4].setBounds(109, 339, 57, 16);
+//		
+//		btn_weekdays[5].setText("星期六");
+//		btn_weekdays[5].setBounds(175, 339, 57, 16);
+//		
+//		btn_weekdays[6].setText("星期天");
+//		btn_weekdays[6].setBounds(238, 339, 57, 16);
+//		
+//		Label lb_hostList = new Label(this, SWT.NONE);
+//		lb_hostList.setBounds(10, 362, 54, 12);
+//		lb_hostList.setText("主机列表");
 		
 		//主机列表控件
-		list_hostList = new List(this, SWT.BORDER);
-		list_hostList.setBounds(109, 357, 147, 68);
+//		list_hostList = new List(this, SWT.BORDER);
+//		list_hostList.setBounds(109, 357, 147, 68);
 		
 		btn_sendSoluton = new Button(this, SWT.NONE);
-		btn_sendSoluton.setBounds(109, 447, 72, 22);
+		btn_sendSoluton.setBounds(244, 451, 72, 22);
 		btn_sendSoluton.setText("发送播放方案");
 		
-		dateTime_start = new DateTime(this, SWT.BORDER);
-		dateTime_start.setBounds(109, 254, 86, 20);
-		
-		dateTime_end = new DateTime(this, SWT.BORDER);
-		dateTime_end.setBounds(329, 254, 84, 20);
-		
-		time_start = new DateTime(this, SWT.BORDER | SWT.TIME);
-		time_start.setBounds(111, 287, 84, 20);
-		
-		time_end = new DateTime(this, SWT.BORDER | SWT.TIME);
-		time_end.setBounds(329, 287, 84, 20);
+//		dateTime_start = new DateTime(this, SWT.BORDER);
+//		dateTime_start.setBounds(109, 254, 86, 20);
+//		
+//		dateTime_end = new DateTime(this, SWT.BORDER);
+//		dateTime_end.setBounds(329, 254, 84, 20);
+//		
+//		time_start = new DateTime(this, SWT.BORDER | SWT.TIME);
+//		time_start.setBounds(111, 287, 84, 20);
+//		
+//		time_end = new DateTime(this, SWT.BORDER | SWT.TIME);
+//		time_end.setBounds(329, 287, 84, 20);
 		
 		//显示播放方案
 		Label lb_chooseSolution = new Label(this, SWT.NONE);
@@ -195,7 +195,7 @@ public class SendPlaySolution extends Composite {
 		combo_solutions.setBounds(428, 6, 86, 20);
 		
 		scrolledComposite_pics = new ScrolledComposite(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite_pics.setBounds(0, 27, 590, 189);
+		scrolledComposite_pics.setBounds(0, 27, 590, 414);
 		
 		lb_chooseDisplay = new Label(this, SWT.NONE);
 		lb_chooseDisplay.setBounds(22, 9, 54, 12);
@@ -218,9 +218,9 @@ public class SendPlaySolution extends Composite {
 	 */
 	public void init(){
 		//初始化播放方式控件内容
-		String playStyles[] = new String[]{"普通播放", "定时播放"};
-		combo_playStyle.setItems(playStyles);
-		combo_playStyle.select(0);
+//		String playStyles[] = new String[]{"普通播放", "定时播放"};
+//		combo_playStyle.setItems(playStyles);
+//		combo_playStyle.select(0);
 		btn_sendSoluton.addSelectionListener(new ButtonListenerImpl());
 		
 		//初始化显示屏
@@ -238,13 +238,13 @@ public class SendPlaySolution extends Composite {
 		}
 		
 		//初始化日期和时间
-		dateTime_start.setYear(1990);
-		dateTime_start.setMonth(7);
-		dateTime_start.setDay(6);
-		
-		time_start.setHours(0);
-		time_start.setMinutes(0);
-		time_start.setSeconds(0);				
+//		dateTime_start.setYear(1990);
+//		dateTime_start.setMonth(7);
+//		dateTime_start.setDay(6);
+//		
+//		time_start.setHours(0);
+//		time_start.setMinutes(0);
+//		time_start.setSeconds(0);				
 
 		//加载图片到滚动面板
 		addPicsToScrollComposite();
@@ -363,9 +363,11 @@ public class SendPlaySolution extends Composite {
 		//压缩图片
 		util.compressPlaySoution(display.getName(), playSolution.getName());
 		//发送解决方案
-//		String solutionPath = util.getCurrentProjectPath() + File.separator + display.getName() + File.separator  + playSolution.getName()
-//				+ File.separator + playSolution.getName() + ".zip";
-//		sendPic.send(ip, solutionPath);
+		String solutionPath = util.getCurrentProjectPath() + File.separator + display.getName() 
+				+ File.separator + display.getName() +  "+" + playSolution.getName() + ".zip";
+		System.out.println("ip = " + ip);
+		
+		sendPic.send(ip, solutionPath);
 		//设置当前播放方案，写入到数据库中
 			
 		//提示发送成功

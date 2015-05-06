@@ -9,7 +9,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -329,11 +328,13 @@ public class Util {
     
     /**
      * 根据播放方案名字压缩文件
+     * 压缩文件名为diplayName + playSolutinName,如兴中道+欢度国庆.zip
      * @param solutionName
      */
     public void compressPlaySoution(String displayName, String solutionName) {
-		String dicPath = getCurrentProjectPath() + File.separator + displayName + File.separator + solutionName;
-		String targetPath = dicPath +  ".zip";
+		String dicPath = getCurrentProjectPath() + File.separator + displayName + File.separator  + solutionName;
+		System.out.println("dicPath = " + dicPath);
+		String targetPath = getCurrentProjectPath() + File.separator + displayName + File.separator + displayName + "+" + solutionName +  ".zip";
 		
 		File file = new File(dicPath) ;												// 定义要压缩的文件夹  
         File zipFile = new File(targetPath) ;										// 定义压缩文件名称  
