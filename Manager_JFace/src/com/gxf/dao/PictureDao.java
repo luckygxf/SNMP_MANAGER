@@ -30,4 +30,10 @@ public interface PictureDao {
 	 * @return
 	 */
 	public Picture queryByPicPath(String picPath);
+	
+	/**
+	 * ¸üĞÂpicture,ÒÑ²âÊÔ
+	 * @param picture
+	 */
+	public void updatePicture(Picture picture);
 }

@@ -99,7 +99,7 @@ public class WordPicEditTool extends ApplicationWindow {
 	private PictureDao pictureDao = new PictureDaoImpl();
 	
 	//获取UpdatePlaySolution用于刷新表格
-	private UpdatePlaySolution updatePlaySolution;
+	private SetPlaySolution updatePlaySolution;
 	
 	//方案播放控制
 	public static PlayControl playControl;
@@ -890,7 +890,7 @@ public class WordPicEditTool extends ApplicationWindow {
 	 * 将UpdatePlaySolution注册
 	 * @param updatePlaySolution
 	 */
-	public void addUpdatePlaySolution(UpdatePlaySolution updatePlaySolution){
+	public void addUpdatePlaySolution(SetPlaySolution updatePlaySolution){
 		this.updatePlaySolution = updatePlaySolution;
 	}
 	

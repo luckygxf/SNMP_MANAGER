@@ -16,6 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
@@ -54,7 +55,7 @@ import org.eclipse.swt.widgets.DateTime;
  * @author Administrator
  *
  */
-public class UpdatePlaySolution extends ApplicationWindow {
+public class SetPlaySolution extends ApplicationWindow {
 	//工具类
 	private Util util = new Util();
 	private final String curProjectPath = util.getCurrentProjectPath();
@@ -75,6 +76,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	private Text txt_playInteraval;
 	private Button btn_editPic;
 	private Button btn_close;
+	private Button btn_setPlayControl;
 	
 	
 	//数据库访问类
@@ -87,15 +89,16 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	public static String playSolutionName;
 	
 	//当前窗口对象
-	private UpdatePlaySolution curUpdatePlaySolution;
-	
+	private SetPlaySolution curUpdatePlaySolution;
+	//label选中背景色
+	private final Color LABEL_SELECTED_COLOR =  Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN);
 	//上下文菜单
 //	private Menu contextMenu;
 	
 	/**
 	 * Create the application window.
 	 */
-	public UpdatePlaySolution() {
+	public SetPlaySolution() {
 		super(null);
 		//获取当前对象
 		curUpdatePlaySolution = this;
@@ -210,10 +213,10 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		btn_editPic = new Button(container, SWT.NONE);
 		btn_editPic.setBounds(132, 550, 72, 22);
 		btn_editPic.setText("编辑图片");
-		
-		Button btn_addSolution = new Button(container, SWT.NONE);
-		btn_addSolution.setBounds(244, 550, 72, 22);
-		btn_addSolution.setText("设置");
+		//设置按钮
+		btn_setPlayControl = new Button(container, SWT.NONE);
+		btn_setPlayControl.setBounds(244, 550, 72, 22);
+		btn_setPlayControl.setText("设置");
 		
 		btn_close = new Button(container, SWT.NONE);
 		btn_close.setBounds(360, 550, 72, 22);
@@ -238,7 +241,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		
 		for(int i = 0; i < combo_display.getItems().length; i++){
 			String itemString = combo_display.getItem(i);
-			if(itemString.equals(UpdatePlaySolution.displayName))
+			if(itemString.equals(SetPlaySolution.displayName))
 			{
 				combo_display.select(i);
 				break;
@@ -249,13 +252,14 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		//为按钮注册监听器
 		btn_editPic.addSelectionListener(new ButtonSelectionListener());
 		btn_close.addSelectionListener(new ButtonSelectionListener());
+		btn_setPlayControl.addSelectionListener(new ButtonSelectionListener());
 		
 		queryDisplayNamesToCombo();
 		
 		//设置从前一个页面传过来的播放方案
 		for(int i = 0; i < combo_playSolutionName.getItemCount(); i++){
 			String itemString = combo_playSolutionName.getItem(i);
-			if(itemString.equals(UpdatePlaySolution.playSolutionName)){
+			if(itemString.equals(SetPlaySolution.playSolutionName)){
 				combo_playSolutionName.select(i);
 				break;
 			}
@@ -407,7 +411,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	//对外提供显示窗口的接口
 	public void showWindow(){
 		try {
-			UpdatePlaySolution window = new UpdatePlaySolution();
+			SetPlaySolution window = new SetPlaySolution();
 			window.setBlockOnOpen(true);
 			window.open();
 //			Display.getCurrent().dispose();
@@ -470,6 +474,26 @@ public class UpdatePlaySolution extends ApplicationWindow {
 			}
 			else if(e.getSource() == btn_close){						//关闭窗口
 				curShell.dispose();			
+			}
+			else if(e.getSource() == btn_setPlayControl){				//设置按钮
+				String picPath = selectedPicture();
+				
+				if(picPath.length() == 0){								//没有选中要设置的图片
+					MessageBox messageBox = new MessageBox(curShell);
+					messageBox.setText("提示");
+					messageBox.setMessage("请选择要设置的图片!");
+					messageBox.open();
+					return;
+				}
+				//更新图片控制信息
+				updatePlayControl(picPath);
+				
+				//提示更新成功
+				MessageBox messageBox = new MessageBox(curShell);
+				messageBox.setText("提示");
+				messageBox.setMessage("设置成功!");
+				messageBox.open();
+				
 			}
 		}
 		
@@ -618,7 +642,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 					for(Label label : labels_pic){
 						label.setBackground(null);
 					}
-					temp.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN));
+					temp.setBackground(LABEL_SELECTED_COLOR);
 					sc_picsChosed.setFocus();
 					
 					//获取图片对象和播放控制信息
@@ -796,5 +820,43 @@ public class UpdatePlaySolution extends ApplicationWindow {
 			else
 				btn_weekdays[i].setSelection(false);
 		}
+	}
+	
+	/**
+	 * 查询被选中图片的picPath
+	 * @return
+	 */
+	private String selectedPicture(){
+		Composite composite = (Composite) sc_picsChosed.getChildren()[0];
+		Control[] labels = composite.getChildren();
+		String picPath = "";
+		
+		for(Control control : labels){
+			Label element = (Label)control;
+			if(element.getBackground().equals(LABEL_SELECTED_COLOR)){
+				picPath = (String) element.getData();
+				return picPath;
+			}//if
+		}//for
+		
+		return picPath;
+		
+	}
+	
+	/**
+	 * 更新图片的播放控制信息
+	 * @param picPath
+	 */
+	private void updatePlayControl(String picPath){
+		//获取面板上面的设置
+		PlayControl playControlNew = getPlayControl();
+		//获取以前的的设置，从数据库中读取
+		Picture picture = pictureDao.queryByPicPath(picPath);
+		PlayControl playControlOld = picture.getPlayControl();
+		//把新的控制信息copy到旧的上面
+		util.copyPlayControl(playControlNew, playControlOld);
+		
+		//更新数据库中的数据
+		pictureDao.updatePicture(picture);
 	}
 }

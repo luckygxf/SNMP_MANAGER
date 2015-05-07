@@ -96,4 +96,18 @@ public class PictureDaoImpl implements PictureDao {
 		return picture;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.PictureDao#updatePicture(com.gxf.beans.Picture)
+	 */
+	@Override
+	public void updatePicture(Picture picture) {
+		Session session = baseDao.getSession();
+		session.beginTransaction();
+		
+		session.update(picture);
+		
+		session.getTransaction().commit();
+		session.close();
+	}
+
 }
