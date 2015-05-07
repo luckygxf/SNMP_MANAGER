@@ -23,4 +23,11 @@ public interface PictureDao {
 	 * @param picPath
 	 */
 	public void deletePictureByPicPath(String picPath);
+	
+	/**
+	 * 根据图片路径查询图片
+	 * @param picPath
+	 * @return
+	 */
+	public Picture queryByPicPath(String picPath);
 }

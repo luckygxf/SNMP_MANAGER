@@ -353,16 +353,16 @@ public class WordPicEditTool extends ApplicationWindow {
 	 * Launch the application.
 	 * @param args
 	 */
-	public static void main(String args[]) {
-		try {
-			WordPicEditTool window = new WordPicEditTool();
-			window.setBlockOnOpen(true);
-			window.open();
-			Display.getCurrent().dispose();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String args[]) {
+//		try {
+//			WordPicEditTool window = new WordPicEditTool();
+//			window.setBlockOnOpen(true);
+//			window.open();
+//			Display.getCurrent().dispose();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 	//提供接口对外部调用
 	public void openEditWindow(){
 		try {
@@ -699,7 +699,7 @@ public class WordPicEditTool extends ApplicationWindow {
 		labelItems.remove(imageItemIndex);
 		label.dispose();
 		list_word.remove(list_word.getSelectionIndex());
-		txt_addWord.setText("");
+//		txt_addWord.setText("");
 		canvas_show.redraw();
 	}
 	
@@ -837,7 +837,9 @@ public class WordPicEditTool extends ApplicationWindow {
 		PlaySolution playSolution = playSolutionDao.querySolutionByNanme(WordPicEditTool.playSolutionName);
 		//设置播放方案和控制信息
 		picture.setPlaySolution(playSolution);		
-		picture.setPlayControl(WordPicEditTool.playControl);
+		PlayControl playControl = new PlayControl();
+		util.copyPlayControl(WordPicEditTool.playControl, playControl);
+		picture.setPlayControl(playControl);
 		
 		pictureDao.addPicture(picture);
 		

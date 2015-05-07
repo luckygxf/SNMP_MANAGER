@@ -222,6 +222,16 @@ public class AddPlaySolution extends ApplicationWindow {
 		 * 添加播放方案
 		 */
 		private void addPlaySolution(){
+			//如果没有显示屏信息
+			if(combo_display.getItemCount() == 0)
+			{
+				MessageBox messageBox = new MessageBox(curShell);
+				messageBox.setText("提示");
+				messageBox.setMessage("请先添加显示屏信息!");
+				messageBox.open();
+				
+				return;
+			}
 			//播放方案不能为空
 			if(txt_displaySolutionName.getText() == null){
 				MessageBox messageBox = new MessageBox(curShell);

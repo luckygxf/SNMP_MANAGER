@@ -20,7 +20,7 @@ import com.gxf.actions.FileAction;
 import com.gxf.actions.HelpAction;
 import com.gxf.actions.SystemAction;
 import com.gxf.actions.ToolAction;
-import com.gxf.composite.HostListComposite;
+import com.gxf.composite.DisplayComposite;
 import com.gxf.composite.PlaySolutionComposite;
 import com.gxf.composite.SendMessageComposite;
 import com.gxf.composite.SendPlaySolution;
@@ -295,7 +295,7 @@ public class Main extends ApplicationWindow {
 				int index = getTabItemIndex("显示屏管理");
 				//如果没有，创建新的tabitem
 				if(index == -1){					
-					Composite composite_hostList = new HostListComposite(tabFolder_workspace, SWT.NONE);
+					Composite composite_hostList = new DisplayComposite(tabFolder_workspace, SWT.NONE);
 					addTabItem("显示屏管理", composite_hostList);
 				}
 				else{												//如果已经出现过

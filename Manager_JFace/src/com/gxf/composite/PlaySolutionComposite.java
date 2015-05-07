@@ -27,6 +27,7 @@ import com.gxf.dao.PlaySolutionDao;
 import com.gxf.dao.impl.DisplayDaoImpl;
 import com.gxf.dao.impl.PlaySolutionDaoImpl;
 import com.gxf.util.Util;
+import org.eclipse.swt.custom.ScrolledComposite;
 
 /**
  * 播放方案管理面板
@@ -53,7 +54,7 @@ public class PlaySolutionComposite extends Composite {
 		super(parent, style);
 		
 		ViewForm viewForm = new ViewForm(this, SWT.NONE);
-		viewForm.setBounds(10, 10, 520, 410);
+		viewForm.setBounds(10, 10, 592, 453);
 		
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT);
 		viewForm.setTopLeft(toolBar);
@@ -90,9 +91,10 @@ public class PlaySolutionComposite extends Composite {
 		
 		Composite composite = new Composite(viewForm, SWT.NONE);
 		viewForm.setContent(composite);
-		
+				
 		table_playSolution = new Table(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.CHECK);
-		table_playSolution.setBounds(0, 0, 516, 376);
+		table_playSolution.setLocation(0, 0);
+		table_playSolution.setSize(589, 431);
 		table_playSolution.setHeaderVisible(true);
 		table_playSolution.setLinesVisible(true);
 		
@@ -121,8 +123,16 @@ public class PlaySolutionComposite extends Composite {
 		tblclmn_lastUpdateTime.setText("最近修改");
 		
 		TableColumn tblclmn_comment = new TableColumn(table_playSolution, SWT.NONE);
-		tblclmn_comment.setWidth(100);
+		tblclmn_comment.setWidth(98);
 		tblclmn_comment.setText("说明");
+		
+		//为表格添加上下文菜单
+		Menu contextMenu = new Menu(Display.getDefault().getShells()[0], SWT.POP_UP);
+		MenuItem queryDetailItem = new MenuItem(contextMenu, SWT.NONE);
+		queryDetailItem.setText("设置");
+		queryDetailItem.addSelectionListener(new MenuItemListenerImpl());
+		
+		table_playSolution.setMenu(contextMenu);
 
 		//初始化控件，加载数据到控件上
 		init();
@@ -137,14 +147,6 @@ public class PlaySolutionComposite extends Composite {
 		tltm_moveDown.addSelectionListener(new ButtonSelectionListener());
 		tltm_moveUp.addSelectionListener(new ButtonSelectionListener());
 		tltm_del.addSelectionListener(new ButtonSelectionListener());
-		
-		//为表格添加上下文菜单
-		Menu contextMenu = new Menu(Display.getDefault().getShells()[0], SWT.POP_UP);
-		MenuItem queryDetailItem = new MenuItem(contextMenu, SWT.NONE);
-		queryDetailItem.setText("设置");
-		queryDetailItem.addSelectionListener(new MenuItemListenerImpl());
-		
-		table_playSolution.setMenu(contextMenu);
 		
 		//显示播放方案信息
 		fillTable();
@@ -342,5 +344,4 @@ public class PlaySolutionComposite extends Composite {
 		}
 		
 	}	
-	
 }

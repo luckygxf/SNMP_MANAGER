@@ -76,4 +76,24 @@ public class PictureDaoImpl implements PictureDao {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.PictureDao#queryByPicPath(java.lang.String)
+	 */
+	@Override
+	public Picture queryByPicPath(String picPath) {
+		Session session = baseDao.getSession();
+		session.beginTransaction();
+		
+		String hql = "from Picture p where p.picPath = ?";
+		Query query = session.createQuery(hql);
+		query.setString(0, picPath);
+		List<Picture> listOfPicture = query.list();		
+		Picture picture = listOfPicture.get(0);
+		
+		session.getTransaction().commit();
+		session.close();
+		
+		return picture;
+	}
+
 }

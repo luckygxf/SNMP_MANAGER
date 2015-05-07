@@ -34,7 +34,7 @@ import com.gxf.dao.impl.DisplayDaoImpl;
 import com.gxf.util.Util;
 
 
-public class HostListComposite extends Composite {
+public class DisplayComposite extends Composite {
 	//面板上的控件
 	private static Table table_display;
 	private Util util = new Util();
@@ -46,6 +46,7 @@ public class HostListComposite extends Composite {
 	private ToolItem tltm_moveDown;
 	private ToolItem tltm_moveUp;
 	private ToolItem tltm_save;
+	private ScrolledComposite scrolledComposite;
 	
 	//显示屏DAO
 	private static DisplayDao displayDao = new DisplayDaoImpl();
@@ -54,12 +55,12 @@ public class HostListComposite extends Composite {
 	private static  List<com.gxf.entities.TableItem> listOfItems = new ArrayList<com.gxf.entities.TableItem>();
 	
 	
-	public HostListComposite(Composite parent, int style) {
+	public DisplayComposite(Composite parent, int style) {
 		super(parent, style);
 		
 		ViewForm viewForm = new ViewForm(this, SWT.NONE);
 		viewForm.setTopCenterSeparate(true);
-		viewForm.setBounds(10, 10, 580, 413);
+		viewForm.setBounds(10, 10, 592, 453);
 		
 		ToolBar toolBar = new ToolBar(viewForm, SWT.FLAT );
 		viewForm.setTopLeft(toolBar);
@@ -91,15 +92,16 @@ public class HostListComposite extends Composite {
 		iconPath = curProjectPath + File.separator + "icons" + File.separator + "saveDisplay.png";		
 		tltm_save.setImage(new Image(defaultDisplay, new ImageData(iconPath)));
 		
-		ScrolledComposite scrolledComposite = new ScrolledComposite(viewForm, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		viewForm.setContent(scrolledComposite);
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setExpandVertical(true);
+//		scrolledComposite = new ScrolledComposite(viewForm, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+//		scrolledComposite.setExpandHorizontal(true);
+//		scrolledComposite.setExpandVertical(true);
 		
-		Composite composite = new Composite(scrolledComposite, SWT.NONE);
+		Composite composite = new Composite(viewForm, SWT.NONE);
+		viewForm.setContent(composite);
+		composite.setBounds(0, 0, 589, 431);
 		
 		table_display = new Table(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.CENTER | SWT.CHECK);
-		table_display.setBounds(0, 0, 566, 379);
+		table_display.setBounds(0, 0, 579, 430);
 		table_display.setHeaderVisible(true);
 		table_display.setLinesVisible(true);
 		
@@ -128,10 +130,10 @@ public class HostListComposite extends Composite {
 		tblclmn_port.setText("端口号");
 		
 		TableColumn tblclmn_comment = new TableColumn(table_display, SWT.NONE);
-		tblclmn_comment.setWidth(135);
+		tblclmn_comment.setWidth(108);
 		tblclmn_comment.setText("说明");
-		scrolledComposite.setContent(composite);
-		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+//		scrolledComposite.setContent(composite);
+//		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));	
 		
 		//初始化操作
 		init();
@@ -352,7 +354,7 @@ public class HostListComposite extends Composite {
 			String displayPath = curProjectPath + File.separator + displayName;
 			File displayFile = new File(displayPath);
 			//删除屏幕信息所在文件夹
-			displayFile.delete();
+			util.deleteFile(displayFile);
 			
 			//从表中删除
 			table_display.remove(index);

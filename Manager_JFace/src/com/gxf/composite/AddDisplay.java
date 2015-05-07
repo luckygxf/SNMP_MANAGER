@@ -350,7 +350,7 @@ public class AddDisplay extends ApplicationWindow {
 			displayFile.mkdir();
 			
 			//刷新前面表格的显示
-			HostListComposite.addTableItem(display);
+			DisplayComposite.addTableItem(display);
 			
 			MessageBox messageBox = new MessageBox(curShell);
 			messageBox.setText("提示");

@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -212,7 +213,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		
 		Button btn_addSolution = new Button(container, SWT.NONE);
 		btn_addSolution.setBounds(244, 550, 72, 22);
-		btn_addSolution.setText("添加");
+		btn_addSolution.setText("设置");
 		
 		btn_close = new Button(container, SWT.NONE);
 		btn_close.setBounds(360, 550, 72, 22);
@@ -424,7 +425,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		super.configureShell(newShell);
 		newShell.setText("设置播放方案");
 		String logoPath = curProjectPath + File.separator + "icons" + File.separator 
-							+ "addDisplayIcon.png";
+							+ "setting.png";
 		newShell.setImage(new Image(Display.getDefault(), new ImageData(logoPath)));
 		
 		//获取当前shell
@@ -515,7 +516,7 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		List<Picture> listOfPics = pictureDao.queryAllPicture();
 		
 		//显示图片的标签
-		Label labels_pic[]= new Label[listOfPics.size()];
+		final Label labels_pic[]= new Label[listOfPics.size()];
 		
 		for(int i = 0; i < labels_pic.length; i++){
 			labels_pic[i] = new Label(composite_pics, SWT.NONE);
@@ -535,13 +536,12 @@ public class UpdatePlaySolution extends ApplicationWindow {
 			
 			//上下文菜单添加监听器
 			addItem.addSelectionListener(new MenuItemListenerImpl());
-			
+
 			labels_pic[i].addListener(SWT.MouseDown, new Listener() {
 				
 				@Override
 				public void handleEvent(Event e) {
-					sc_picsToChoose.setFocus();
-					
+					sc_picsToChoose.setFocus();					
 				}
 			});
 		}
@@ -555,15 +555,24 @@ public class UpdatePlaySolution extends ApplicationWindow {
 	public void addSc_picsChosed(){
 		Composite composite_pics = new Composite(sc_picsChosed, SWT.NONE);
 		sc_picsChosed.setContent(composite_pics);
+		
+		sc_picsChosed.setExpandHorizontal(true);
+		sc_picsChosed.setExpandVertical(true);
+		
 		//初始化滚动面板布局等每行显示4张图片
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 4;
-		composite_pics.setLayout(gridLayout);
+		gridLayout.makeColumnsEqualWidth = true;
+		
+//		composite_pics.setLayout(gridLayout);
+		
+		sc_picsChosed.setMinSize(sc_picsChosed.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
 		//图片宽度和高度
 		int compositeWidth = sc_picsToChoose.getBounds().width;
 		int picWidth = (compositeWidth / 4 - 8) ;
 		int picHeight = 80;
+		
 		
 		//从数据库中查询所有图片信息
 		PlaySolution playSolution = playSolutionDao.querySolutionByNanme(combo_playSolutionName.getItem(
@@ -571,10 +580,10 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		List<Picture> listOfPics = new ArrayList<Picture>(playSolution.getPictures());
 		
 		//显示图片的标签
-		Label labels_pic[]= new Label[listOfPics.size()];
+		final Label labels_pic[]= new Label[listOfPics.size()];
 		
 		for(int i = 0; i < labels_pic.length; i++){
-			labels_pic[i] = new Label(composite_pics, SWT.NONE);
+			labels_pic[i] = new Label(composite_pics, SWT.CENTER);
 			
 			//添加上下文菜单
 			Menu contextMenu = new Menu(curShell, SWT.POP_UP);
@@ -586,25 +595,42 @@ public class UpdatePlaySolution extends ApplicationWindow {
 			
 			//在标签上显示图片
 			ImageData imageData = new ImageData(listOfPics.get(i).getPicPath());
-			imageData = imageData.scaledTo(picWidth, picHeight);
+			labels_pic[i].setSize(picWidth, picHeight);
+			imageData = imageData.scaledTo(picWidth - 15, picHeight - 15);
 			Image image = new Image(Display.getDefault(), imageData);
 			labels_pic[i].setImage(image);
+			labels_pic[i].setBounds((i % 4) * picWidth, (i / 4) * picHeight, picWidth, picHeight);
+
 			//将图片路径放到event.data中
 			delItem.setData(listOfPics.get(i).getPicPath());
 			
 			//上下文菜单添加监听器
 			delItem.addSelectionListener(new MenuItemListenerImpl());
 			
+			//将图片路径放到label.data中
+			labels_pic[i].setData(listOfPics.get(i).getPicPath());
+			
 			labels_pic[i].addListener(SWT.MouseDown, new Listener() {
 				
 				@Override
 				public void handleEvent(Event e) {
-					sc_picsToChoose.setFocus();
+					Label temp = (Label) e.widget;
+					for(Label label : labels_pic){
+						label.setBackground(null);
+					}
+					temp.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN));
+					sc_picsChosed.setFocus();
 					
+					//获取图片对象和播放控制信息
+					String picPath = (String) temp.getData();
+					Picture picture = pictureDao.queryByPicPath(picPath);
+					PlayControl playControl = picture.getPlayControl();
+					showDisplayControl(playControl);
 				}
 			});
 		}
-		composite_pics.setSize(composite_pics.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		sc_picsChosed.setMinSize(composite_pics.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+//		composite_pics.setSize(composite_pics.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		composite_pics.layout();
 	}
 	
@@ -727,5 +753,48 @@ public class UpdatePlaySolution extends ApplicationWindow {
 		
 		playControl.setWeekdays(sb.toString());
 		return playControl;
+	}
+	
+	/**
+	 * 显示每张图片的控制播放信息
+	 * @param playControl
+	 */
+	private void showDisplayControl(PlayControl playControl){
+		//刷新播放方式和时间间隔
+		combo_playType.select(playControl.getPlayType() - 1);
+		txt_playInteraval.setText(String.valueOf(playControl.getTimeInterval()));
+		//刷新播放开始日期
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(playControl.getDateTimeStart());
+		dateTime_start.setYear(calendar.get(Calendar.YEAR));
+		dateTime_start.setMonth(calendar.get(Calendar.MONTH + 1));
+		dateTime_start.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+		
+		//播放结束日期
+		calendar.setTime(playControl.getDateTimeEnd());
+		dateTime_end.setYear(calendar.get(Calendar.YEAR));
+		dateTime_end.setMonth(calendar.get(Calendar.MONTH + 1));
+		dateTime_end.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+		
+		//播放开始时间
+		calendar.setTime(playControl.getTimeStart());
+		time_start.setHours(calendar.get(Calendar.HOUR_OF_DAY));
+		time_start.setMinutes(calendar.get(Calendar.MINUTE));
+		time_start.setSeconds(calendar.get(Calendar.SECOND));
+		
+		//播放结束时间
+		calendar.setTime(playControl.getTimeEnd());
+		time_end.setHours(calendar.get(Calendar.HOUR_OF_DAY));
+		time_end.setMinutes(calendar.get(Calendar.MINUTE));
+		time_end.setSeconds(calendar.get(Calendar.SECOND));
+		
+		//播放星期
+		String weekdays = playControl.getWeekdays();
+		for(int i = 0; i < weekdays.length(); i++){
+			if(weekdays.charAt(i) == '1')
+				btn_weekdays[i].setSelection(true);
+			else
+				btn_weekdays[i].setSelection(false);
+		}
 	}
 }

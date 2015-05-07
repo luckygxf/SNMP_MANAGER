@@ -5,7 +5,7 @@ import java.sql.Time;
 
 public class PlayControl {
 	private int id;
-	private int playType;
+	private int playType;										//1普通播放2定时播放
 	private int timeInterval;
 	private Date dateTimeStart;
 	private Date dateTimeEnd;

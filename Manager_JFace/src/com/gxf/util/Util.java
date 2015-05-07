@@ -500,4 +500,37 @@ public class Util {
 			e.printStackTrace();
 		}
     }
+    
+    /**
+     * 递归删除文件
+     * @param fileToDelete
+     */
+    public  void deleteFile(File fileToDelete){
+		File filesInFile[] = fileToDelete.listFiles();
+		if(filesInFile == null)						//不是文件夹直接删除
+			fileToDelete.delete();
+		else{										//是文件夹
+			for(File elementFile : filesInFile){	//递归删除，子文件
+				deleteFile(elementFile);
+			}//for
+			
+			//删除文件
+			fileToDelete.delete();
+		}
+	}
+    
+    /**
+     * 复制两个控制播放实体
+     * @param src
+     * @param dst
+     */
+    public void copyPlayControl(PlayControl src, PlayControl dst){
+    	dst.setPlayType(src.getPlayType());
+    	dst.setTimeInterval(src.getTimeInterval());
+    	dst.setDateTimeStart(src.getDateTimeStart());
+    	dst.setDateTimeEnd(src.getDateTimeEnd());
+    	dst.setTimeStart(src.getTimeStart());
+    	dst.setTimeEnd(src.getTimeEnd());
+    	dst.setWeekdays(src.getWeekdays());
+    }
 }
