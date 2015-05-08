@@ -46,7 +46,7 @@ public class DisplayComposite extends Composite {
 	private ToolItem tltm_moveDown;
 	private ToolItem tltm_moveUp;
 	private ToolItem tltm_save;
-	private ScrolledComposite scrolledComposite;
+//	private ScrolledComposite scrolledComposite;
 	
 	//œ‘ æ∆¡DAO
 	private static DisplayDao displayDao = new DisplayDaoImpl();

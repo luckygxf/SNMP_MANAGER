@@ -22,6 +22,7 @@ import com.gxf.actions.SystemAction;
 import com.gxf.actions.ToolAction;
 import com.gxf.composite.DisplayComposite;
 import com.gxf.composite.PlaySolutionComposite;
+import com.gxf.composite.QueryPlaySolution;
 import com.gxf.composite.SendMessageComposite;
 import com.gxf.composite.SendPlaySolution;
 import com.gxf.util.Util;
@@ -50,6 +51,7 @@ public class Main extends ApplicationWindow {
 	private Button btn_hostList;
 	private Button btn_sendMessage;
 	private Button btn_manageSolution;
+	private Button btn_querySolution;
 	
 	//工作区间tabfolder
 	private CTabFolder tabFolder_workspace;
@@ -114,7 +116,7 @@ public class Main extends ApplicationWindow {
 		lb_querySolution.setBounds(0, 50, 45, 34);
 		lb_querySolution.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\query.png")));
 		
-		Button btn_querySolution = new Button(composite_left, SWT.NONE);
+		btn_querySolution = new Button(composite_left, SWT.NONE);
 		btn_querySolution.setText("查询播放方案");
 		btn_querySolution.setBounds(44, 50, 95, 34);
 		
@@ -150,10 +152,11 @@ public class Main extends ApplicationWindow {
 		btn_sendMessage.addSelectionListener(new ButtonListenerImpl());
 		btn_hostList.addSelectionListener(new ButtonListenerImpl());
 		btn_manageSolution.addSelectionListener(new ButtonListenerImpl());
+		btn_querySolution.addSelectionListener(new ButtonListenerImpl());
 		
 		//初始化显示发送播放方案面面板
-		Composite composite_playSoltion = new SendPlaySolution(tabFolder_workspace, SWT.NONE);
-		addTabItem("发送播放方案", composite_playSoltion);
+		Composite composite_queryPlaySolution = new QueryPlaySolution(tabFolder_workspace, SWT.NONE);
+		addTabItem("查询播放方案", composite_queryPlaySolution);
 	}
 	/**
 	 * Create the menu manager.
@@ -309,6 +312,18 @@ public class Main extends ApplicationWindow {
 				if(index == -1){					
 					Composite composite_solutionList = new PlaySolutionComposite(tabFolder_workspace, SWT.NONE);
 					addTabItem("播放方案管理", composite_solutionList);
+				}
+				else{												//如果已经出现过
+					tabFolder_workspace.setSelection(index);
+				}
+			}
+			else if(e.getSource() == btn_querySolution){			//查询播放方案
+				//先查找tabitem,如果没有再添加
+				int index = getTabItemIndex("查询播放方案");
+				//如果没有，创建新的tabitem
+				if(index == -1){		
+					Composite composite_queryPlaySolution = new QueryPlaySolution(tabFolder_workspace, SWT.NONE);
+					addTabItem("查询播放方案", composite_queryPlaySolution);
 				}
 				else{												//如果已经出现过
 					tabFolder_workspace.setSelection(index);
