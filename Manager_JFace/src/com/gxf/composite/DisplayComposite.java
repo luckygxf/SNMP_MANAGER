@@ -117,6 +117,10 @@ public class DisplayComposite extends Composite {
 		tblclmn_displayType.setWidth(82);
 		tblclmn_displayType.setText("类型");
 		
+		TableColumn tblclmn_curPlaySolution = new TableColumn(table_display, SWT.NONE);
+		tblclmn_curPlaySolution.setWidth(100);
+		tblclmn_curPlaySolution.setText("当前播放方案");
+		
 		TableColumn tblclmn_communicationType = new TableColumn(table_display, SWT.NONE);
 		tblclmn_communicationType.setWidth(78);
 		tblclmn_communicationType.setText("通信方式");
@@ -247,6 +251,8 @@ public class DisplayComposite extends Composite {
 			temp.setTxt_displayType(txt_displayType);
 			columNums++;
 			
+			//这里跳过当前播放方案列
+			columNums++;
 			//设置通信方式
 			final Combo combo_communityType = new Combo(table_display, SWT.NONE);
 			combo_communityType.add("网络通信");
@@ -277,7 +283,7 @@ public class DisplayComposite extends Composite {
 				
 				@Override
 				public void modifyText(ModifyEvent arg0) {
-					editor_diplayIp.getItem().setText(4, txt_displayIp.getText());
+					editor_diplayIp.getItem().setText(5, txt_displayIp.getText());
 					
 				}
 			});
@@ -294,7 +300,7 @@ public class DisplayComposite extends Composite {
 				
 				@Override
 				public void modifyText(ModifyEvent arg0) {
-					editor_diplayPort.getItem().setText(5, txt_displayPort.getText());
+					editor_diplayPort.getItem().setText(6, txt_displayPort.getText());
 					
 				}
 			});
@@ -311,7 +317,7 @@ public class DisplayComposite extends Composite {
 				
 				@Override
 				public void modifyText(ModifyEvent arg0) {
-					editor_diplayComment.getItem().setText(6, txt_displayComment.getText());
+					editor_diplayComment.getItem().setText(7, txt_displayComment.getText());
 					
 				}
 			});
@@ -414,14 +420,15 @@ public class DisplayComposite extends Composite {
 			Communication communication = display.getCommunication();
 			
 			TableItem item = new TableItem(table_display, SWT.NONE);
-			String temp[] = new String[7];
+			String temp[] = new String[8];
 			temp[0] = String.valueOf(display.getId());
 			temp[1] = display.getName();
 			temp[2] = display.getType();
-			temp[3] = communication.getName();
-			temp[4] = communication.getIp();
-			temp[5] = String.valueOf(communication.getPort());
-			temp[6] = display.getComment();
+			temp[3] = display.getCurPlaySolutionName();
+			temp[4] = communication.getName();
+			temp[5] = communication.getIp();
+			temp[6] = String.valueOf(communication.getPort());
+			temp[7] = display.getComment();
 			
 			item.setText(temp);
 		}
@@ -442,10 +449,10 @@ public class DisplayComposite extends Composite {
 		temp[0] = String.valueOf(display.getId());
 		temp[1] = display.getName();
 		temp[2] = display.getType();
-		temp[3] = communication.getName();
-		temp[4] = communication.getIp();
-		temp[5] = String.valueOf(communication.getPort());
-		temp[6] = display.getComment();
+		temp[4] = communication.getName();
+		temp[5] = communication.getIp();
+		temp[6] = String.valueOf(communication.getPort());
+		temp[7] = display.getComment();
 		
 		item.setText(temp);
 		
@@ -489,10 +496,9 @@ public class DisplayComposite extends Composite {
 			display.setType(tableItems[i].getText(2));
 			
 			Communication communication = display.getCommunication();
-			communication.setName(tableItems[i].getText(3));
-			System.out.println("ip = " + tableItems[i].getText(4));
-			communication.setIp(tableItems[i].getText(4));
-			communication.setPort(Integer.valueOf(tableItems[i].getText(5)));
+			communication.setName(tableItems[i].getText(4));
+			communication.setIp(tableItems[i].getText(5));
+			communication.setPort(Integer.valueOf(tableItems[i].getText(6)));
 			
 			display.setComment(tableItems[i].getText());
 			

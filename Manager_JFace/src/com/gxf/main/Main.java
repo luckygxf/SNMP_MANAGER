@@ -83,42 +83,44 @@ public class Main extends ApplicationWindow {
 		Composite composite_left = new Composite(container, SWT.NONE);
 		composite_left.setBounds(0, 10, 139, 518);
 		
+		//查询播放方案
+		Label lb_querySolution = new Label(composite_left, SWT.NONE);
+		lb_querySolution.setBounds(0, 10, 45, 34);
+		lb_querySolution.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\query.png")));
+		
+		btn_querySolution = new Button(composite_left, SWT.NONE);
+		btn_querySolution.setText("查询播放方案");
+		btn_querySolution.setBounds(44, 10, 95, 34);
+
+		//显示屏管理
 		Label lb_hostlist = new Label(composite_left, SWT.NONE);
 		lb_hostlist.setBounds(0, 134, 45, 34);
-		lb_hostlist.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\sendSolutionIcon.jpg")));
+		lb_hostlist.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\manageDisplay.png")));
 		
-		//主机列表按键被按下
-		btn_hostList = new Button(composite_left, SWT.NONE);
-		
+		btn_hostList = new Button(composite_left, SWT.NONE);		
 		btn_hostList.setBounds(44, 134, 95, 34);
 		btn_hostList.setText("显示屏管理");
-		
+
+		//发送消息按钮
 		Label label = new Label(composite_left, SWT.NONE);
 		label.setImage(SWTResourceManager.getImage(projectPath + "\\icons\\sendMessage.png"));
 		label.setBounds(0, 185, 45, 34);
+		label.setVisible(false);
 		
-		//发送消息按钮
 		btn_sendMessage = new Button(composite_left, SWT.NONE);
+		btn_sendMessage.setVisible(false);
 		
 		btn_sendMessage.setText("发送消息");
 		btn_sendMessage.setBounds(44, 185, 95, 34);
 		
 		//发送播放方案
 		Label lb_sendSolution = new Label(composite_left, SWT.NONE);
-		lb_sendSolution.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\sendSolutionIcon.jpg")));
-		lb_sendSolution.setBounds(0, 10, 45, 34);
+		lb_sendSolution.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\sendPlaySolution.png")));
+		lb_sendSolution.setBounds(0, 54, 45, 34);
 		
 		btn_sendSolution = new Button(composite_left, SWT.NONE);
 		btn_sendSolution.setText("发送播放方案");
-		btn_sendSolution.setBounds(44, 10, 95, 34);
-		
-		Label lb_querySolution = new Label(composite_left, SWT.NONE);
-		lb_querySolution.setBounds(0, 50, 45, 34);
-		lb_querySolution.setImage(new Image(Display.getDefault(), new ImageData(projectPath + "\\icons\\query.png")));
-		
-		btn_querySolution = new Button(composite_left, SWT.NONE);
-		btn_querySolution.setText("查询播放方案");
-		btn_querySolution.setBounds(44, 50, 95, 34);
+		btn_sendSolution.setBounds(44, 54, 95, 34);
 		
 		Label lb_updateSolution = new Label(composite_left, SWT.NONE);
 		lb_updateSolution.setBounds(0, 94, 45, 34);
@@ -135,8 +137,7 @@ public class Main extends ApplicationWindow {
 		tabFolder_workspace = new CTabFolder(composite_right, SWT.NONE);
 		tabFolder_workspace.setBounds(0, 10, 597, 507);
 		tabFolder_workspace.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
-		tabFolder_workspace.setMaximizeVisible(true);
-		tabFolder_workspace.setMinimizeVisible(true);		
+
 		
 		//对控件进行初始化
 		init();
