@@ -12,6 +12,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -532,5 +535,23 @@ public class Util {
     	dst.setTimeStart(src.getTimeStart());
     	dst.setTimeEnd(src.getTimeEnd());
     	dst.setWeekdays(src.getWeekdays());
+    }
+    
+    /**
+     * 判断远程ip是否可连接
+     * @param ip
+     * @param port
+     * @return
+     */
+    public boolean validConnection(String ip, int port){
+    	//远程ip地址
+    	try {
+			InetAddress remoteIp = InetAddress.getByName(ip);
+			Socket remoteSocket = new Socket(remoteIp, port);
+		
+		} catch (Exception e) {
+			return false;
+		} 
+    	return true;
     }
 }

@@ -328,23 +328,37 @@ public class SendPlaySolution extends Composite {
 	 */
 	public void sendPlaySolution(){
 		//发送播放方案步骤
+		//0.判断远端主机是否可达
 		//1.生成xml控制文件
 		//2.压缩图片和xml文件
 		//3.发送压缩文件
-		//4.设置当前播放方案，写入数据库 
+		//4.设置当前播放方案，写入数据库 		
 		
+		//获取对应的显示屏和播放方案实体
+		com.gxf.beans.Display display = displayDao.queryDisplayByName(combo_display.getItem(combo_display.getSelectionIndex()));
+		
+		//目的主机IP
+		String ip = display.getCommunication().getIp();
+		
+		//如果远端主机不可达
+		if(!util.validConnection(ip, 16202)){
+			MessageBox messageBox = new MessageBox(curShell);
+			messageBox.setText("提示");
+			messageBox.setMessage("远端主机没有开启，或者没有启动播放应用程序!");
+			messageBox.open();
+			return ;
+		}
+
 		//如果没有可以发送的播放方案
 		if(combo_display.getItemCount() == 0|| combo_solutions.getItemCount() == 0)
 		{
 			MessageBox messageBox = new MessageBox(curShell);
-			messageBox.setText("选择主机");
+			messageBox.setText("提示");
 			messageBox.setMessage("没有可以发送的播放方案!");
 			messageBox.open();
 			return ;
 		}
 		
-		//获取对应的显示屏和播放方案实体
-		com.gxf.beans.Display display = displayDao.queryDisplayByName(combo_display.getItem(combo_display.getSelectionIndex()));
 		Set<PlaySolution> setOfPlaySolution = display.getSolutions();
 		String playSolutionName = combo_solutions.getItem(combo_solutions.getSelectionIndex());
 		
@@ -355,8 +369,6 @@ public class SendPlaySolution extends Composite {
 				break;
 		}//for
 		
-		//目的主机IP
-		String ip = display.getCommunication().getIp();
 		
 		//生成xml控制文件
 		util.createConfigXml(display, playSolution);

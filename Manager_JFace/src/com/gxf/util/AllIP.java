@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +101,10 @@ public class AllIP {
 			InetAddress inetAddress;
 			DatagramSocket datagramSocket = null;
 			try {
-				inetAddress = InetAddress.getByName("210.38.235.184");
+//				inetAddress = InetAddress.getByName("210.38.235.184");
+				Socket temp = new Socket();				
+				inetAddress = temp.getLocalAddress();			//获取本地ip
+				temp.close();
 				DatagramPacket datagramPacket = new DatagramPacket(arrayOfByte, arrayOfByte.length, 
 				inetAddress, portNum);
 				datagramSocket = new DatagramSocket(portNum);	//发送数据包socket
