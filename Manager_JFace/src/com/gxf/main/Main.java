@@ -15,11 +15,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.jface.action.Action;
 
-import com.gxf.actions.EditAction;
-import com.gxf.actions.FileAction;
+import com.gxf.actions.ExitAction;
 import com.gxf.actions.HelpAction;
 import com.gxf.actions.SystemAction;
-import com.gxf.actions.ToolAction;
 import com.gxf.composite.DisplayComposite;
 import com.gxf.composite.PlaySolutionComposite;
 import com.gxf.composite.QueryPlaySolution;
@@ -36,9 +34,9 @@ import org.eclipse.swt.events.SelectionEvent;
 
 
 public class Main extends ApplicationWindow {
-	private Action fileAction = new FileAction();
-	private Action editAction = new EditAction();
-	private Action toolAction = new ToolAction();
+	
+	//菜单对应的ACTION
+	private Action exitAction = new ExitAction();
 	private Action systemAction = new SystemAction();
 	private Action helpAction = new HelpAction();
 	
@@ -173,20 +171,14 @@ public class Main extends ApplicationWindow {
 		MenuManager menuManager = new MenuManager("menu");					//添加菜单栏内容
 		
 		MenuManager fileMenuManager = new MenuManager("文件");
-		MenuManager editMenuManager = new MenuManager("编辑");
-		MenuManager toolMenuManager = new MenuManager("工具");
 		MenuManager systemMenuManager = new MenuManager("系统");
 		MenuManager helpMenuManager = new MenuManager("帮助");
 		
 		menuManager.add(fileMenuManager);
-		menuManager.add(editMenuManager);
-		menuManager.add(toolMenuManager);
 		menuManager.add(systemMenuManager);
 		menuManager.add(helpMenuManager);
-
-		fileMenuManager.add(fileAction);
-		editMenuManager.add(editAction);
-		toolMenuManager.add(toolAction);
+		
+		fileMenuManager.add(exitAction);
 		systemMenuManager.add(systemAction);
 		helpMenuManager.add(helpAction);		
 		

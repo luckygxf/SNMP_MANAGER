@@ -5,6 +5,11 @@ import org.eclipse.jface.action.Action;
 import com.gxf.main.Main;
 
 
+/**
+ * 退出系统菜单
+ * @author Administrator
+ *
+ */
 public class ExitAction extends Action{
 	public ExitAction(){
 		super();
