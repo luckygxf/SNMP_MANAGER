@@ -18,7 +18,7 @@ public class PlaySolutionDaoImpl implements PlaySolutionDao {
 	/* (non-Javadoc)
 	 * @see com.gxf.dao.PlaysolutionDao#querySolutionByNanme(java.lang.String)
 	 */
-	public PlaySolution querySolutionByNanme(String name){
+	public PlaySolution querySolutionByName(String name){
 		SessionFactory sessionFactory = baseDao.getSessionFactory();
 		Session session = sessionFactory.openSession();
 		String hql = "from PlaySolution s where s.name = ?";

@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -464,8 +465,10 @@ public class SetPlaySolution extends ApplicationWindow {
 				String playSolutionName = combo_playSolutionName.getItem(combo_playSolutionName.getSelectionIndex());
 				String playSolutionPath = curProjectPath + File.separator + 
 											displayName + File.separator + playSolutionName;
+				//向图片编辑器传递显示屏名称和播放方案名称
 				WordPicEditTool.solutionPath = playSolutionPath;
 				WordPicEditTool.playSolutionName = playSolutionName;
+				WordPicEditTool.displayName = displayName;
 				//或播放控制信息，传递给文字图片编辑器
 				WordPicEditTool.playControl = getPlayControl();
 				//向编辑器注册
@@ -577,11 +580,23 @@ public class SetPlaySolution extends ApplicationWindow {
 	 * 显示已经添加到播放方案中的图片
 	 */
 	public void addSc_picsChosed(){
+		//清空上一次生成的面板对象
+		Control controls_temp[] = sc_picsChosed.getChildren();
+		if(controls_temp != null && controls_temp.length != 0){
+			Composite temp = (Composite) sc_picsChosed.getChildren()[0];
+			temp.dispose();			
+		}
+		
+		//开始重新生成新的面板和图片
 		Composite composite_pics = new Composite(sc_picsChosed, SWT.NONE);
 		sc_picsChosed.setContent(composite_pics);
 		
 		sc_picsChosed.setExpandHorizontal(true);
 		sc_picsChosed.setExpandVertical(true);
+		
+		//注意判断是否有播放方案可加载
+		if(combo_display.getItemCount() == 0 || combo_playSolutionName.getItemCount() == 0)
+			return;
 		
 		//初始化滚动面板布局等每行显示4张图片
 		GridLayout gridLayout = new GridLayout();
@@ -599,9 +614,22 @@ public class SetPlaySolution extends ApplicationWindow {
 		
 		
 		//从数据库中查询所有图片信息
-		PlaySolution playSolution = playSolutionDao.querySolutionByNanme(combo_playSolutionName.getItem(
-										combo_playSolutionName.getSelectionIndex()));
-		List<Picture> listOfPics = new ArrayList<Picture>(playSolution.getPictures());
+		//1.查询显示屏信息
+		//2.查询显示屏对应的播放方案
+		//3.根据播放方案查询对应的图片
+		//注意播放方案可能重名
+		com.gxf.beans.Display display = displayDao.queryDisplayByName(combo_display.getItem(combo_display.getSelectionIndex()));
+		Set<PlaySolution> setOfPlaySolution = display.getSolutions();
+		PlaySolution playSolutionSelected = null;
+		//遍历集合，找到选中的播放方案
+		for(Iterator<PlaySolution> it_playSolution = setOfPlaySolution.iterator(); it_playSolution.hasNext();){
+			playSolutionSelected = it_playSolution.next();
+			if(playSolutionSelected.getName().equals(combo_playSolutionName.getItem(combo_playSolutionName.getSelectionIndex()))){
+				break;
+			}
+		}
+		
+		List<Picture> listOfPics = new ArrayList<Picture>(playSolutionSelected.getPictures());
 		
 		//显示图片的标签
 		final Label labels_pic[]= new Label[listOfPics.size()];
@@ -683,7 +711,7 @@ public class SetPlaySolution extends ApplicationWindow {
 				util.copyFile(scrFilePath, dstFilePath);
 				
 				//图片信息写入到数据库中
-				PlaySolution playSolution = playSolutionDao.querySolutionByNanme(playSolutionName);
+				PlaySolution playSolution = playSolutionDao.querySolutionByName(playSolutionName);
 				Picture picture = new Picture();
 				picture.setPicName(curTime + ".bmp");
 				picture.setPicPath(dstFilePath);

@@ -445,10 +445,11 @@ public class DisplayComposite extends Composite {
 		Communication communication = display.getCommunication();
 		
 		TableItem item = new TableItem(table_display, SWT.NONE);
-		String temp[] = new String[7];
+		String temp[] = new String[8];
 		temp[0] = String.valueOf(display.getId());
 		temp[1] = display.getName();
 		temp[2] = display.getType();
+		temp[3] = display.getCurPlaySolutionName();
 		temp[4] = communication.getName();
 		temp[5] = communication.getIp();
 		temp[6] = String.valueOf(communication.getPort());

@@ -105,7 +105,7 @@ public class AddDisplay extends ApplicationWindow {
 		
 		txt_displayType = new Text(group_basicInfo, SWT.BORDER);
 		txt_displayType.setText("");
-		txt_displayType.setBounds(347, 21, 86, 18);
+		txt_displayType.setBounds(347, 21, 102, 18);
 		
 		Label lb_displayCommType = new Label(group_basicInfo, SWT.NONE);
 		lb_displayCommType.setBounds(10, 50, 54, 12);
@@ -120,7 +120,7 @@ public class AddDisplay extends ApplicationWindow {
 		
 		txt_ip = new Text(group_basicInfo, SWT.BORDER);
 		txt_ip.setText("");
-		txt_ip.setBounds(347, 44, 86, 18);
+		txt_ip.setBounds(347, 44, 102, 18);
 		
 		Label lb_port = new Label(group_basicInfo, SWT.NONE);
 		lb_port.setBounds(10, 77, 54, 12);
@@ -135,7 +135,7 @@ public class AddDisplay extends ApplicationWindow {
 		
 		txt_comment = new Text(group_basicInfo, SWT.BORDER);
 		txt_comment.setText("");
-		txt_comment.setBounds(347, 71, 86, 18);
+		txt_comment.setBounds(347, 71, 102, 18);
 		
 		Group group_solutions = new Group(container, SWT.NONE);
 		group_solutions.setText("设置播放方案");
@@ -180,7 +180,7 @@ public class AddDisplay extends ApplicationWindow {
 		
 		//加载播放方案
 		listOfSolution = playSolutionDao.queryAllSolutions();
-		System.out.println("size = " + listOfSolution.size());
+
 		cbnSolutions = new Button[listOfSolution.size()];
 		for(int i = 0; i < cbnSolutions.length; i++){
 			cbnSolutions[i] = new Button(composite_solutions, SWT.CHECK);
@@ -321,7 +321,7 @@ public class AddDisplay extends ApplicationWindow {
 			//获取设置的播放方案信息,添加到显示屏中
 			for(int i = 0; i < cbnSolutions.length; i++){
 				if(cbnSolutions[i].getSelection()){
-					PlaySolution temp = playSolutionDao.querySolutionByNanme(cbnSolutions[i].getText());
+					PlaySolution temp = playSolutionDao.querySolutionByName(cbnSolutions[i].getText());
 					display.getSolutions().add(temp);
 				}
 			}

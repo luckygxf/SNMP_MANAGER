@@ -59,6 +59,8 @@ public class QueryPlaySolution extends Composite {
 	//工具类
 	private Util util = new Util();
 	private final String curProjectPath = util.getCurrentProjectPath();
+	private String displayName;
+	private String playSolutionName;
 	
 	//label选中背景色
 	private final Color LABEL_SELECTED_COLOR =  Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN);
@@ -188,12 +190,14 @@ public class QueryPlaySolution extends Composite {
 		if(displayNames.length != 0){
 			combo_display.setItems(displayNames);
 			combo_display.select(0);
+			displayName = combo_display.getItem(0);
 		}
 		//查询所有的播放方案
 		String solutionNames[] = getSolutions();
 		if(solutionNames.length != 0){
 			combo_playSolution.setItems(solutionNames);
 			combo_playSolution.select(0);
+			playSolutionName = combo_playSolution.getItem(0);
 		}
 		//为两个组合框添加监听事件
 		combo_display.addSelectionListener(new ComboSelectionListener());
@@ -290,7 +294,8 @@ public class QueryPlaySolution extends Composite {
 			labels_pic[i].setBounds((i % 4) * picWidth, (i / 4) * picHeight, picWidth, picHeight);
 			
 			//图片路径放到label.data中
-			labels_pic[i].setData(pics[i].getPath());
+			String picRelativePath = displayName + File.separator + playSolutionName + File.separator + pics[i].getName();
+			labels_pic[i].setData(picRelativePath);
 			
 			labels_pic[i].addListener(SWT.MouseDown, new Listener() {
 				

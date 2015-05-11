@@ -9,7 +9,7 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/snmp_manager</property>
+        <property name="connection.url">jdbc:mysql://210.38.235.184:3306/snmp_manager</property>
         <property name="connection.username">root</property>
         <property name="connection.password">luckygxf</property>
 

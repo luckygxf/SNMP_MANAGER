@@ -128,9 +128,16 @@ public class PlaySolutionComposite extends Composite {
 		
 		//为表格添加上下文菜单
 		Menu contextMenu = new Menu(Display.getDefault().getShells()[0], SWT.POP_UP);
+		//设置菜单
 		MenuItem queryDetailItem = new MenuItem(contextMenu, SWT.NONE);
 		queryDetailItem.setText("设置");
+		//刷新菜单
+		MenuItem refreshItem = new MenuItem(contextMenu, SWT.NONE);
+		refreshItem.setText("刷新");
+		//添加监听器
 		queryDetailItem.addSelectionListener(new MenuItemListenerImpl());
+		//暂时不需要刷新功能
+//		refreshItem.addSelectionListener(new MenuItemListenerImpl());
 		
 		table_playSolution.setMenu(contextMenu);
 
@@ -340,6 +347,9 @@ public class PlaySolutionComposite extends Composite {
 				SetPlaySolution.playSolutionName = playSolutionName;
 				
 				updatePlaySolution.showWindow();
+			}else if(item.getText() == "刷新"){
+				//显示播放方案信息
+				fillTable();
 			}
 		}
 		

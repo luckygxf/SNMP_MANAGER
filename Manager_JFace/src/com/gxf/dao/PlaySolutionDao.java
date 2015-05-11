@@ -11,7 +11,7 @@ public interface PlaySolutionDao {
 	 * @param name
 	 * @return
 	 */
-	public PlaySolution querySolutionByNanme(String name);
+	public PlaySolution querySolutionByName(String name);
 	
 	/**
 	 * 添加播放方案

@@ -1,7 +1,9 @@
 package com.gxf.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -9,14 +11,19 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import com.gxf.beans.Display;
+import com.gxf.beans.Picture;
+import com.gxf.beans.PlayControl;
+import com.gxf.beans.PlaySolution;
 import com.gxf.dao.BaseDao;
 import com.gxf.dao.CommunicationDao;
 import com.gxf.dao.DisplayDao;
+import com.gxf.dao.PlayControlDao;
 
 public class DisplayDaoImpl implements DisplayDao {
 	
 	private BaseDao baseDao = new BaseDao();
 	private CommunicationDao communicationDao = new CommunicationDaoImpl();
+	private PlayControlDao playControlDaol = new PlayControlDaoImpl();
 	
 	
 	/* (non-Javadoc)
@@ -58,6 +65,22 @@ public class DisplayDaoImpl implements DisplayDao {
 		Session session = baseDao.getSession();
 		//获取display对象
 		Display display = (Display)session.get(Display.class, displayId);
+		
+		//删除对应的播放方案-->图片-->控制信息
+		Set<PlaySolution> listOfPlaySolution = display.getSolutions(); 
+		for(Iterator<PlaySolution> it_playSolution = listOfPlaySolution.iterator(); it_playSolution.hasNext(); ){
+			PlaySolution playSolution = it_playSolution.next();
+			Set<Picture> setOfPicture = playSolution.getPictures();
+			//获取对应的图片信息
+			for(Iterator<Picture> it_picture = setOfPicture.iterator(); it_picture.hasNext();){
+				Picture picture = it_picture.next();
+				//获取要删除的播放控制信息
+				PlayControl playControlToDelete = picture.getPlayControl();
+				playControlDaol.deletePlayControl(playControlToDelete);
+			}
+		}
+		
+		
 		int communicationId = display.getCommunication().getId();
 		
 		String hql = "delete Display d where d.id = ?";

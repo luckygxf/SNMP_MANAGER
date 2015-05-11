@@ -91,8 +91,9 @@ public class WordPicEditTool extends ApplicationWindow {
 	private Shell curShell;
 	
 	//播放方案名称
-	public static String solutionPath;
-	public static String playSolutionName;
+	public static String solutionPath;						
+	public static String playSolutionName;							//播放方案名
+	public static String displayName;								//显示屏名称
 	
 	//数据库访问类
 	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
@@ -827,14 +828,14 @@ public class WordPicEditTool extends ApplicationWindow {
 		String date_str = util.getCurTime();
 		//设置图片路径
 		String imageName = date_str + ".bmp";
-		String imagePath = solutionPath + File.separator + imageName;
+		String imagePath = displayName + File.separator + playSolutionName  + File.separator + imageName;
 		
 		//图片信息保存到数据库中
 		Picture picture = new Picture();
 		picture.setPicName(imageName);
 		picture.setPicPath(imagePath);
 //		System.out.println("imagePath = " + imagePath);
-		PlaySolution playSolution = playSolutionDao.querySolutionByNanme(WordPicEditTool.playSolutionName);
+		PlaySolution playSolution = playSolutionDao.querySolutionByName(WordPicEditTool.playSolutionName);
 		//设置播放方案和控制信息
 		picture.setPlaySolution(playSolution);		
 		PlayControl playControl = new PlayControl();
