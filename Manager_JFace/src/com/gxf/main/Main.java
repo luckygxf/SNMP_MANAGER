@@ -56,7 +56,12 @@ public class Main extends ApplicationWindow {
 	//工作区间tabfolder
 	private CTabFolder tabFolder_workspace;
 	
-	
+	//工作面板
+	private Composite composite_playSoltion;
+	private Composite composite_sendMessage;
+	private Composite composite_hostList;
+	private Composite composite_solutionList;
+	private Composite composite_queryPlaySolution;
 
 	/**
 	 * Create the application window.
@@ -274,7 +279,7 @@ public class Main extends ApplicationWindow {
 				int index = getTabItemIndex("发送播放方案");
 				//如果没有，创建新的tabitem
 				if(index == -1){					
-					Composite composite_playSoltion = new SendPlaySolution(tabFolder_workspace, SWT.NONE);
+					composite_playSoltion = new SendPlaySolution(tabFolder_workspace, SWT.NONE);
 					addTabItem("发送播放方案", composite_playSoltion);
 				}
 				else{												//如果已经出现过
@@ -287,7 +292,7 @@ public class Main extends ApplicationWindow {
 				int index = getTabItemIndex("发送消息");
 				//如果没有，创建新的tabitem
 				if(index == -1){					
-					Composite composite_sendMessage = new SendMessageComposite(tabFolder_workspace, SWT.NONE);
+					composite_sendMessage = new SendMessageComposite(tabFolder_workspace, SWT.NONE);
 					addTabItem("发送消息", composite_sendMessage);
 				}
 				else{												//如果已经出现过
@@ -299,7 +304,7 @@ public class Main extends ApplicationWindow {
 				int index = getTabItemIndex("显示屏管理");
 				//如果没有，创建新的tabitem
 				if(index == -1){					
-					Composite composite_hostList = new DisplayComposite(tabFolder_workspace, SWT.NONE);
+					composite_hostList = new DisplayComposite(tabFolder_workspace, SWT.NONE);
 					addTabItem("显示屏管理", composite_hostList);
 				}
 				else{												//如果已经出现过
@@ -311,7 +316,7 @@ public class Main extends ApplicationWindow {
 				int index = getTabItemIndex("播放方案管理");
 				//如果没有，创建新的tabitem
 				if(index == -1){					
-					Composite composite_solutionList = new PlaySolutionComposite(tabFolder_workspace, SWT.NONE);
+					composite_solutionList = new PlaySolutionComposite(tabFolder_workspace, SWT.NONE);
 					addTabItem("播放方案管理", composite_solutionList);
 				}
 				else{												//如果已经出现过
@@ -323,7 +328,7 @@ public class Main extends ApplicationWindow {
 				int index = getTabItemIndex("查询播放方案");
 				//如果没有，创建新的tabitem
 				if(index == -1){		
-					Composite composite_queryPlaySolution = new QueryPlaySolution(tabFolder_workspace, SWT.NONE);
+					composite_queryPlaySolution = new QueryPlaySolution(tabFolder_workspace, SWT.NONE);
 					addTabItem("查询播放方案", composite_queryPlaySolution);
 				}
 				else{												//如果已经出现过

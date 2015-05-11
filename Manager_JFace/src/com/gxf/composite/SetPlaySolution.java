@@ -248,7 +248,10 @@ public class SetPlaySolution extends ApplicationWindow {
 				break;
 			}
 		}
-//		combo_display.select(0);
+		if(combo_display.getSelectionIndex() == -1 && combo_display.getItemCount() != 0){
+			combo_display.select(0);
+		}
+
 		
 		//为按钮注册监听器
 		btn_editPic.addSelectionListener(new ButtonSelectionListener());
@@ -266,7 +269,6 @@ public class SetPlaySolution extends ApplicationWindow {
 			}
 		}
 		
-		//初始化星期控件
 		//初始化星期复选框
 		btn_weekdays = new Button[7];
 		for(int i = 0; i < btn_weekdays.length; i++){
@@ -510,7 +512,7 @@ public class SetPlaySolution extends ApplicationWindow {
 		String displayName = combo_display.getItem(combo_display.getSelectionIndex());
 		com.gxf.beans.Display display = displayDao.queryDisplayByName(displayName);
 		Set<PlaySolution> solutions = display.getSolutions();
-//		System.out.println("solutions.size() = " + solutions.size());
+
 		String solutionNams[] = new String[solutions.size()];
 		int index = 0;
 		for(PlaySolution playSolution : solutions){

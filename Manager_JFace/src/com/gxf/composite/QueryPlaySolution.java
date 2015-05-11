@@ -15,10 +15,14 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Button;
@@ -64,6 +68,8 @@ public class QueryPlaySolution extends Composite {
 	
 	//label选中背景色
 	private final Color LABEL_SELECTED_COLOR =  Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN);
+	
+	private Shell curShell;
 
 	public QueryPlaySolution(Composite parent, int style) {
 		super(parent, style);
@@ -177,6 +183,9 @@ public class QueryPlaySolution extends Composite {
 		cbtn_weeks[6].setText("星期天");
 		cbtn_weeks[6].setBounds(216, 121, 54, 22);
 		
+		//获取当前shell
+		curShell = this.getShell();
+		
 		//初始化操作
 		init();
 	}
@@ -204,7 +213,8 @@ public class QueryPlaySolution extends Composite {
 		combo_playSolution.addSelectionListener(new ComboSelectionListener());
 		
 		//加载所有播放方案图片
-		addPicturesToComposite();
+		addPicturesToComposite();	
+		
 	}
 	
 	/**
@@ -252,11 +262,24 @@ public class QueryPlaySolution extends Composite {
 		//2.加载所有播放方案下的图片，这里直接从硬盘读取，不从数据库读取
 		//3.加载鼠标点击事件
 		
+		Control controls[] = sc_pics.getChildren();
+		
+		if(controls != null && controls.length != 0)
+			controls[0].dispose();
+		
 		//判断是否有播放方案选中
 		if(combo_display.getItemCount() == 0 || combo_playSolution.getItemCount() == 0)
 			return;
 		//加载播放方案所有图片
 		Composite composite_pics = new Composite(sc_pics, SWT.NONE);
+		//创建上下文菜单
+		Menu contextMenu = new Menu(curShell, SWT.TOP);
+		MenuItem refreshItem = new MenuItem(contextMenu, SWT.NONE);
+		refreshItem.setText("刷新");
+		composite_pics.setMenu(contextMenu);
+		//添加监听器
+		refreshItem.addSelectionListener(new MenuItemSelectionImpl());
+		
 		sc_pics.setContent(composite_pics);
 		sc_pics.setExpandHorizontal(true);
 		sc_pics.setExpandVertical(true);
@@ -373,14 +396,22 @@ public class QueryPlaySolution extends Composite {
 		public void widgetSelected(SelectionEvent e) {
 			if(e.getSource() == combo_display){														//显示屏改变
 				if(combo_display.getItemCount() == 0)
+				{
+					combo_playSolution.removeAll();
+					addPicturesToComposite();
 					return;
+				}
 				//获取显示屏名字
 				String displayName = combo_display.getItem(combo_display.getSelectionIndex());
 				com.gxf.beans.Display display = displayDao.queryDisplayByName(displayName);
 				Set<PlaySolution> listOfSolution = display.getSolutions();
 				
 				if(listOfSolution.size() == 0)
+				{
+					combo_playSolution.removeAll();
+					addPicturesToComposite();
 					return;
+				}
 				int index = 0;
 				String solutionNames[] = new String[listOfSolution.size()];
 				for(Iterator<PlaySolution> it = listOfSolution.iterator(); it.hasNext();){
@@ -395,6 +426,23 @@ public class QueryPlaySolution extends Composite {
 			else if(e.getSource() == combo_playSolution){											//播放方案改变
 				//刷新图片显示
 				addPicturesToComposite();
+			}
+		}
+		
+	}
+	
+	/**
+	 * 菜单选项监听器
+	 * @author Administrator
+	 *
+	 */
+	class MenuItemSelectionImpl extends SelectionAdapter{
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			MenuItem item = (MenuItem) e.getSource();
+			if(item.getText().equals("刷新")){								//刷新
+				init();
 			}
 		}
 		

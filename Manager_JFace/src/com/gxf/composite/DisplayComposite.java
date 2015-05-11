@@ -46,7 +46,7 @@ public class DisplayComposite extends Composite {
 	private ToolItem tltm_moveDown;
 	private ToolItem tltm_moveUp;
 	private ToolItem tltm_save;
-//	private ScrolledComposite scrolledComposite;
+
 	
 	//显示屏DAO
 	private static DisplayDao displayDao = new DisplayDaoImpl();
@@ -348,8 +348,6 @@ public class DisplayComposite extends Composite {
 			String id_str = tableItems[i].getText(0);
 			//从数据库中删除
 			displayDao.deleteDisplayById(Integer.valueOf(id_str));
-			System.out.println("index = " + index);
-			System.out.println("size of list = " + listOfItems.size());
 			//释放表格中添加的控件
 			com.gxf.entities.TableItem tableItem = listOfItems.get(index);
 			tableItem.dispose();
@@ -513,5 +511,4 @@ public class DisplayComposite extends Composite {
 		messageBox.setMessage("保存屏信息成功!");
 		messageBox.open();
 	}
-	
 }

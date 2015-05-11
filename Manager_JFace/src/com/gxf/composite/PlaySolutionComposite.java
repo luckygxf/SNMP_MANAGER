@@ -136,8 +136,7 @@ public class PlaySolutionComposite extends Composite {
 		refreshItem.setText("刷新");
 		//添加监听器
 		queryDetailItem.addSelectionListener(new MenuItemListenerImpl());
-		//暂时不需要刷新功能
-//		refreshItem.addSelectionListener(new MenuItemListenerImpl());
+		refreshItem.addSelectionListener(new MenuItemListenerImpl());
 		
 		table_playSolution.setMenu(contextMenu);
 
@@ -348,10 +347,18 @@ public class PlaySolutionComposite extends Composite {
 				
 				updatePlaySolution.showWindow();
 			}else if(item.getText() == "刷新"){
-				//显示播放方案信息
-				fillTable();
+				//刷新表格内容
+				refreshTable();
 			}
 		}
 		
 	}	
+	
+	/**
+	 * 刷新表格内容
+	 */
+	private void refreshTable(){
+		table_playSolution.removeAll();
+		fillTable();
+	}
 }

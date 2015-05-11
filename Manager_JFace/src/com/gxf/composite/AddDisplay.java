@@ -137,30 +137,30 @@ public class AddDisplay extends ApplicationWindow {
 		txt_comment.setText("");
 		txt_comment.setBounds(347, 71, 102, 18);
 		
-		Group group_solutions = new Group(container, SWT.NONE);
-		group_solutions.setText("设置播放方案");
-		group_solutions.setBounds(10, 122, 493, 101);
-		
-		ScrolledComposite sc_solutions = new ScrolledComposite(group_solutions, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		sc_solutions.setBounds(10, 21, 473, 68);
-		sc_solutions.setExpandHorizontal(true);
-		sc_solutions.setExpandVertical(true);
+//		Group group_solutions = new Group(container, SWT.NONE);
+//		group_solutions.setText("设置播放方案");
+//		group_solutions.setBounds(10, 122, 493, 101);
+//		
+//		ScrolledComposite sc_solutions = new ScrolledComposite(group_solutions, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+//		sc_solutions.setBounds(10, 21, 473, 68);
+//		sc_solutions.setExpandHorizontal(true);
+//		sc_solutions.setExpandVertical(true);
 		
 		//设置播放方案面板
-		composite_solutions = new Composite(sc_solutions, SWT.NONE);
-		sc_solutions.setContent(composite_solutions);
-		sc_solutions.setMinSize(composite_solutions.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 6;
-		composite_solutions.setLayout(gridLayout);
+//		composite_solutions = new Composite(sc_solutions, SWT.NONE);
+//		sc_solutions.setContent(composite_solutions);
+//		sc_solutions.setMinSize(composite_solutions.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+//		GridLayout gridLayout = new GridLayout();
+//		gridLayout.numColumns = 6;
+//		composite_solutions.setLayout(gridLayout);
 		
 		
 		btn_add = new Button(container, SWT.NONE);
-		btn_add.setBounds(161, 263, 72, 22);
+		btn_add.setBounds(135, 138, 72, 22);
 		btn_add.setText("添加");
 		
 		btn_close = new Button(container, SWT.NONE);
-		btn_close.setBounds(257, 263, 72, 22);
+		btn_close.setBounds(259, 138, 72, 22);
 		btn_close.setText("关闭");
 		
 		//初始化操作
@@ -179,14 +179,14 @@ public class AddDisplay extends ApplicationWindow {
 		combo_commType.select(0);
 		
 		//加载播放方案
-		listOfSolution = playSolutionDao.queryAllSolutions();
-
-		cbnSolutions = new Button[listOfSolution.size()];
-		for(int i = 0; i < cbnSolutions.length; i++){
-			cbnSolutions[i] = new Button(composite_solutions, SWT.CHECK);
-			cbnSolutions[i].setText(listOfSolution.get(i).getName());
-		}
-		composite_solutions.layout();
+//		listOfSolution = playSolutionDao.queryAllSolutions();
+//
+//		cbnSolutions = new Button[listOfSolution.size()];
+//		for(int i = 0; i < cbnSolutions.length; i++){
+//			cbnSolutions[i] = new Button(composite_solutions, SWT.CHECK);
+//			cbnSolutions[i].setText(listOfSolution.get(i).getName());
+//		}
+//		composite_solutions.layout();
 		
 		//对按键添加监听器
 		btn_add.addSelectionListener(new ButtonSelectionListener());
@@ -274,7 +274,7 @@ public class AddDisplay extends ApplicationWindow {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(521, 371);
+		return new Point(521, 232);
 	}
 	
 	/**
@@ -319,12 +319,12 @@ public class AddDisplay extends ApplicationWindow {
 			display.setType(txt_displayType.getText());
 			
 			//获取设置的播放方案信息,添加到显示屏中
-			for(int i = 0; i < cbnSolutions.length; i++){
-				if(cbnSolutions[i].getSelection()){
-					PlaySolution temp = playSolutionDao.querySolutionByName(cbnSolutions[i].getText());
-					display.getSolutions().add(temp);
-				}
-			}
+//			for(int i = 0; i < cbnSolutions.length; i++){
+//				if(cbnSolutions[i].getSelection()){
+//					PlaySolution temp = playSolutionDao.querySolutionByName(cbnSolutions[i].getText());
+//					display.getSolutions().add(temp);
+//				}
+//			}
 			//封装通信方式
 			Communication communication = new Communication();
 			communication.setName(combo_commType.getItem(combo_commType.getSelectionIndex()));

@@ -13,16 +13,23 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.DateTime;
+
+
+
+
 
 
 
@@ -259,6 +266,15 @@ public class SendPlaySolution extends Composite {
 //		for(int i = 0; i < AllIP.IPS.size(); i++){
 //			list_hostList.add(AllIP.IPS.get(i));
 //		}
+		
+		//创建刷新上下文菜单
+		Menu contextMenu = new Menu(curShell, SWT.TOP);
+		MenuItem freshItem = new MenuItem(contextMenu, SWT.None);
+		freshItem.setText("刷新");
+		
+		scrolledComposite_pics.setMenu(contextMenu);
+		freshItem.addSelectionListener(new MenuItemSelectionImpl());
+		
 	}
 	
 	/**
@@ -419,8 +435,14 @@ public class SendPlaySolution extends Composite {
 	 */
 	public void addPicsToScrollComposite(){
 		//如果没有播放方案直接返回
+		Control controls[] = scrolledComposite_pics.getChildren();
+		
+		if(controls != null && controls.length != 0)
+			controls[0].dispose();
+		
 		if(combo_display.getItemCount() == 0 || combo_solutions.getItemCount() == 0)
 			return;
+		
 		
 		//获取选中的显示屏和播放方案名
 		String displayName = combo_display.getItem(combo_display.getSelectionIndex());
@@ -494,15 +516,24 @@ public class SendPlaySolution extends Composite {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(e.getSource() == combo_display){														//显示屏改变
+				//如果没有显示屏信息，播放方案应该置为空
 				if(combo_display.getItemCount() == 0)
+				{
+					combo_solutions.removeAll();
+					addPicsToScrollComposite();
 					return;
+				}
 				//获取显示屏名字
 				String displayName = combo_display.getItem(combo_display.getSelectionIndex());
 				com.gxf.beans.Display display = displayDao.queryDisplayByName(displayName);
 				Set<PlaySolution> listOfSolution = display.getSolutions();
 				
 				if(listOfSolution.size() == 0)
+				{
+					combo_solutions.removeAll();
+					addPicsToScrollComposite();
 					return;
+				}
 				int index = 0;
 				String solutionNames[] = new String[listOfSolution.size()];
 				for(Iterator<PlaySolution> it = listOfSolution.iterator(); it.hasNext();){
@@ -522,4 +553,20 @@ public class SendPlaySolution extends Composite {
 		
 	}
 	
+	/**
+	 * 菜单选项监听器
+	 * @author Administrator
+	 *
+	 */
+	class MenuItemSelectionImpl extends SelectionAdapter{
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			MenuItem item = (MenuItem) e.getSource();
+			if(item.getText().equals("刷新")){								//刷新
+				init();
+			}
+		}
+		
+	}
 }
