@@ -1,6 +1,7 @@
 package com.gxf.main;
 
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.window.ApplicationWindow;
@@ -198,9 +199,13 @@ public class Main extends ApplicationWindow {
 		
 		//添加工具栏按钮 
 		toolBarManager.add(addDisplayAction);
+		toolBarManager.add(new Separator());
 		toolBarManager.add(addPlaySolutionAction);
+		toolBarManager.add(new Separator());
 		toolBarManager.add(helpAction);
+		toolBarManager.add(new Separator());
 		toolBarManager.add(systemAction);
+		toolBarManager.add(new Separator());
 		toolBarManager.add(exitAction);
 		
 		return toolBarManager;
