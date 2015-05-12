@@ -15,6 +15,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.jface.action.Action;
 
+import com.gxf.actions.AddDisplayAction;
+import com.gxf.actions.AddPlaySolutionAction;
 import com.gxf.actions.ExitAction;
 import com.gxf.actions.HelpAction;
 import com.gxf.actions.SystemAction;
@@ -36,9 +38,11 @@ import org.eclipse.swt.events.SelectionEvent;
 public class Main extends ApplicationWindow {
 	
 	//菜单对应的ACTION
-	private Action exitAction = new ExitAction();
-	private Action systemAction = new SystemAction();
-	private Action helpAction = new HelpAction();
+	private Action exitAction = ExitAction.getExitAction();
+	private Action systemAction = SystemAction.getSystemAction();
+	private Action helpAction = HelpAction.getHelpAction();
+	private Action addDisplayAction = new AddDisplayAction();
+	private Action addPlaySolutionAction = new AddPlaySolutionAction();
 	
 	//工具类
 	private Util util = new Util();
@@ -60,7 +64,6 @@ public class Main extends ApplicationWindow {
 	private Composite composite_hostList;
 	private Composite composite_solutionList;
 	private Composite composite_queryPlaySolution;
-
 	/**
 	 * Create the application window.
 	 */
@@ -192,7 +195,14 @@ public class Main extends ApplicationWindow {
 	@Override
 	protected ToolBarManager createToolBarManager(int style) {						
 		ToolBarManager toolBarManager = new ToolBarManager(SWT.NONE);				//添加工具栏
-
+		
+		//添加工具栏按钮 
+		toolBarManager.add(addDisplayAction);
+		toolBarManager.add(addPlaySolutionAction);
+		toolBarManager.add(helpAction);
+		toolBarManager.add(systemAction);
+		toolBarManager.add(exitAction);
+		
 		return toolBarManager;
 	}
 

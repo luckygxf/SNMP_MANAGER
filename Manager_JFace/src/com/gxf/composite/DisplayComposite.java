@@ -375,7 +375,7 @@ public class DisplayComposite extends Composite {
 	 * 添加显示屏信息
 	 */
 	private void addDisplay(){
-		AddDisplay addDisplay = new AddDisplay();
+		AddDisplay addDisplay = AddDisplay.getAddDisplayComposite();
 		addDisplay.show();
 	}
 	

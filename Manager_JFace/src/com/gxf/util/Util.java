@@ -240,7 +240,12 @@ public class Util {
      * @return
      */
     public String getCurrentProjectPath(){
-    	String curPath = System.getProperty("user.dir");
+//    	String curPath = System.getProperty("user.dir");
+    	String curPath = "";
+    	File directory = new File("");//设定为当前文件夹
+    	try{
+    		curPath = directory.getAbsolutePath();
+    	}catch(Exception e){}
     	
     	return curPath;
     }

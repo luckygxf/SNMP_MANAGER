@@ -7,6 +7,8 @@ import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
@@ -26,15 +28,19 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
  * 使用说明
+ * 单例模式
  * @author Administrator
  *
  */
 public class DirectionsForUseComposite extends ApplicationWindow {
 	private Util util = new Util();
+	private Shell curShell;
+	private static DirectionsForUseComposite directionsForUseComposite = new DirectionsForUseComposite();
+	
 	/**
 	 * Create the application window.
 	 */
-	public DirectionsForUseComposite() {
+	private DirectionsForUseComposite() {
 		super(null);
 		setShellStyle(SWT.MIN);
 		createActions();
@@ -155,6 +161,11 @@ public class DirectionsForUseComposite extends ApplicationWindow {
 		ImageData imageData = new ImageData(iconPath);
 		Image image = new Image(Display.getDefault(), imageData);
 		newShell.setImage(image);
+		
+		//设置当前shell
+		curShell = newShell;
+		
+		curShell.addKeyListener(new KeyListenerImpl());
 	}
 
 	/**
@@ -170,12 +181,45 @@ public class DirectionsForUseComposite extends ApplicationWindow {
 	 */
 	public void showWindow(){
 		try {
-			DirectionsForUseComposite window = new DirectionsForUseComposite();
+			DirectionsForUseComposite window = DirectionsForUseComposite.getDirectionsForUseComposite();
 			window.setBlockOnOpen(true);
 			window.open();
 //			Display.getCurrent().dispose();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 返回单例实例
+	 * @return
+	 */
+	public static DirectionsForUseComposite getDirectionsForUseComposite(){
+		return directionsForUseComposite;
+	}
+	
+	/**
+	 * 按键监听器，这里主要是为了监听esc退出全屏显示
+	 * @author Administrator
+	 *
+	 */
+	class KeyListenerImpl implements KeyListener{
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			if(arg0.keyCode == SWT.ESC)
+			{
+				//退出全屏，设置前面shell显示出来
+				curShell.dispose();
+			}
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }

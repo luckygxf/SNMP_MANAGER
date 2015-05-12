@@ -69,10 +69,13 @@ public class AddDisplay extends ApplicationWindow {
 	private CommunicationDao communicatioDao = new CommunicationDaoImpl();
 	private DisplayDao displayDao = new DisplayDaoImpl();
 
+	//单例模式 实例
+	private static AddDisplay addDisplay = new AddDisplay();
 	/**
+	 * 单例模式
 	 * Create the application window.
 	 */
-	public AddDisplay() {
+	private AddDisplay() {
 		super(null);
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
@@ -247,7 +250,7 @@ public class AddDisplay extends ApplicationWindow {
 	 */
 	public void show(){
 		try {
-			AddDisplay window = new AddDisplay();
+			AddDisplay window = AddDisplay.getAddDisplayComposite();
 			window.setBlockOnOpen(true);
 			window.open();
 //			Display.getCurrent().dispose();
@@ -357,5 +360,13 @@ public class AddDisplay extends ApplicationWindow {
 			messageBox.setMessage("显示屏信息添加成功!");
 			messageBox.open();
 		}
+	}
+	
+	/**
+	 * 获取单例模式 实例
+	 * @return
+	 */
+	public static AddDisplay getAddDisplayComposite(){
+		return addDisplay;
 	}
 }

@@ -31,11 +31,13 @@ import org.eclipse.swt.widgets.Canvas;
 public class SystemInfo extends ApplicationWindow {
 	private Util util = new Util();
 	private Shell curShell;
-
+	
+	private static SystemInfo systemInfo = new SystemInfo();
+	
 	/**
 	 * Create the application window.
 	 */
-	public SystemInfo() {
+	private SystemInfo() {
 		super(null);
 		setShellStyle(SWT.CLOSE | SWT.TITLE);
 		createActions();
@@ -199,7 +201,7 @@ public class SystemInfo extends ApplicationWindow {
 	 */
 	public void showWindow(){
 		try {
-			SystemInfo window = new SystemInfo();
+			SystemInfo window = SystemInfo.getSystemInfo();
 			window.setBlockOnOpen(true);
 			window.open();
 //			Display.getCurrent().dispose();
@@ -267,5 +269,13 @@ public class SystemInfo extends ApplicationWindow {
 			
 		}
 		
+	}
+	
+	/**
+	 * 返回单例实例
+	 * @return
+	 */
+	public static SystemInfo getSystemInfo(){
+		return systemInfo;
 	}
 }

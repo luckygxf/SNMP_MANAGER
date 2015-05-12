@@ -193,7 +193,7 @@ public class PlaySolutionComposite extends Composite {
 		 * 打开添加播放方案面板
 		 */
 		private void addPlaySolution(){
-			AddPlaySolution addComposite = new AddPlaySolution();
+			AddPlaySolution addComposite = AddPlaySolution.getAddPlaySolution();
 			addComposite.showWindow();
 		}
 		

@@ -49,10 +49,14 @@ public class AddPlaySolution extends ApplicationWindow {
 	private DisplayDao displayDao = new DisplayDaoImpl();
 	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
 	
+	//单例模式  实例
+	private static AddPlaySolution addPlaySolution = new AddPlaySolution();
+	
 	/**
+	 * 使用单例模式 
 	 * Create the application window.
 	 */
-	public AddPlaySolution() {
+	private AddPlaySolution() {
 		super(null);
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
@@ -279,12 +283,20 @@ public class AddPlaySolution extends ApplicationWindow {
 	 */
 	public void showWindow(){
 		try {
-			AddPlaySolution window = new AddPlaySolution();
+			AddPlaySolution window = AddPlaySolution.getAddPlaySolution();
 			window.setBlockOnOpen(true);
 			window.open();
 //			Display.getCurrent().dispose();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 获取单例模式  实例
+	 * @return
+	 */
+	public static AddPlaySolution getAddPlaySolution(){
+		return addPlaySolution;
 	}
 }
