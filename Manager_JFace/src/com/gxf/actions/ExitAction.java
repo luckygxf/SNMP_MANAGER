@@ -46,9 +46,7 @@ public class ExitAction extends Action{
 
 	@Override
 	public void run() {
-		
-		super.run();
-		Main.getMain().close();						//¹Ø±Õ´°¿Ú
+		System.exit(0);
 	}
 	
 	public static ExitAction getExitAction(){

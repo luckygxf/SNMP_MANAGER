@@ -1,8 +1,9 @@
 package com.gxf.beans;
 
+import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -18,7 +19,7 @@ public class PlaySolution {
 	private int updateCount;
 	private String comment;
 	private Display display;
-	private Set<Picture> pictures = new HashSet<Picture>();
+	private Set<Picture> pictures = new TreeSet<Picture>();
 	
 	public int getId() {
 		return id;

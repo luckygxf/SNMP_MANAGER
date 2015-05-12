@@ -12,6 +12,8 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.jface.action.Action;
@@ -165,6 +167,8 @@ public class Main extends ApplicationWindow {
 		//初始化显示发送播放方案面面板
 		Composite composite_queryPlaySolution = new QueryPlaySolution(tabFolder_workspace, SWT.NONE);
 		addTabItem("查询播放方案", composite_queryPlaySolution);
+		
+		
 	}
 	/**
 	 * Create the menu manager.
@@ -252,6 +256,17 @@ public class Main extends ApplicationWindow {
 		super.configureShell(newShell);
 		//设置程序标题
 		newShell.setText("LED管理程序--by GXF");
+		
+		//为关闭窗口注册监听器
+		newShell.addListener(SWT.Close, new Listener() {
+			
+			@Override
+			public void handleEvent(Event arg0) {
+				//终止当前正字运行的jvm
+				System.exit(0);
+				
+			}
+		});
 
 	}
 

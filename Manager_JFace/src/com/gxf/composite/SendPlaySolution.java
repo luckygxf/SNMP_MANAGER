@@ -335,9 +335,9 @@ public class SendPlaySolution extends Composite {
 	 * 根据config生成config.xml
 	 * @param config
 	 */
-	public void createConfigXml(String solutionName, Config config){
-		util.createConfigXml(solutionName, config);
-	}
+//	public void createConfigXml(String solutionName, Config config){
+////		util.createConfigXml(solutionName, config);
+//	}
 	
 	/**
 	 * 发送播放方案

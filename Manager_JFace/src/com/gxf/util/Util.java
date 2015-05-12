@@ -22,7 +22,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -254,85 +257,85 @@ public class Util {
      * 根据config生成config.xml,放到播放方案下面
      * @param config
      */
-    public void createConfigXml(String solutionName, Config configInfo){    	
-    	Document document = DocumentHelper.createDocument();
-    	
-        Element config = document.addElement("config");
-        //style
-        Element style = config.addElement("style");
-        style.addText(String.valueOf(configInfo.getPlayStyle()));
-        //timeInterval
-        Element timeInterval = config.addElement("timeInterval");
-        timeInterval.addText(String.valueOf(configInfo.getPlayTimeInterval()));
-        //date_start
-        Element date_start = config.addElement("date_start");
-        Element day = date_start.addElement("day_start");
-        day.addText(String.valueOf(configInfo.getDay_start()));
-        Element month = date_start.addElement("month_start");
-        month.addText(String.valueOf(configInfo.getMonth_start()));
-        Element year = date_start.addElement("year_start");
-        year.addText(String.valueOf(configInfo.getYear_start()));
-        
-        //date_end
-        date_start = config.addElement("date_end");
-        day = date_start.addElement("day_end");
-        day.addText(String.valueOf(configInfo.getDay_end()));
-        month = date_start.addElement("month_end");
-        month.addText(String.valueOf(configInfo.getMonth_end()));
-        year = date_start.addElement("year_end");
-        year.addText(String.valueOf(configInfo.getYear_end()));
-        
-        //time_start
-        Element time_start = config.addElement("time_start");
-        Element second = time_start.addElement("second_start");
-        second.addText(String.valueOf(configInfo.getSec_start()));
-        Element minute = time_start.addElement("minute_start");
-        minute.addText(String.valueOf(configInfo.getMin_start()));
-        Element hour = time_start.addElement("hour_start");
-        hour.addText(String.valueOf(configInfo.getHour_start()));
-        
-        //time_end
-        time_start = config.addElement("time_end");
-        second = time_start.addElement("second_end");
-        second.addText(String.valueOf(configInfo.getSec_end()));
-        minute = time_start.addElement("minute_end");
-        minute.addText(String.valueOf(configInfo.getMin_end()));
-        hour = time_start.addElement("hour_end");
-        hour.addText(String.valueOf(configInfo.getHour_end()));
-        
-        //weekdays
-        Element weekdays = config.addElement("weekdays");
-        boolean weeks[] = configInfo.getWeekdays();
-        for(int i = 0; i < weeks.length; i++){
-        	String elementName = "weekday" + i;
-        	Element element = weekdays.addElement(elementName);
-        	String elementText = String.valueOf(weeks[i] ? 1 : 0);
-        	element.addText(elementText);
-        }
-        //向播放方案下面添加配置文件
-        String dic = getCurrentProjectPath() + File.separator + "playSolutions" + File.separator + solutionName;
-        String configFilePath = dic + File.separator + solutionName + ".xml";
-//        FileWriter out;
-//		try {
-//			out = new FileWriter(new File(configFilePath));
-//			document.write(out);
-//			out.flush();
+//    public void createConfigXml(String solutionName, Config configInfo){    	
+//    	Document document = DocumentHelper.createDocument();
+//    	
+//        Element config = document.addElement("config");
+//        //style
+//        Element style = config.addElement("style");
+//        style.addText(String.valueOf(configInfo.getPlayStyle()));
+//        //timeInterval
+//        Element timeInterval = config.addElement("timeInterval");
+//        timeInterval.addText(String.valueOf(configInfo.getPlayTimeInterval()));
+//        //date_start
+//        Element date_start = config.addElement("date_start");
+//        Element day = date_start.addElement("day_start");
+//        day.addText(String.valueOf(configInfo.getDay_start()));
+//        Element month = date_start.addElement("month_start");
+//        month.addText(String.valueOf(configInfo.getMonth_start()));
+//        Element year = date_start.addElement("year_start");
+//        year.addText(String.valueOf(configInfo.getYear_start()));
+//        
+//        //date_end
+//        date_start = config.addElement("date_end");
+//        day = date_start.addElement("day_end");
+//        day.addText(String.valueOf(configInfo.getDay_end()));
+//        month = date_start.addElement("month_end");
+//        month.addText(String.valueOf(configInfo.getMonth_end()));
+//        year = date_start.addElement("year_end");
+//        year.addText(String.valueOf(configInfo.getYear_end()));
+//        
+//        //time_start
+//        Element time_start = config.addElement("time_start");
+//        Element second = time_start.addElement("second_start");
+//        second.addText(String.valueOf(configInfo.getSec_start()));
+//        Element minute = time_start.addElement("minute_start");
+//        minute.addText(String.valueOf(configInfo.getMin_start()));
+//        Element hour = time_start.addElement("hour_start");
+//        hour.addText(String.valueOf(configInfo.getHour_start()));
+//        
+//        //time_end
+//        time_start = config.addElement("time_end");
+//        second = time_start.addElement("second_end");
+//        second.addText(String.valueOf(configInfo.getSec_end()));
+//        minute = time_start.addElement("minute_end");
+//        minute.addText(String.valueOf(configInfo.getMin_end()));
+//        hour = time_start.addElement("hour_end");
+//        hour.addText(String.valueOf(configInfo.getHour_end()));
+//        
+//        //weekdays
+//        Element weekdays = config.addElement("weekdays");
+//        boolean weeks[] = configInfo.getWeekdays();
+//        for(int i = 0; i < weeks.length; i++){
+//        	String elementName = "weekday" + i;
+//        	Element element = weekdays.addElement(elementName);
+//        	String elementText = String.valueOf(weeks[i] ? 1 : 0);
+//        	element.addText(elementText);
+//        }
+//        //向播放方案下面添加配置文件
+//        String dic = getCurrentProjectPath() + File.separator + "playSolutions" + File.separator + solutionName;
+//        String configFilePath = dic + File.separator + solutionName + ".xml";
+////        FileWriter out;
+////		try {
+////			out = new FileWriter(new File(configFilePath));
+////			document.write(out);
+////			out.flush();
+////		} catch (IOException e) {
+////			e.printStackTrace();
+////		}        
+//		
+//        OutputFormat format = OutputFormat.createPrettyPrint();
+//        format.setEncoding("UTF-8");
+//        File file = new File(configFilePath);
+//        
+//        try {
+//        	XMLWriter writer = new  XMLWriter(new FileOutputStream(file), format);
+//			writer.write(document);
 //		} catch (IOException e) {
 //			e.printStackTrace();
-//		}        
-		
-        OutputFormat format = OutputFormat.createPrettyPrint();
-        format.setEncoding("UTF-8");
-        File file = new File(configFilePath);
-        
-        try {
-        	XMLWriter writer = new  XMLWriter(new FileOutputStream(file), format);
-			writer.write(document);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-    }
+//		}
+//		
+//    }
     
     /**
      * 根据播放方案名字压缩文件
@@ -341,7 +344,6 @@ public class Util {
      */
     public void compressPlaySoution(String displayName, String solutionName) {
 		String dicPath = getCurrentProjectPath() + File.separator + displayName + File.separator  + solutionName;
-		System.out.println("dicPath = " + dicPath);
 		String targetPath = getCurrentProjectPath() + File.separator + displayName + File.separator + displayName + "+" + solutionName +  ".zip";
 		
 		File file = new File(dicPath) ;												// 定义要压缩的文件夹  
@@ -350,7 +352,7 @@ public class Util {
         ZipOutputStream zipOut = null ; 											// 声明压缩流对象  
         try{
         	zipOut = new ZipOutputStream(new FileOutputStream(zipFile)) ;  
-            zipOut.setComment("compressed by GXF") ;  								// 设置注释  
+            zipOut.setComment("compressed by GXF" + new Date()) ;					// 设置注释  
             int temp = 0 ;  
             if(file.isDirectory()){ 												// 判断是否是文件夹  
                 File lists[] = file.listFiles() ;   								// 列出全部文件  
@@ -439,7 +441,8 @@ public class Util {
      */
     public void createConfigXml(com.gxf.beans.Display display, com.gxf.beans.PlaySolution playSolution){
     	//获取播放路径下面的图片
-    	List<Picture> listOfPicture = new ArrayList<Picture>(playSolution.getPictures());
+//    	List<Picture> listOfPicture = new ArrayList<Picture>(playSolution.getPictures());
+    	Set<Picture> listOfPicture = new TreeSet<Picture>(playSolution.getPictures());
     	//没有图片
     	if(listOfPicture == null || listOfPicture.size() == 0)
     		return;
@@ -448,8 +451,8 @@ public class Util {
     	Element pictures = document.addElement("pictures");
     	
     	//生成xml内容
-    	for(int i = 0; i < listOfPicture.size(); i++){
-    		Picture pictureBean = (Picture) listOfPicture.get(i);
+    	for(Iterator<Picture> it_picture = listOfPicture.iterator(); it_picture.hasNext();){
+    		Picture pictureBean = (Picture) it_picture.next();
     		PlayControl playControlBean = pictureBean.getPlayControl();
     		
     		//生成picture节点

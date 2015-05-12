@@ -1,6 +1,7 @@
 package com.gxf.beans;
 
-public class Picture {
+
+public class Picture implements Comparable<Picture>{
 	private int id;
 	private String picName;
 	private String picPath;
@@ -36,6 +37,15 @@ public class Picture {
 	}
 	public void setPlayControl(PlayControl playControl) {
 		this.playControl = playControl;
+	}
+	@Override
+	public int compareTo(Picture o) {
+		if(this.id < o.id)
+			return -1;
+		else if(this.id > o.id)
+			return 1;
+		else
+			return 0;
 	}
 	
 }
