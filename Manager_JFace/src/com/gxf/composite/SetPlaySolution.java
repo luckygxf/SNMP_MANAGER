@@ -96,10 +96,13 @@ public class SetPlaySolution extends ApplicationWindow {
 	//上下文菜单
 //	private Menu contextMenu;
 	
+	//单例模式 实例
+	private static SetPlaySolution setPlaySolution = new SetPlaySolution();
+	
 	/**
 	 * Create the application window.
 	 */
-	public SetPlaySolution() {
+	private SetPlaySolution() {
 		super(null);
 		//获取当前对象
 		curUpdatePlaySolution = this;
@@ -414,7 +417,7 @@ public class SetPlaySolution extends ApplicationWindow {
 	//对外提供显示窗口的接口
 	public void showWindow(){
 		try {
-			SetPlaySolution window = new SetPlaySolution();
+			SetPlaySolution window = SetPlaySolution.getSetPlaySolution();
 			window.setBlockOnOpen(true);
 			window.open();
 //			Display.getCurrent().dispose();
@@ -462,7 +465,7 @@ public class SetPlaySolution extends ApplicationWindow {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(e.getSource() == btn_editPic){							//编辑图片按钮,打开文字图片编辑器
-				WordPicEditTool wordPicEditTool = new WordPicEditTool();
+				WordPicEditTool wordPicEditTool = WordPicEditTool.getWordPicEditTool();
 				String displayName = combo_display.getItem(combo_display.getSelectionIndex());
 				String playSolutionName = combo_playSolutionName.getItem(combo_playSolutionName.getSelectionIndex());
 				String playSolutionPath = curProjectPath + File.separator + 
@@ -888,5 +891,13 @@ public class SetPlaySolution extends ApplicationWindow {
 		
 		//更新数据库中的数据
 		pictureDao.updatePicture(picture);
+	}
+	
+	/**
+	 * 返回单例模式实例
+	 * @return
+	 */
+	public static SetPlaySolution getSetPlaySolution(){
+		return setPlaySolution;
 	}
 }

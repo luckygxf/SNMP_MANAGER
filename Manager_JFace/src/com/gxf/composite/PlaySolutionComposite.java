@@ -337,7 +337,7 @@ public class PlaySolutionComposite extends Composite {
 		public void widgetSelected(SelectionEvent e) {
 			MenuItem item = (MenuItem) e.getSource();
 			if(item.getText() == "设置"){						//查看播放方案详细信息
-				SetPlaySolution updatePlaySolution = new SetPlaySolution();
+				SetPlaySolution updatePlaySolution = SetPlaySolution.getSetPlaySolution();
 				TableItem tableItemSelectedIndex = table_playSolution.getItem(table_playSolution.getSelectionIndex());
 				String displayName = tableItemSelectedIndex.getText(2);
 				String playSolutionName = tableItemSelectedIndex.getText(1);

@@ -58,6 +58,7 @@ public class AddPlaySolution extends ApplicationWindow {
 	 */
 	private AddPlaySolution() {
 		super(null);
+		setShellStyle(SWT.MIN);
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();

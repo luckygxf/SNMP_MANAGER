@@ -104,12 +104,15 @@ public class WordPicEditTool extends ApplicationWindow {
 	
 	//方案播放控制
 	public static PlayControl playControl;
+	
+	//单例模式实例
+	private static WordPicEditTool wordPicEditTool = new WordPicEditTool();
 
 	
 	/**
 	 * Create the application window.
 	 */
-	public WordPicEditTool() {
+	private WordPicEditTool() {
 		super(null);
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
@@ -367,7 +370,7 @@ public class WordPicEditTool extends ApplicationWindow {
 	//提供接口对外部调用
 	public void openEditWindow(){
 		try {
-			WordPicEditTool window = new WordPicEditTool();
+			WordPicEditTool window = WordPicEditTool.getWordPicEditTool();
 			window.setBlockOnOpen(true);
 			window.open();
 			Display.getCurrent().dispose();
@@ -895,4 +898,11 @@ public class WordPicEditTool extends ApplicationWindow {
 		this.updatePlaySolution = updatePlaySolution;
 	}
 	
+	/**
+	 * 返回单例模式实例
+	 * @return
+	 */
+	public static WordPicEditTool getWordPicEditTool(){
+		return wordPicEditTool;
+	}
 }

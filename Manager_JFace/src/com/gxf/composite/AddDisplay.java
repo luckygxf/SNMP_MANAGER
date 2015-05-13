@@ -77,6 +77,7 @@ public class AddDisplay extends ApplicationWindow {
 	 */
 	private AddDisplay() {
 		super(null);
+		setShellStyle(SWT.MIN);
 		createActions();
 		addToolBar(SWT.FLAT | SWT.WRAP);
 		addMenuBar();
