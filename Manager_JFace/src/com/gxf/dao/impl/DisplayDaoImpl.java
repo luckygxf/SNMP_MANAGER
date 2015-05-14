@@ -148,8 +148,8 @@ public class DisplayDaoImpl implements DisplayDao {
 		session.beginTransaction();
 		String hql = "update Display d set d.curPlaySolutionName = ? where d.name = ?";
 		Query query = session.createQuery(hql);
-		query.setString(0, displayName);
-		query.setString(1, curPlaySolutionName);
+		query.setString(0, curPlaySolutionName);
+		query.setString(1, displayName);
 		
 		query.executeUpdate();
 		session.getTransaction().commit();

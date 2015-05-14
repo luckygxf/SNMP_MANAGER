@@ -552,14 +552,22 @@ public class Util {
      * @return
      */
     public boolean validConnection(String ip, int port){
+    	Socket socket = null;
     	//‘∂≥Ãipµÿ÷∑
     	try {
 			InetAddress remoteIp = InetAddress.getByName(ip);
-			Socket remoteSocket = new Socket(remoteIp, port);
+			socket = new Socket(remoteIp, port);
 		
 		} catch (Exception e) {
 			return false;
-		} 
+		} finally{
+			if(socket != null)
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
     	return true;
     }
 }

@@ -199,6 +199,8 @@ public class SendPlaySolution extends Composite {
 //		scrolledComposite_pics.setExpandHorizontal(true);
 //		scrolledComposite_pics.setExpandVertical(true);
 		
+		//不放到init()中，原因是refresh()调用下面语句，造成注册多个监听器,多个弹框
+		btn_sendSoluton.addSelectionListener(new ButtonListenerImpl());
 		
 		//对控件进行初始化
 		init();
@@ -211,8 +213,7 @@ public class SendPlaySolution extends Composite {
 		//初始化播放方式控件内容
 //		String playStyles[] = new String[]{"普通播放", "定时播放"};
 //		combo_playStyle.setItems(playStyles);
-//		combo_playStyle.select(0);
-		btn_sendSoluton.addSelectionListener(new ButtonListenerImpl());
+//		combo_playStyle.select(0);	
 		
 		//初始化显示屏
 		String displayNames[] = getDisplayNames();
@@ -272,6 +273,7 @@ public class SendPlaySolution extends Composite {
 		public void widgetSelected(SelectionEvent e) {
 			if(e.getSource() == btn_sendSoluton){					//发送配送方案
 				sendPlaySolution();
+				
 			}
 			
 		}
