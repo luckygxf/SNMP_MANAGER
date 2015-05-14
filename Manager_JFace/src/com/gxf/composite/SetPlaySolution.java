@@ -466,6 +466,7 @@ public class SetPlaySolution extends ApplicationWindow {
 		public void widgetSelected(SelectionEvent e) {
 			if(e.getSource() == btn_editPic){							//编辑图片按钮,打开文字图片编辑器
 				WordPicEditTool wordPicEditTool = WordPicEditTool.getWordPicEditTool();
+				System.out.println("wordPicEditTool hashCode = " + wordPicEditTool.hashCode());
 				String displayName = combo_display.getItem(combo_display.getSelectionIndex());
 				String playSolutionName = combo_playSolutionName.getItem(combo_playSolutionName.getSelectionIndex());
 				String playSolutionPath = curProjectPath + File.separator + 
@@ -535,9 +536,9 @@ public class SetPlaySolution extends ApplicationWindow {
 		Composite composite_pics = new Composite(sc_picsToChoose, SWT.NONE);
 		sc_picsToChoose.setContent(composite_pics);
 		//初始化滚动面板布局等每行显示4张图片
-		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 4;
-		composite_pics.setLayout(gridLayout);
+//		GridLayout gridLayout = new GridLayout();
+//		gridLayout.numColumns = 4;
+//		composite_pics.setLayout(gridLayout);
 		
 		//图片宽度和高度
 		int compositeWidth = sc_picsToChoose.getBounds().width;
@@ -551,7 +552,7 @@ public class SetPlaySolution extends ApplicationWindow {
 		final Label labels_pic[]= new Label[listOfPics.size()];
 		
 		for(int i = 0; i < labels_pic.length; i++){
-			labels_pic[i] = new Label(composite_pics, SWT.NONE);
+			labels_pic[i] = new Label(composite_pics, SWT.CENTER);
 			//添加上下文菜单
 			Menu contextMenu = new Menu(curShell, SWT.POP_UP);
 			MenuItem addItem = new MenuItem(contextMenu, SWT.PUSH);
@@ -561,8 +562,12 @@ public class SetPlaySolution extends ApplicationWindow {
 			//添加图片信息到label上
 			ImageData imageData = new ImageData(listOfPics.get(i).getPicPath());
 			imageData = imageData.scaledTo(picWidth, picHeight);
+			imageData = imageData.scaledTo(picWidth - 15, picHeight - 15);
 			Image image = new Image(Display.getDefault(), imageData);
 			labels_pic[i].setImage(image);
+			//设置图片大小 
+			labels_pic[i].setBounds((i % 4) * picWidth, (i / 4) * picHeight, picWidth, picHeight);
+			
 			//将图片路径放到event.data中
 			addItem.setData(listOfPics.get(i).getPicPath());
 			
@@ -573,7 +578,14 @@ public class SetPlaySolution extends ApplicationWindow {
 				
 				@Override
 				public void handleEvent(Event e) {
+					//滑动窗口获得焦点
 					sc_picsToChoose.setFocus();					
+					//设置图片背景色
+					Label temp = (Label) e.widget;
+					for(Label label : labels_pic){
+						label.setBackground(null);
+					}
+					temp.setBackground(LABEL_SELECTED_COLOR);
 				}
 			});
 		}
@@ -604,9 +616,9 @@ public class SetPlaySolution extends ApplicationWindow {
 			return;
 		
 		//初始化滚动面板布局等每行显示4张图片
-		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 4;
-		gridLayout.makeColumnsEqualWidth = true;
+//		GridLayout gridLayout = new GridLayout();
+//		gridLayout.numColumns = 4;
+//		gridLayout.makeColumnsEqualWidth = true;
 		
 //		composite_pics.setLayout(gridLayout);
 		
@@ -703,15 +715,18 @@ public class SetPlaySolution extends ApplicationWindow {
 			MenuItem item = (MenuItem) e.getSource();
 			if(item.getText() == "添加"){						//添加图片到播放方案中
 				//1.复制文件到播放方案文件夹中
-				//2.向数据库中写入数据
+				//2.向数据库中写入图片信息，控制信息
 				//3.更新显示
 				String scrFilePath = (String) item.getData();
 				String curTime = util.getCurTime();
 				String playSolutionName = combo_playSolutionName.getItem(combo_playSolutionName.getSelectionIndex());
 				String displayName = combo_display.getItem(combo_display.getSelectionIndex());
+				//保存图片的相对路径
+				String relativePath = displayName + File.separator + playSolutionName
+						+ File.separator + curTime + ".bmp";
+				//图片绝对路径
+				String dstFilePath = curProjectPath + File.separator + relativePath;
 				
-				String dstFilePath = curProjectPath + File.separator + displayName + File.separator + playSolutionName
-										+ File.separator + curTime + ".bmp";
 				//复制文件
 				util.copyFile(scrFilePath, dstFilePath);
 				
@@ -719,8 +734,12 @@ public class SetPlaySolution extends ApplicationWindow {
 				PlaySolution playSolution = playSolutionDao.querySolutionByName(playSolutionName);
 				Picture picture = new Picture();
 				picture.setPicName(curTime + ".bmp");
-				picture.setPicPath(dstFilePath);
+				picture.setPicPath(relativePath);
 				picture.setPlaySolution(playSolution);
+				
+				//获取面板上面播放控制信息
+				PlayControl playControl = getPlayControl();
+				picture.setPlayControl(playControl);
 				
 				pictureDao.addPicture(picture);
 				

@@ -30,7 +30,9 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Label;
@@ -371,6 +373,7 @@ public class WordPicEditTool extends ApplicationWindow {
 	public void openEditWindow(){
 		try {
 			WordPicEditTool window = WordPicEditTool.getWordPicEditTool();
+//			curShell.setText("文字图像编辑器(" + WordPicEditTool.displayName + "-->" + WordPicEditTool.playSolutionName + ")");
 			window.setBlockOnOpen(true);
 			window.open();
 			Display.getCurrent().dispose();
@@ -386,7 +389,7 @@ public class WordPicEditTool extends ApplicationWindow {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("文字图像编辑器");
+		newShell.setText("文字图像编辑器(" + WordPicEditTool.displayName + "-->" + WordPicEditTool.playSolutionName + ")");
 		//设置程序logo
 		String iconPath = curProjectPath + File.separator + "icons" + File.separator + "editPicIcon.jpg";
 		ImageData imageData = new ImageData(iconPath);
@@ -394,6 +397,16 @@ public class WordPicEditTool extends ApplicationWindow {
 		newShell.setImage(image);
 		
 		curShell = newShell;
+		
+		//注册关闭事件监听器
+		curShell.addListener(SWT.Close, new Listener() {
+			
+			@Override
+			public void handleEvent(Event e) {
+				curShell.dispose();
+				
+			}
+		});
 	}
 
 	/**
@@ -677,9 +690,9 @@ public class WordPicEditTool extends ApplicationWindow {
 		public void widgetSelected(SelectionEvent e) {
 			//选中的index
 			int index = list_word.getSelectionIndex();
-			//选中的文字
-			String word = list_word.getItem(index);
-			txt_addWord.setText(word);
+			//没有选中元素，返回，不做任何处理
+			if(index == -1)
+				return;
 			
 			ImageItem imageItem = imageItems.get(index);
 			combo_wordStyles.select(imageItem.getFontNameIndex());
@@ -855,6 +868,8 @@ public class WordPicEditTool extends ApplicationWindow {
 	 * 关闭窗口
 	 */
 	public void closeWindow(){
+		//将单例置为空
+		wordPicEditTool = null;
 		curShell.dispose();
 	}
 	
@@ -903,6 +918,9 @@ public class WordPicEditTool extends ApplicationWindow {
 	 * @return
 	 */
 	public static WordPicEditTool getWordPicEditTool(){
+		if(wordPicEditTool == null)
+			wordPicEditTool = new WordPicEditTool();
+		
 		return wordPicEditTool;
 	}
 }

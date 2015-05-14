@@ -300,4 +300,6 @@ public class AddPlaySolution extends ApplicationWindow {
 	public static AddPlaySolution getAddPlaySolution(){
 		return addPlaySolution;
 	}
+	
+
 }

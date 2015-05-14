@@ -106,7 +106,7 @@ public class SystemInfo extends ApplicationWindow {
 		label_1.setBounds(43, 97, 115, 24);
 		
 		Label label_2 = new Label(composite_sysInfo, SWT.CENTER);
-		label_2.setText("Copyright© 2015");
+		label_2.setText("CopyRight© 2015");
 		label_2.setFont(SWTResourceManager.getFont("宋体", 14, SWT.BOLD));
 		label_2.setBackground(SWTResourceManager.getColor(30, 144, 255));
 		label_2.setBounds(41, 186, 184, 24);

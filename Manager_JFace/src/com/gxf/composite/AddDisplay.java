@@ -1,8 +1,8 @@
 package com.gxf.composite;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.StatusLineManager;
@@ -14,7 +14,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -22,20 +21,20 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import com.gxf.beans.Communication;
-import com.gxf.beans.PlaySolution;
+import com.gxf.composite.SystemInfo.KeyListenerImpl;
+//import com.gxf.beans.PlaySolution;
 import com.gxf.dao.CommunicationDao;
 import com.gxf.dao.DisplayDao;
-import com.gxf.dao.PlaySolutionDao;
+//import com.gxf.dao.PlaySolutionDao;
 import com.gxf.dao.impl.CommunicationDaoImpl;
 import com.gxf.dao.impl.DisplayDaoImpl;
-import com.gxf.dao.impl.PlaySolutionDaoImpl;
+//import com.gxf.dao.impl.PlaySolutionDaoImpl;
 import com.gxf.util.Util;
 
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Button;
 
 /**
@@ -51,11 +50,9 @@ public class AddDisplay extends ApplicationWindow {
 	private Text txt_port;
 	private Text txt_comment;
 	private Combo combo_commType;
-	private Composite composite_solutions;
 	private Button btn_add;
 	private Button btn_close;
 	
-	private Button cbnSolutions[];
 	
 	//工具类
 	private Util util = new Util();
@@ -64,8 +61,8 @@ public class AddDisplay extends ApplicationWindow {
 	private Shell curShell;
 	
 	//数据库访问类
-	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
-	private List<PlaySolution> listOfSolution = new ArrayList<PlaySolution>();
+//	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
+//	private List<PlaySolution> listOfSolution = new ArrayList<PlaySolution>();
 	private CommunicationDao communicatioDao = new CommunicationDaoImpl();
 	private DisplayDao displayDao = new DisplayDaoImpl();
 
@@ -195,6 +192,8 @@ public class AddDisplay extends ApplicationWindow {
 		//对按键添加监听器
 		btn_add.addSelectionListener(new ButtonSelectionListener());
 		btn_close.addSelectionListener(new ButtonSelectionListener());
+		
+		
 	}
 	/**
 	 * Create the actions.
@@ -270,7 +269,7 @@ public class AddDisplay extends ApplicationWindow {
 		String iconPath = curProjectPath + File.separator + "icons" + File.separator
 							+ "addDisplayIcon.png";
 		newShell.setImage(new Image(Display.getDefault(), new ImageData(iconPath)));
-		curShell = newShell;
+		curShell = newShell;	
 	}
 
 	/**
@@ -368,6 +367,11 @@ public class AddDisplay extends ApplicationWindow {
 	 * @return
 	 */
 	public static AddDisplay getAddDisplayComposite(){
+		if(addDisplay == null)
+			addDisplay = new AddDisplay();
+		
 		return addDisplay;
 	}
+	
+
 }

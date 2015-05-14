@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridLayout;
@@ -24,28 +23,13 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.DateTime;
-
-
-
-
-
-
-
-
-
-
 import com.gxf.beans.PlaySolution;
 import com.gxf.dao.DisplayDao;
-import com.gxf.dao.PlaySolutionDao;
 import com.gxf.dao.impl.DisplayDaoImpl;
-import com.gxf.dao.impl.PlaySolutionDaoImpl;
-import com.gxf.util.AllIP;
 import com.gxf.util.Config;
 import com.gxf.util.PicFilenameFilter;
 import com.gxf.util.SendPic;
-import com.gxf.util.SolutionNameFilter;
 import com.gxf.util.Util;
 
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -53,11 +37,11 @@ import org.eclipse.swt.custom.ScrolledComposite;
 public class SendPlaySolution extends Composite {
 	
 	//各种控件
-	private Label lb_showPlayStyle;
+//	private Label lb_showPlayStyle;
 	private Text txt_timeInterval;
 	private Button btn_sendSoluton;
 	private Button btn_weekdays[];
-	private List list_hostList;
+//	private List list_hostList;
 	
 	//播放日期控制
 	private DateTime dateTime_start;
@@ -87,7 +71,7 @@ public class SendPlaySolution extends Composite {
 	
 	//数据库访问类
 	private DisplayDao displayDao =  new DisplayDaoImpl();
-	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
+//	private PlaySolutionDao playSolutionDao = new PlaySolutionDaoImpl();
 	
 	public SendPlaySolution(Composite parent, int style) {
 		super(parent, style);
@@ -393,7 +377,6 @@ public class SendPlaySolution extends Composite {
 		//发送解决方案
 		String solutionPath = util.getCurrentProjectPath() + File.separator + display.getName() 
 				+ File.separator + display.getName() +  "+" + playSolution.getName() + ".zip";
-		System.out.println("ip = " + ip);
 		
 		sendPic.send(ip, solutionPath);
 		//设置当前播放方案，写入到数据库中

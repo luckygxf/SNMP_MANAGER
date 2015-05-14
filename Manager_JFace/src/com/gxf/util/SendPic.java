@@ -98,7 +98,6 @@ public class SendPic {
 				picOutputStream.write(bytes, 0, length);
 				zipSize += length;
 			} 
-			System.out.println("zipSize = " + zipSize);
 			
 			//发送消息结束标志message_end
 			picOutputStream.write(MESSGE_END.getBytes());
