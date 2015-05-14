@@ -338,9 +338,6 @@ public class PlaySolutionComposite extends Composite {
 			MenuItem item = (MenuItem) e.getSource();
 			if(item.getText() == "设置"){						//查看播放方案详细信息
 				SetPlaySolution updatePlaySolution = SetPlaySolution.getSetPlaySolution();
-				//没有选中播放方案
-				if(table_playSolution.getSelectionIndex() == -1)
-					return;
 				TableItem tableItemSelectedIndex = table_playSolution.getItem(table_playSolution.getSelectionIndex());
 				String displayName = tableItemSelectedIndex.getText(2);
 				String playSolutionName = tableItemSelectedIndex.getText(1);

@@ -104,7 +104,6 @@ public class SetPlaySolution extends ApplicationWindow {
 	 */
 	private SetPlaySolution() {
 		super(null);
-		setShellStyle(SWT.MIN);
 		//获取当前对象
 		curUpdatePlaySolution = this;
 		createActions();
@@ -467,7 +466,7 @@ public class SetPlaySolution extends ApplicationWindow {
 		public void widgetSelected(SelectionEvent e) {
 			if(e.getSource() == btn_editPic){							//编辑图片按钮,打开文字图片编辑器
 				WordPicEditTool wordPicEditTool = WordPicEditTool.getWordPicEditTool();
-
+				System.out.println("wordPicEditTool hashCode = " + wordPicEditTool.hashCode());
 				String displayName = combo_display.getItem(combo_display.getSelectionIndex());
 				String playSolutionName = combo_playSolutionName.getItem(combo_playSolutionName.getSelectionIndex());
 				String playSolutionPath = curProjectPath + File.separator + 
