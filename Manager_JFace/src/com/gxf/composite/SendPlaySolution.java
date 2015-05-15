@@ -1,11 +1,15 @@
 package com.gxf.composite;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridLayout;
@@ -24,6 +28,8 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.DateTime;
+
+import com.gxf.beans.Picture;
 import com.gxf.beans.PlaySolution;
 import com.gxf.dao.DisplayDao;
 import com.gxf.dao.impl.DisplayDaoImpl;
@@ -59,6 +65,9 @@ public class SendPlaySolution extends Composite {
 	
 	//当前shell
 	public static Shell curShell;
+	
+	//label选中背景色
+	private final Color LABEL_SELECTED_COLOR =  Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN);
 	
 	//存放所有播放方案的文件夹
 //	private final String DIC_NAME_PLAY_SOLUTIONS = "playSolutions";
@@ -437,35 +446,45 @@ public class SendPlaySolution extends Composite {
 		Composite composite_pics = new Composite(scrolledComposite_pics, SWT.NONE);
 		scrolledComposite_pics.setContent(composite_pics);
 		//初始化滚动面板布局等每行显示4张图片
-		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 4;
-		composite_pics.setLayout(gridLayout);
+//		GridLayout gridLayout = new GridLayout();
+//		gridLayout.numColumns = 4;
+//		composite_pics.setLayout(gridLayout);
 		
-		String curProjectPath = util.getCurrentProjectPath();
-		String solutionPath = curProjectPath + File.separator + displayName 
-							+ File.separator  + playSolutionName;
-		File solutionPathFile = new File(solutionPath);
-		//获取所有图片文件
-		File pics[] = solutionPathFile.listFiles(new PicFilenameFilter());
+		
+		//获取播放方案下面所有图片文件
+		File pics[] = util.getPictureOrderByPlayOrder(displayName, playSolutionName);	
+		
 		int compositeWidth = scrolledComposite_pics.getBounds().width;
 		//图片宽度和高度
 		int picWidth = compositeWidth / 4 - 8;
-		int picHeight = 100;
+		int picHeight = 80;
 		String picPath[] = new String[pics.length];
+		
+		
 		//显示图片的标签
-		Label labels_pic[]= new Label[pics.length];
+		final Label labels_pic[]= new Label[pics.length];
 		for(int i = 0; i < pics.length; i++){
-			labels_pic[i] = new Label(composite_pics, SWT.NONE);
+			labels_pic[i] = new Label(composite_pics, SWT.CENTER);
 			picPath[i] = pics[i].getPath();
 			ImageData imageData = new ImageData(picPath[i]);
-			imageData = imageData.scaledTo(picWidth, picHeight);
+//			imageData = imageData.scaledTo(picWidth, picHeight);
+			imageData = imageData.scaledTo(picWidth - 15, picHeight - 15);
 			Image image = new Image(Display.getDefault(), imageData);
 			labels_pic[i].setImage(image);
+			labels_pic[i].setBounds((i % 4) * picWidth, (i / 4) * picHeight, picWidth, picHeight);
 			labels_pic[i].addListener(SWT.MouseDown, new Listener() {
 				
 				@Override
-				public void handleEvent(Event arg0) {
+				public void handleEvent(Event e) {
 					scrolledComposite_pics.setFocus();
+					
+					Label labelClicked = (Label) e.widget;
+					//取消所有图片的背景色
+					for(Label labelInComposite : labels_pic){
+						labelInComposite.setBackground(null);
+					}
+					//设置选中的图片的背景色
+					labelClicked.setBackground(LABEL_SELECTED_COLOR);
 					
 				}
 			});

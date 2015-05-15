@@ -8,5 +8,6 @@
 		<time_start>00:00:00</time_start>
 		<time_end>23:59:59</time_end>
 		<weekdays>11111111</weekdays>
+		<playOrder>1</playOrder>
 	</picture>
 </pictures>

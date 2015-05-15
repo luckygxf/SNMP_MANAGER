@@ -19,6 +19,7 @@ import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -42,6 +43,9 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.gxf.beans.Picture;
 import com.gxf.beans.PlayControl;
+import com.gxf.beans.PlaySolution;
+import com.gxf.dao.DisplayDao;
+import com.gxf.dao.impl.DisplayDaoImpl;
 import com.gxf.entities.DisplayDevice;
 import com.gxf.entities.FontFormat;
 
@@ -51,6 +55,9 @@ import com.gxf.entities.FontFormat;
  *
  */
 public class Util {
+	
+	//数据库访问类
+	private DisplayDao displayDao = new DisplayDaoImpl();
 	
 	/**
 	 * 输出列表中的字符串
@@ -446,9 +453,11 @@ public class Util {
     	//获取播放路径下面的图片
 //    	List<Picture> listOfPicture = new ArrayList<Picture>(playSolution.getPictures());
     	Set<Picture> listOfPicture = new TreeSet<Picture>(playSolution.getPictures());
+
     	//没有图片
     	if(listOfPicture == null || listOfPicture.size() == 0)
     		return;
+    	
     	//先生成根节点pictures
     	Document document = DocumentHelper.createDocument();
     	Element pictures = document.addElement("pictures");
@@ -488,6 +497,10 @@ public class Util {
     		//生成weekdays节点
     		Element weekdays = picture.addElement("weekdays");
     		weekdays.addText(playControlBean.getWeekdays());
+    		
+    		//生成playOrder节点
+    		Element playOrder = picture.addElement("playOrder");
+    		playOrder.addText(String.valueOf(pictureBean.getPlayOrder()));
     	}//for
     	
         //向播放方案下面添加配置文件
@@ -587,5 +600,46 @@ public class Util {
     	messageBox.setMessage(message);
     	
     	return messageBox;
+    }
+    
+    /**
+     * 获取播放方案的图片，按照图片播放顺序排好序
+     * @param displayName
+     * @param playSolutionName
+     * @return
+     */
+    public File[] getPictureOrderByPlayOrder(String displayName, String playSolutionName){
+    	//这里从数据库中获取，按播放顺序显示
+		//1.获取显示屏信息
+		//2.获取播放方案
+		//3.获取图片信息
+		//4.对图片信息 按播放顺序排序
+		
+		//1.获取显示屏信息
+		com.gxf.beans.Display curDisplay = displayDao.queryDisplayByName(displayName);
+		Set<PlaySolution> setOfPlaySolution = curDisplay.getSolutions();
+		
+		//2.获取播放方案
+		PlaySolution curPlaySolution = null;
+		for(Iterator<PlaySolution> it = setOfPlaySolution.iterator(); it.hasNext();){
+			PlaySolution tempPlaySolution = (PlaySolution) it.next();
+			if(tempPlaySolution.getName().equals(playSolutionName)){
+				curPlaySolution = tempPlaySolution;
+				break;
+			}
+		}
+		//3.获取图片信息
+		Set<Picture> setOfPicture = curPlaySolution.getPictures();
+		List<Picture> listOfPicture = new ArrayList<Picture>(setOfPicture);
+		//4.对图片信息 按播放顺序排序
+		Collections.sort(listOfPicture);
+		
+		File pics[] = new File[listOfPicture.size()];
+		for(int i = 0; i < pics.length; i++){
+			String picPath = getCurrentProjectPath() + File.separator + listOfPicture.get(i).getPicPath();
+			pics[i] = new File(picPath);
+		}//for
+		
+		return pics;
     }
 }

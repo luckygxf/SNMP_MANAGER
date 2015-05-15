@@ -290,11 +290,7 @@ public class QueryPlaySolution extends Composite {
 		String playSolutionName = combo_playSolution.getItem(combo_playSolution.getSelectionIndex());
 		
 		//加载所有图片文件 
-		String solutionPath = curProjectPath + File.separator + displayName 
-							+ File.separator  + playSolutionName;
-		File solutionPathFile = new File(solutionPath);
-		
-		File pics[] = solutionPathFile.listFiles(new PicFilenameFilter());
+		File pics[] = util.getPictureOrderByPlayOrder(displayName, playSolutionName);
 		
 		//设置图片的宽度和高度
 		int compositeWidth = sc_pics.getBounds().width;
