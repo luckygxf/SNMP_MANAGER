@@ -110,4 +110,51 @@ public class PictureDaoImpl implements PictureDao {
 		session.close();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gxf.dao.PictureDao#queryPictureCount()
+	 */
+	@Override
+	public int queryPictureCount() {
+		//获取session 开启事务
+		Session session = baseDao.getSession();
+		session.beginTransaction();
+		
+		//执行查询
+		String hql = "select count(*) from Picture";
+		Query query = session.createQuery(hql);
+		Object count = query.uniqueResult();
+		
+		//提交事务 关闭session
+		session.getTransaction().commit();
+		session.close();
+		
+		
+		//返回查询结果
+		if(count == null)
+			return 0;
+		else
+			return ((Long)count).intValue();
+	}
+
+	@Override
+	public Picture queryPicByPlayOrder(int playOrder) {
+		//获取session 开启事务
+		Session session = baseDao.getSession();
+		session.beginTransaction();
+		
+		//执行查询
+		String hql = "from Picture p where p.playOrder =:playOrder";
+		Query query = session.createQuery(hql);
+		query.setParameter("playOrder", playOrder);
+		List<Picture> listOfPic = query.list();
+		Picture picture = listOfPic.get(0);
+		
+		//提交事务 关闭session
+		session.getTransaction().commit();
+		session.close();
+		
+		//返回查询结果
+		return picture;
+	}
+
 }

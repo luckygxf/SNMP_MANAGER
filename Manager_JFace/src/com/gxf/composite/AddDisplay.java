@@ -296,6 +296,9 @@ public class AddDisplay extends ApplicationWindow {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(e.getSource() == btn_add){							//添加播放器信息按钮
+				//检验显示屏信息是完整
+				if(!validDisplayInfo())
+					return;
 				addDisplay();
 			}
 			else if(e.getSource() == btn_close){					//关闭窗口
@@ -373,5 +376,20 @@ public class AddDisplay extends ApplicationWindow {
 		return addDisplay;
 	}
 	
-
+	/**
+	 * 验证显示屏信息
+	 * 屏幕名称不能为空等
+	 * @return
+	 */
+	private boolean validDisplayInfo(){
+		//显示屏名称不能为空
+		if(txt_displayName.getText() == null || txt_displayName.getText().equals("")){
+			util.getMessageBox(curShell, "提示", "显示屏名称不能为空").open();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	
 }

@@ -36,4 +36,17 @@ public interface PictureDao {
 	 * @param picture
 	 */
 	public void updatePicture(Picture picture);
+	
+	/**
+	 * 查询图片表中记录数
+	 * @return
+	 */
+	public int queryPictureCount();
+	
+	/**
+	 * 根据图片播放顺序查询图片信息
+	 * @param playOrder
+	 * @return
+	 */
+	public Picture queryPicByPlayOrder(int playOrder);
 }

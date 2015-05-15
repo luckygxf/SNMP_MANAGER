@@ -215,6 +215,9 @@ public class AddPlaySolution extends ApplicationWindow {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(e.getSource() == btn_add){						//添加播放方案
+				//验证播放方案信息是否完整
+				if(!validPlaySolution())
+					return;
 				addPlaySolution();
 			}
 			else if(e.getSource() == btn_close){				//关闭当前窗口
@@ -301,5 +304,24 @@ public class AddPlaySolution extends ApplicationWindow {
 		return addPlaySolution;
 	}
 	
-
+	/**
+	 * 验证播放方案信息是否完整
+	 * 如方案名不能为空等
+	 * @return
+	 */
+	private boolean validPlaySolution(){
+		//没有显示屏信息
+		if(combo_display.getItemCount() == 0){
+			util.getMessageBox(curShell, "提示", "请先完成显示屏信息!").open();
+			return false;
+		}
+		
+		//没有填写播放方案名
+		if(txt_displaySolutionName.getText() == null || txt_displaySolutionName.getText().equals("")){
+			util.getMessageBox(curShell, "提示", "播放方案名不能为空!").open();
+			return false;
+		}
+		
+		return true;
+	}
 }

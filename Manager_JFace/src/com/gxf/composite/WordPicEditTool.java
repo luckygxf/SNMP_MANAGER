@@ -470,6 +470,7 @@ public class WordPicEditTool extends ApplicationWindow {
 				deleteAllImage();
 			}
 			else if(e.getSource() == btn_imageCreate){					//添加到播放方案
+				//添加图片到播放方案
 				saveToPlaySolution();
 				//刷新前面窗口显示
 				updatePlaySolution.addImageToChoose();
@@ -850,9 +851,11 @@ public class WordPicEditTool extends ApplicationWindow {
 		Picture picture = new Picture();
 		picture.setPicName(imageName);
 		picture.setPicPath(imagePath);
-//		System.out.println("imagePath = " + imagePath);
-		PlaySolution playSolution = playSolutionDao.querySolutionByName(WordPicEditTool.playSolutionName);
+		//设置图片播放顺序
+		int pictureCount = pictureDao.queryPictureCount();
+		picture.setPlayOrder(pictureCount + 1);
 		//设置播放方案和控制信息
+		PlaySolution playSolution = playSolutionDao.querySolutionByName(WordPicEditTool.playSolutionName);
 		picture.setPlaySolution(playSolution);		
 		PlayControl playControl = new PlayControl();
 		util.copyPlayControl(WordPicEditTool.playControl, playControl);

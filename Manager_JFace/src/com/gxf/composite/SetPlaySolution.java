@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -466,7 +467,6 @@ public class SetPlaySolution extends ApplicationWindow {
 		public void widgetSelected(SelectionEvent e) {
 			if(e.getSource() == btn_editPic){							//编辑图片按钮,打开文字图片编辑器
 				WordPicEditTool wordPicEditTool = WordPicEditTool.getWordPicEditTool();
-				System.out.println("wordPicEditTool hashCode = " + wordPicEditTool.hashCode());
 				String displayName = combo_display.getItem(combo_display.getSelectionIndex());
 				String playSolutionName = combo_playSolutionName.getItem(combo_playSolutionName.getSelectionIndex());
 				String playSolutionPath = curProjectPath + File.separator + 
@@ -553,7 +553,7 @@ public class SetPlaySolution extends ApplicationWindow {
 		
 		for(int i = 0; i < labels_pic.length; i++){
 			labels_pic[i] = new Label(composite_pics, SWT.CENTER);
-			//添加上下文菜单
+			//上下文菜单
 			Menu contextMenu = new Menu(curShell, SWT.POP_UP);
 			MenuItem addItem = new MenuItem(contextMenu, SWT.PUSH);
 			addItem.setText("添加");
@@ -644,9 +644,10 @@ public class SetPlaySolution extends ApplicationWindow {
 			if(playSolutionSelected.getName().equals(combo_playSolutionName.getItem(combo_playSolutionName.getSelectionIndex()))){
 				break;
 			}
-		}
-		
+		}		
 		List<Picture> listOfPics = new ArrayList<Picture>(playSolutionSelected.getPictures());
+		//对图片按播放顺序升序排列
+		Collections.sort(listOfPics);
 		
 		//显示图片的标签
 		final Label labels_pic[]= new Label[listOfPics.size()];
@@ -654,11 +655,17 @@ public class SetPlaySolution extends ApplicationWindow {
 		for(int i = 0; i < labels_pic.length; i++){
 			labels_pic[i] = new Label(composite_pics, SWT.CENTER);
 			
-			//添加上下文菜单
+			//上下文菜单
 			Menu contextMenu = new Menu(curShell, SWT.POP_UP);
 
 			MenuItem delItem = new MenuItem(contextMenu, SWT.PUSH);
 			delItem.setText("删除");
+			
+			MenuItem moveForward = new MenuItem(contextMenu, SWT.PUSH);
+			moveForward.setText("前移");
+			
+			MenuItem moveBack = new MenuItem(contextMenu, SWT.PUSH);
+			moveBack.setText("后移");
 			
 			labels_pic[i].setMenu(contextMenu);
 			
@@ -672,9 +679,13 @@ public class SetPlaySolution extends ApplicationWindow {
 
 			//将图片路径放到event.data中
 			delItem.setData(listOfPics.get(i).getPicPath());
+			moveForward.setData(listOfPics.get(i));
+			moveBack.setData(listOfPics.get(i));
 			
 			//上下文菜单添加监听器
 			delItem.addSelectionListener(new MenuItemListenerImpl());
+			moveForward.addSelectionListener(new MenuItemListenerImpl());
+			moveBack.addSelectionListener(new MenuItemListenerImpl());
 			
 			//将图片路径放到label.data中
 			labels_pic[i].setData(listOfPics.get(i).getPicPath());
@@ -766,6 +777,53 @@ public class SetPlaySolution extends ApplicationWindow {
 				
 				//更新显示，两个面板都要更新
 				addImageToChoose();
+				addSc_picsChosed();
+			}
+			else if(item.getText().equals("前移")){			//图片前移，即播放顺序前移
+				//获取当前图片播放顺序
+				//1.如果是第一个播放，返回，不做处理
+				//2.如果不是第一个播放顺序，播放顺序减一，前一张图片播放顺序加一
+				Picture curPicture = (Picture) item.getData();
+				int playOrder = curPicture.getPlayOrder();
+				
+				//1.图片是第一张播放顺序
+				if(playOrder == 1)
+					return;
+				//2.不是第一张播放的图片
+				Picture prePic = pictureDao.queryPicByPlayOrder(playOrder - 1);
+				prePic.setPlayOrder(playOrder);
+				
+				curPicture.setPlayOrder(playOrder - 1);
+				
+				pictureDao.updatePicture(curPicture);
+				pictureDao.updatePicture(prePic);
+				
+				//更新显示
+				addSc_picsChosed();
+				
+			}
+			else if(item.getText().equals("后移")){			//图片后移，即播放顺序后移
+				//获取当前图片播放顺序
+				//1.如果是最后一张图片，返回，不做处理
+				//2.如果不是最后一张图片，播放顺序加一，后一张图片播放顺序减一
+				Picture curPicture = (Picture) item.getData();
+				int playOrder = curPicture.getPlayOrder();
+				
+				//1.最后播放的一张图片
+				int picCount = pictureDao.queryPictureCount();
+				if(picCount == (playOrder - 1))
+					return;
+				
+				//2.不是最后播放的一张图片
+				Picture behindPic = pictureDao.queryPicByPlayOrder(playOrder + 1);
+				behindPic.setPlayOrder(playOrder);
+				
+				curPicture.setPlayOrder(playOrder + 1);
+				
+				pictureDao.updatePicture(curPicture);
+				pictureDao.updatePicture(behindPic);
+				
+				//更新显示
 				addSc_picsChosed();
 			}
 		}

@@ -7,6 +7,7 @@ public class Picture implements Comparable<Picture>{
 	private String picPath;
 	private PlaySolution playSolution;
 	private PlayControl playControl;
+	private int playOrder;
 	
 	public int getId() {
 		return id;
@@ -40,12 +41,18 @@ public class Picture implements Comparable<Picture>{
 	}
 	@Override
 	public int compareTo(Picture o) {
-		if(this.id < o.id)
+		if(this.playOrder < o.playOrder)
 			return -1;
-		else if(this.id > o.id)
+		else if(this.playOrder > o.playOrder)
 			return 1;
 		else
 			return 0;
+	}
+	public int getPlayOrder() {
+		return playOrder;
+	}
+	public void setPlayOrder(int playOrder) {
+		this.playOrder = playOrder;
 	}
 	
 }

@@ -16,7 +16,9 @@
        <property name="picPath" type="string">
         	<column name="picPath" length="50"/>
         </property>
-        
+                <property name="playOrder">
+        	<column name="playOrder"></column>
+        </property>
         <many-to-one name="playSolution" class="com.gxf.beans.PlaySolution" 
                          column="playSolutionId" >
         </many-to-one>

@@ -36,6 +36,9 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 import com.gxf.beans.Picture;
 import com.gxf.beans.PlayControl;
@@ -569,5 +572,20 @@ public class Util {
 				}
 		}
     	return true;
+    }
+    
+    /**
+     * 获取提示框
+     * @param text
+     * @param message
+     * @return
+     */
+    public MessageBox getMessageBox(Shell shell, String text, String message){
+    	MessageBox messageBox = new MessageBox(shell, SWT.NONE);
+    	
+    	messageBox.setText(text);
+    	messageBox.setMessage(message);
+    	
+    	return messageBox;
     }
 }
