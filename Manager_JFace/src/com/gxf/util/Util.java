@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.Time;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,9 +23,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.zip.ZipEntry;
@@ -36,6 +39,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -641,5 +645,71 @@ public class Util {
 		}//for
 		
 		return pics;
+    }
+    
+    /**
+     * 通过显示屏名、播放方案名找到xml，解析
+     * @param displayName
+     * @param playSolutionName
+     * @return
+     */
+    public Map<String, PlayControl> parseXml(String displayName, String playSolutionName){
+//    	List<PlayControl> listOfPlayControl = new ArrayList<PlayControl>();
+    	
+    	Map<String, PlayControl> playControls = new HashMap<String ,PlayControl>();
+    	
+    	//获取xml路径
+    	String curProjectPath = getCurrentProjectPath();
+    	String configXmlPath = curProjectPath + File.separator 
+    			+ displayName + File.separator + playSolutionName + File.separator + playSolutionName + ".xml"; 
+    	File configXmlFile = new File(configXmlPath);
+    	
+    	//使用SAXReader解析
+    	SAXReader reader = new SAXReader();
+    	try{
+    		Document document = reader.read(configXmlFile);
+    		//根节点
+			Element root = document.getRootElement();
+			for(Iterator<Element> it_picture = root.elementIterator(); it_picture.hasNext();){
+				Element picture = (Element) it_picture.next();
+				//获取图片名称在xml中
+				String picName = picture.attribute("name").getValue();
+				
+				//解析获得的控制信息
+				PlayControl playControl = new PlayControl();
+				playControl.setPicName(picName);
+				for(Iterator<Element> it_in = picture.elementIterator(); it_in.hasNext();){
+					//type
+					Element type = (Element) it_in.next();
+					playControl.setPlayType(Integer.parseInt(type.getText()));
+					//timeinterval
+					Element timeInterval = (Element) it_in.next();
+					playControl.setTimeInterval(Integer.parseInt(timeInterval.getText()));
+					//date_start 
+					Element date_start = (Element) it_in.next();
+					playControl.setDateTimeStart(java.sql.Date.valueOf(date_start.getText()));
+					//date_end
+					Element date_end = (Element) it_in.next();
+					playControl.setDateTimeEnd(java.sql.Date.valueOf(date_end.getText()));
+					//time_start
+					Element time_start = (Element) it_in.next();
+					playControl.setTimeStart(Time.valueOf(time_start.getText()));
+					//time_end
+					Element time_end = (Element) it_in.next();
+					playControl.setTimeEnd(Time.valueOf(time_end.getText()));
+					//weekdays
+					Element weekdays = (Element) it_in.next();
+					playControl.setWeekdays(weekdays.getText());
+					//playOrder
+					Element playOrder = (Element) it_in.next();
+					playControl.setPlayOrder(Integer.valueOf(playOrder.getText()));
+				}//for
+				playControls.put(picName, playControl);
+			}//for
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	
+    	return playControls;
     }
 }

@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.DateTime;
 
 import com.gxf.beans.Picture;
 import com.gxf.beans.PlaySolution;
+import com.gxf.composite.SetPlaySolution.ButtonSelectionListener;
 import com.gxf.dao.DisplayDao;
 import com.gxf.dao.impl.DisplayDaoImpl;
 import com.gxf.util.Config;
@@ -47,6 +48,7 @@ public class SendPlaySolution extends Composite {
 	private Text txt_timeInterval;
 	private Button btn_sendSoluton;
 	private Button btn_weekdays[];
+	private Button btn_preViewSolution;
 //	private List list_hostList;
 	
 	//播放日期控制
@@ -170,7 +172,7 @@ public class SendPlaySolution extends Composite {
 //		list_hostList.setBounds(109, 357, 147, 68);
 		
 		btn_sendSoluton = new Button(this, SWT.NONE);
-		btn_sendSoluton.setBounds(244, 451, 72, 22);
+		btn_sendSoluton.setBounds(355, 453, 84, 22);
 		btn_sendSoluton.setText("发送播放方案");
 		
 //		dateTime_start = new DateTime(this, SWT.BORDER);
@@ -204,13 +206,17 @@ public class SendPlaySolution extends Composite {
 		combo_display = new Combo(this, SWT.NONE);
 		combo_display.setBounds(109, 6, 143, 20);
 		
+		btn_preViewSolution = new Button(this, SWT.NONE);
+		btn_preViewSolution.setBounds(157, 453, 84, 22);
+		btn_preViewSolution.setText("预览播放方案");
+		
 //		scrolledComposite_pics.setLayout(new FillLayout());
 //		scrolledComposite_pics.setExpandHorizontal(true);
 //		scrolledComposite_pics.setExpandVertical(true);
 		
 		//不放到init()中，原因是refresh()调用下面语句，造成注册多个监听器,多个弹框
 		btn_sendSoluton.addSelectionListener(new ButtonListenerImpl());
-		
+		btn_preViewSolution.addSelectionListener(new ButtonListenerImpl());
 		//对控件进行初始化
 		init();
 	}
@@ -283,6 +289,9 @@ public class SendPlaySolution extends Composite {
 			if(e.getSource() == btn_sendSoluton){					//发送配送方案
 				sendPlaySolution();
 				
+			}
+			else if(e.getSource() == btn_preViewSolution){			//预览方案
+				openPreViewSolutionWindow();
 			}
 			
 		}
@@ -572,5 +581,28 @@ public class SendPlaySolution extends Composite {
 			}
 		}
 		
+	}
+	
+	/**
+	 * 打开预览方案窗口
+	 */
+	private void openPreViewSolutionWindow(){
+		//没有播放方案可以预览
+		if(combo_display.getItemCount() == 0 || combo_solutions.getItemCount() == 0){
+			MessageBox messageBox = util.getMessageBox(curShell, "提示", "当前没有可以预览的方案");
+			messageBox.open();
+			return;
+		}
+	
+		//获取显示屏名称和播放方案名称
+		String displayName = combo_display.getItem(combo_display.getSelectionIndex());
+		String playSolutionName = combo_solutions.getItem(combo_solutions.getSelectionIndex());
+		
+		PreViewWindow preViewWindow = new PreViewWindow();
+		
+		PreViewWindow.setDisplayName(displayName);
+		PreViewWindow.setPlaySolutinName(playSolutionName);
+		
+		preViewWindow.showWindow();
 	}
 }

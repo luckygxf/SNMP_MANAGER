@@ -3,7 +3,8 @@ package com.gxf.beans;
 import java.sql.Date;
 import java.sql.Time;
 
-public class PlayControl {
+
+public class PlayControl implements Comparable{
 	private int id;
 	private int playType;										//1普通播放2定时播放
 	private int timeInterval;
@@ -12,6 +13,12 @@ public class PlayControl {
 	private Time timeStart;
 	private Time timeEnd;
 	private String weekdays;
+	
+	//图片名称
+	private String picName;
+	//播放顺序
+	private int playOrder;
+	
 	public int getId() {
 		return id;
 	}
@@ -60,6 +67,26 @@ public class PlayControl {
 	public void setWeekdays(String weekdays) {
 		this.weekdays = weekdays;
 	}
+	public String getPicName() {
+		return picName;
+	}
+	public void setPicName(String picName) {
+		this.picName = picName;
+	}
+	public int getPlayOrder() {
+		return playOrder;
+	}
+	public void setPlayOrder(int playOrder) {
+		this.playOrder = playOrder;
+	}
 	
-	
+	@Override
+	public int compareTo(Object o) {
+		PlayControl playControl = (PlayControl) o;
+		if(playOrder > playControl.getPlayOrder())
+			return 1;
+		else if(playOrder < playControl.getPlayOrder())
+			return -1;
+		return 0;
+	}
 }
