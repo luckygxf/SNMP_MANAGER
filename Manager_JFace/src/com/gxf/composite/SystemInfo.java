@@ -91,7 +91,7 @@ public class SystemInfo extends ApplicationWindow {
 		lblNewLabel.setBackground(SWTResourceManager.getColor(30, 144, 255));
 		lblNewLabel.setFont(SWTResourceManager.getFont("宋体", 14, SWT.BOLD));
 		lblNewLabel.setBounds(43, 10, 124, 24);
-		lblNewLabel.setText("LED管理程序");
+		lblNewLabel.setText("LED管理系统");
 		
 		Label label = new Label(composite_sysInfo, SWT.CENTER);
 		label.setText("Developed By GXF!");
@@ -100,28 +100,28 @@ public class SystemInfo extends ApplicationWindow {
 		label.setBounds(43, 50, 198, 24);
 		
 		Label label_1 = new Label(composite_sysInfo, SWT.CENTER);
-		label_1.setText("版本：V1.0");
+		label_1.setText("版本1.0");
 		label_1.setFont(SWTResourceManager.getFont("宋体", 14, SWT.BOLD));
 		label_1.setBackground(SWTResourceManager.getColor(30, 144, 255));
 		label_1.setBounds(43, 97, 115, 24);
 		
 		Label label_2 = new Label(composite_sysInfo, SWT.CENTER);
-		label_2.setText("CopyRight© 2015");
+		label_2.setText("CopyRight©2015");
 		label_2.setFont(SWTResourceManager.getFont("宋体", 14, SWT.BOLD));
 		label_2.setBackground(SWTResourceManager.getColor(30, 144, 255));
 		label_2.setBounds(41, 186, 184, 24);
 		
 		Label label_3 = new Label(composite_sysInfo, SWT.CENTER);
-		label_3.setText("运行环境：跨平台");
-		label_3.setFont(SWTResourceManager.getFont("宋体", 14, SWT.BOLD));
+		label_3.setText("可跨平台运行");
+		label_3.setFont(SWTResourceManager.getFont("瀹嬩綋", 14, SWT.BOLD));
 		label_3.setBackground(SWTResourceManager.getColor(30, 144, 255));
 		label_3.setBounds(43, 143, 171, 24);
 		
-		//添加鼠标和键盘监听事件
+		//娣诲姞榧犳爣鍜岄敭鐩樼洃鍚簨浠�
 		composite.addKeyListener(new KeyListenerImpl());
 		composite.addMouseListener(new MouseListenerImp());
 		
-		//添加keylistener and mouselistener
+		//娣诲姞keylistener and mouselistener
 		composite.addMouseListener(new MouseListenerImp());
 
 		return container;
@@ -183,21 +183,21 @@ public class SystemInfo extends ApplicationWindow {
 	@Override
 	protected void configureShell(Shell newShell) {
 		newShell.setBackground(SWTResourceManager.getColor(0, 128, 0));
-		//设置程序logo
+		//璁剧疆绋嬪簭logo
 		String projectPath = util.getCurrentProjectPath();
 		String logoPath = projectPath + "\\icons\\" + "logo.png";
 		ImageData logoImageData = new ImageData(logoPath);
 		Image logoImage = new Image(newShell.getDisplay(), logoImageData);
 		newShell.setImage(logoImage);
 		super.configureShell(newShell);
-		//设置程序标题
-		newShell.setText("LED管理程序--by GXF");
+		//璁剧疆绋嬪簭鏍囬
+		newShell.setText("LED绠＄悊绋嬪簭--by GXF");
 		
 		curShell = newShell;
 	}
 	
 	/**
-	 * 对外提供接口
+	 * 瀵瑰鎻愪緵鎺ュ彛
 	 */
 	public void showWindow(){
 		try {
@@ -219,7 +219,7 @@ public class SystemInfo extends ApplicationWindow {
 	}
 	
 	/**
-	 * 按键监听器，这里主要是为了监听esc退出全屏显示
+	 * 鎸夐敭鐩戝惉鍣紝杩欓噷涓昏鏄负浜嗙洃鍚琫sc閫�嚭鍏ㄥ睆鏄剧ず
 	 * @author Administrator
 	 *
 	 */
@@ -229,7 +229,7 @@ public class SystemInfo extends ApplicationWindow {
 		public void keyPressed(KeyEvent arg0) {
 			if(arg0.keyCode == SWT.ESC)
 			{
-				//退出全屏，设置前面shell显示出来
+				//閫�嚭鍏ㄥ睆锛岃缃墠闈hell鏄剧ず鍑烘潵
 				curShell.dispose();
 			}
 			
@@ -244,16 +244,16 @@ public class SystemInfo extends ApplicationWindow {
 	}
 	
 	/**
-	 * 鼠标监听器
+	 * 榧犳爣鐩戝惉鍣�
 	 * @author Administrator
 	 *
 	 */
 	class MouseListenerImp implements MouseListener{
 		
-		//双击鼠标退出全屏
+		//鍙屽嚮榧犳爣閫�嚭鍏ㄥ睆
 		@Override
 		public void mouseDoubleClick(MouseEvent arg0) {
-			//退出全屏，设置前面shell显示出来
+			//閫�嚭鍏ㄥ睆锛岃缃墠闈hell鏄剧ず鍑烘潵
 			curShell.dispose();
 		}
 
@@ -272,7 +272,7 @@ public class SystemInfo extends ApplicationWindow {
 	}
 	
 	/**
-	 * 返回单例实例
+	 * 杩斿洖鍗曚緥瀹炰緥
 	 * @return
 	 */
 	public static SystemInfo getSystemInfo(){
