@@ -189,7 +189,7 @@ public class SendPlaySolution extends Composite {
 		
 		//显示播放方案
 		Label lb_chooseSolution = new Label(this, SWT.NONE);
-		lb_chooseSolution.setBounds(275, 9, 54, 12);
+		lb_chooseSolution.setBounds(275, 9, 54, 22);
 		lb_chooseSolution.setText("播放方案");
 		
 		//显示播放方案
@@ -197,14 +197,14 @@ public class SendPlaySolution extends Composite {
 		combo_solutions.setBounds(374, 6, 143, 20);
 		
 		scrolledComposite_pics = new ScrolledComposite(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite_pics.setBounds(0, 27, 590, 414);
+		scrolledComposite_pics.setBounds(0, 37, 590, 404);
 		
 		lb_chooseDisplay = new Label(this, SWT.NONE);
-		lb_chooseDisplay.setBounds(22, 9, 54, 12);
+		lb_chooseDisplay.setBounds(22, 9, 54, 22);
 		lb_chooseDisplay.setText("显示屏");
 		
 		combo_display = new Combo(this, SWT.NONE);
-		combo_display.setBounds(109, 6, 143, 20);
+		combo_display.setBounds(109, 6, 143, 25);
 		
 		btn_preViewSolution = new Button(this, SWT.NONE);
 		btn_preViewSolution.setBounds(157, 453, 84, 22);

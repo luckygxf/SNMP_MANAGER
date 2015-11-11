@@ -94,14 +94,14 @@ public class AddDisplay extends ApplicationWindow {
 		group_basicInfo.setBounds(10, 0, 493, 107);
 		
 		Label lb_displayName = new Label(group_basicInfo, SWT.NONE);
-		lb_displayName.setBounds(10, 24, 54, 12);
+		lb_displayName.setBounds(10, 24, 54, 15);
 		lb_displayName.setText("名称");
 		
 		txt_displayName = new Text(group_basicInfo, SWT.BORDER);
 		txt_displayName.setBounds(83, 21, 86, 18);
 		
 		Label lb_displayType = new Label(group_basicInfo, SWT.NONE);
-		lb_displayType.setBounds(255, 24, 54, 12);
+		lb_displayType.setBounds(255, 24, 54, 15);
 		lb_displayType.setText("类型");
 		
 		txt_displayType = new Text(group_basicInfo, SWT.BORDER);
@@ -109,14 +109,14 @@ public class AddDisplay extends ApplicationWindow {
 		txt_displayType.setBounds(347, 21, 102, 18);
 		
 		Label lb_displayCommType = new Label(group_basicInfo, SWT.NONE);
-		lb_displayCommType.setBounds(10, 50, 54, 12);
+		lb_displayCommType.setBounds(10, 50, 54, 20);
 		lb_displayCommType.setText("通信方式");
 		
 		combo_commType = new Combo(group_basicInfo, SWT.NONE);
 		combo_commType.setBounds(83, 45, 86, 20);
 		
 		Label lb_ip = new Label(group_basicInfo, SWT.NONE);
-		lb_ip.setBounds(255, 50, 54, 12);
+		lb_ip.setBounds(255, 50, 54, 20);
 		lb_ip.setText("ip");
 		
 		txt_ip = new Text(group_basicInfo, SWT.BORDER);
@@ -124,14 +124,16 @@ public class AddDisplay extends ApplicationWindow {
 		txt_ip.setBounds(347, 44, 102, 18);
 		
 		Label lb_port = new Label(group_basicInfo, SWT.NONE);
-		lb_port.setBounds(10, 77, 54, 12);
+		lb_port.setBounds(10, 77, 54, 20);
 		lb_port.setText("端口");
 		
 		txt_port = new Text(group_basicInfo, SWT.BORDER);
 		txt_port.setBounds(83, 71, 86, 18);
+		//设置客户端默认接受端口为16201
+		txt_port.setText(String.valueOf(16201));
 		
 		Label lb_comment = new Label(group_basicInfo, SWT.NONE);
-		lb_comment.setBounds(255, 77, 54, 12);
+		lb_comment.setBounds(255, 77, 54, 20);
 		lb_comment.setText("说明");
 		
 		txt_comment = new Text(group_basicInfo, SWT.BORDER);

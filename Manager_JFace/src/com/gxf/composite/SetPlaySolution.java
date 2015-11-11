@@ -125,7 +125,7 @@ public class SetPlaySolution extends ApplicationWindow {
 		composite_head.setBounds(10, 0, 574, 28);
 		
 		Label lb_display = new Label(composite_head, SWT.NONE);
-		lb_display.setBounds(60, 6, 54, 12);
+		lb_display.setBounds(60, 6, 54, 22);
 		lb_display.setText("显示屏");
 		
 		//显示屏
@@ -133,7 +133,7 @@ public class SetPlaySolution extends ApplicationWindow {
 		combo_display.setBounds(130, 3, 122, 20);
 		
 		Label lb_playSolution = new Label(composite_head, SWT.NONE);
-		lb_playSolution.setBounds(318, 6, 70, 12);
+		lb_playSolution.setBounds(318, 6, 70, 22);
 		lb_playSolution.setText("播放方案");
 		
 		combo_playSolutionName = new Combo(composite_head, SWT.NONE);
@@ -165,14 +165,14 @@ public class SetPlaySolution extends ApplicationWindow {
 		composite_settings.setBounds(10, 20, 554, 140);
 		
 		Label lb_playType = new Label(composite_settings, SWT.NONE);
-		lb_playType.setBounds(25, 10, 54, 12);
+		lb_playType.setBounds(25, 10, 54, 22);
 		lb_playType.setText("播放方式");
 		
 		combo_playType = new Combo(composite_settings, SWT.NONE);
 		combo_playType.setBounds(85, 7, 86, 20);
 		
 		Label lb_playTimeInterval = new Label(composite_settings, SWT.NONE);
-		lb_playTimeInterval.setBounds(248, 10, 86, 12);
+		lb_playTimeInterval.setBounds(248, 10, 86, 22);
 		lb_playTimeInterval.setText("播放时间间隔");
 		
 		txt_playInteraval = new Text(composite_settings, SWT.BORDER);
@@ -183,35 +183,35 @@ public class SetPlaySolution extends ApplicationWindow {
 		lb_secondIcon.setText("秒");
 		
 		Label lb_playDate = new Label(composite_settings, SWT.NONE);
-		lb_playDate.setBounds(25, 43, 54, 12);
+		lb_playDate.setBounds(25, 43, 54, 20);
 		lb_playDate.setText("播放日期");
 		
 		dateTime_start = new DateTime(composite_settings, SWT.BORDER);
 		dateTime_start.setBounds(85, 35, 84, 20);
 		
 		Label lb_toIcon = new Label(composite_settings, SWT.NONE);
-		lb_toIcon.setBounds(248, 43, 54, 12);
+		lb_toIcon.setBounds(248, 43, 54, 20);
 		lb_toIcon.setText("到");
 		
 		dateTime_end = new DateTime(composite_settings, SWT.BORDER);
 		dateTime_end.setBounds(372, 35, 84, 20);
 		
 		Label lb_playTime = new Label(composite_settings, SWT.NONE);
-		lb_playTime.setBounds(25, 69, 54, 12);
+		lb_playTime.setBounds(25, 69, 54, 20);
 		lb_playTime.setText("播放时间");
 		
 		time_start = new DateTime(composite_settings, SWT.BORDER | SWT.TIME);
 		time_start.setBounds(85, 61, 84, 20);
 		
 		Label lb_toIcon1 = new Label(composite_settings, SWT.NONE);
-		lb_toIcon1.setBounds(248, 69, 54, 12);
+		lb_toIcon1.setBounds(248, 69, 54, 20);
 		lb_toIcon1.setText("到");
 		
 		time_end = new DateTime(composite_settings, SWT.BORDER | SWT.TIME);
 		time_end.setBounds(372, 61, 84, 20);
 		
 		Label lb_week = new Label(composite_settings, SWT.NONE);
-		lb_week.setBounds(25, 95, 54, 12);
+		lb_week.setBounds(25, 95, 54, 22);
 		lb_week.setText("星期");
 		
 		//编辑图片按钮

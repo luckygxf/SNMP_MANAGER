@@ -77,21 +77,21 @@ public class AddPlaySolution extends ApplicationWindow {
 		composite.setBounds(10, 10, 432, 187);
 		
 		Label lb_displayName = new Label(composite, SWT.NONE);
-		lb_displayName.setBounds(24, 32, 54, 12);
+		lb_displayName.setBounds(24, 32, 54, 22);
 		lb_displayName.setText("显示屏");
 		
 		combo_display = new Combo(composite, SWT.NONE);
 		combo_display.setBounds(84, 29, 109, 20);
 		
 		Label lb_playSolutionName = new Label(composite, SWT.NONE);
-		lb_playSolutionName.setBounds(219, 32, 71, 12);
+		lb_playSolutionName.setBounds(219, 32, 71, 22);
 		lb_playSolutionName.setText("播放方案名");
 		
 		txt_displaySolutionName = new Text(composite, SWT.BORDER);
 		txt_displaySolutionName.setBounds(296, 29, 115, 18);
 		
 		Label lb_comment = new Label(composite, SWT.NONE);
-		lb_comment.setBounds(24, 75, 54, 12);
+		lb_comment.setBounds(24, 72, 54, 22);
 		lb_comment.setText("说明");
 		
 		txt_comment = new Text(composite, SWT.BORDER);

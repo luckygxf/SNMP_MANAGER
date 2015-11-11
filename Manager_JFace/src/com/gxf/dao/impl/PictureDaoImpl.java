@@ -56,23 +56,26 @@ public class PictureDaoImpl implements PictureDao {
 	public void deletePictureByPicPath(String picPath) {
 		Session session = baseDao.getSession();
 		session.beginTransaction();
-		//先删除对应的控制信息
-		String hql_query = "from Picture p where p.picPath = ?";
+		//获取图片对应的控制信息
+		String hql_query = "from Picture p where p.picPath = :picPath";
 		Query queryControl = session.createQuery(hql_query);
-		queryControl.setString(0, picPath);
+		queryControl.setString("picPath", picPath);
 		Picture picture = (Picture) queryControl.list().get(0);
 		PlayControl playControl = picture.getPlayControl();
-		playControlDao.deletePlayControl(playControl);
 		
-		//删除图片
-		String hql = "delete Picture p where p.picPath = ?";
+		
+		//删除图片 
+		String hql = "delete Picture p where p.picPath = :picPath";
 		Query query = session.createQuery(hql);
-		query.setString(0, picPath);
-		query.executeUpdate();
+		query.setString("picPath", picPath);
+		query.executeUpdate();		
 		
 		//提交事务，关闭session
 		session.getTransaction().commit();
 		session.close();
+		
+		//先删除对应的控制信息		
+		playControlDao.deletePlayControl(playControl);
 		
 	}
 
@@ -84,9 +87,9 @@ public class PictureDaoImpl implements PictureDao {
 		Session session = baseDao.getSession();
 		session.beginTransaction();
 		
-		String hql = "from Picture p where p.picPath = ?";
+		String hql = "from Picture p where p.picPath = :picPath";
 		Query query = session.createQuery(hql);
-		query.setString(0, picPath);
+		query.setString("picPath", picPath);
 		List<Picture> listOfPicture = query.list();		
 		Picture picture = listOfPicture.get(0);
 		

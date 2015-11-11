@@ -23,7 +23,7 @@
         	<column name="curPlaySolutionName" length="50"/>
         </property>
         
-        <set name="solutions" inverse="true" lazy="false" cascade="delete" table = "playsolution">
+        <set name="solutions" inverse="true" lazy="false" cascade="all" table = "playsolution">
              <key>
                   <column name="displayId"/>
              </key>

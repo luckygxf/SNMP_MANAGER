@@ -75,18 +75,18 @@ public class QueryPlaySolution extends Composite {
 		super(parent, style);
 		
 		Label lb_displayIcon = new Label(this, SWT.NONE);
-		lb_displayIcon.setBounds(22, 9, 54, 12);
+		lb_displayIcon.setBounds(22, 5, 54, 17);
 		lb_displayIcon.setText("显示屏");
 		
 		combo_display = new Combo(this, SWT.NONE);
-		combo_display.setBounds(109, 6, 143, 20);
+		combo_display.setBounds(109, 1, 143, 17);
 		
 		lb_playSolutinIcon = new Label(this, SWT.NONE);
-		lb_playSolutinIcon.setBounds(275, 9, 54, 12);
+		lb_playSolutinIcon.setBounds(275, 5, 54, 17);
 		lb_playSolutinIcon.setText("播放方案");
 		
 		combo_playSolution = new Combo(this, SWT.NONE);
-		combo_playSolution.setBounds(374, 6, 143, 20);
+		combo_playSolution.setBounds(374, 1, 143, 20);
 		
 		sc_pics = new ScrolledComposite(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		sc_pics.setBounds(0, 27, 590, 306);
@@ -98,7 +98,7 @@ public class QueryPlaySolution extends Composite {
 		group_playSettings.setBounds(0, 339, 590, 142);
 		
 		Label lb_playTypeIcon = new Label(group_playSettings, SWT.NONE);
-		lb_playTypeIcon.setBounds(36, 20, 54, 12);
+		lb_playTypeIcon.setBounds(36, 16, 54, 17);
 		lb_playTypeIcon.setText("播放类型");
 		
 		combo_playType = new Combo(group_playSettings, SWT.NONE);
@@ -110,46 +110,46 @@ public class QueryPlaySolution extends Composite {
 		combo_playType.select(0);
 		
 		Label lb_playTimeInterval = new Label(group_playSettings, SWT.NONE);
-		lb_playTimeInterval.setBounds(288, 20, 86, 12);
+		lb_playTimeInterval.setBounds(288, 16, 86, 17);
 		lb_playTimeInterval.setText("播放时间间隔");
 		
 		txt_playTimeInterval = new Text(group_playSettings, SWT.BORDER);
 		txt_playTimeInterval.setBounds(380, 14, 41, 18);
 		
 		Label lb_secondIcon = new Label(group_playSettings, SWT.NONE);
-		lb_secondIcon.setBounds(436, 20, 32, 12);
+		lb_secondIcon.setBounds(436, 16, 32, 17);
 		lb_secondIcon.setText("秒");
 		
 		Label lb_playDateStart = new Label(group_playSettings, SWT.NONE);
-		lb_playDateStart.setBounds(36, 47, 54, 12);
+		lb_playDateStart.setBounds(36, 42, 54, 17);
 		lb_playDateStart.setText("播放日期");
 		
 		dateTime_start = new DateTime(group_playSettings, SWT.BORDER);
 		dateTime_start.setBounds(96, 39, 86, 20);
 		
 		Label lb_toIcon = new Label(group_playSettings, SWT.NONE);
-		lb_toIcon.setBounds(288, 47, 21, 12);
+		lb_toIcon.setBounds(288, 42, 21, 17);
 		lb_toIcon.setText("到");
 		
 		dateTime_end = new DateTime(group_playSettings, SWT.BORDER);
 		dateTime_end.setBounds(380, 39, 86, 20);
 		
 		Label lb_playTimeStart = new Label(group_playSettings, SWT.NONE);
-		lb_playTimeStart.setBounds(36, 74, 54, 12);
+		lb_playTimeStart.setBounds(36, 67, 54, 17);
 		lb_playTimeStart.setText("播放时间");
 		
 		time_start = new DateTime(group_playSettings, SWT.BORDER);
 		time_start.setBounds(96, 66, 86, 20);
 		
 		Label lb_toIcon1 = new Label(group_playSettings, SWT.NONE);
-		lb_toIcon1.setBounds(288, 74, 54, 12);
+		lb_toIcon1.setBounds(288, 67, 54, 17);
 		lb_toIcon1.setText("到");
 		
 		time_end = new DateTime(group_playSettings, SWT.BORDER);
 		time_end.setBounds(380, 66, 86, 20);
 		
 		Label lb_weekdays = new Label(group_playSettings, SWT.NONE);
-		lb_weekdays.setBounds(36, 99, 46, 12);
+		lb_weekdays.setBounds(36, 95, 46, 17);
 		lb_weekdays.setText("星期");
 		
 		//星期复选框

@@ -24,7 +24,7 @@
         </many-to-one>
         
         <many-to-one name="playControl" class="com.gxf.beans.PlayControl" 
-                         column="playControlId"  lazy= "false" cascade="all" unique="true">
+                         column="playControlId" cascade="all"  lazy= "false"  unique="true">
         </many-to-one>
     </class>
 

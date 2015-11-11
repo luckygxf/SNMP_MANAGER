@@ -133,13 +133,13 @@ public class WordPicEditTool extends ApplicationWindow {
 		Composite container = new Composite(parent, SWT.NONE);
 		{
 			Label lb_imageWidth = new Label(container, SWT.NONE);
-			lb_imageWidth.setBounds(30, 10, 54, 12);
+			lb_imageWidth.setBounds(30, 10, 54, 23);
 			lb_imageWidth.setText("图像宽度");
 		}
 		{
 			Label lb_height = new Label(container, SWT.NONE);
 			lb_height.setText("图像高度");
-			lb_height.setBounds(30, 39, 54, 12);
+			lb_height.setBounds(30, 39, 54, 18);
 		}
 		
 		//图片宽度和高度默认为128 * 64，不能编辑
@@ -174,21 +174,21 @@ public class WordPicEditTool extends ApplicationWindow {
 		group_wordStyle.setBounds(30, 266, 541, 139);
 		
 		Label lb_wordStyle = new Label(group_wordStyle, SWT.NONE);
-		lb_wordStyle.setBounds(61, 29, 54, 12);
+		lb_wordStyle.setBounds(61, 29, 54, 22);
 		lb_wordStyle.setText("字体");
 		
 		combo_wordStyles = new Combo(group_wordStyle, SWT.NONE);
 		combo_wordStyles.setBounds(121, 26, 86, 20);
 		
 		Label lb_wordSize = new Label(group_wordStyle, SWT.NONE);
-		lb_wordSize.setBounds(271, 29, 54, 12);
+		lb_wordSize.setBounds(271, 29, 54, 22);
 		lb_wordSize.setText("字体大小");
 		
 		combo_wordSize = new Combo(group_wordStyle, SWT.NONE);
 		combo_wordSize.setBounds(345, 26, 86, 20);
 		
 		Label lb_wordColor = new Label(group_wordStyle, SWT.NONE);
-		lb_wordColor.setBounds(61, 63, 54, 12);
+		lb_wordColor.setBounds(61, 63, 54, 22);
 		lb_wordColor.setText("字体颜色");
 		
 		combo_wordColor = new Combo(group_wordStyle, SWT.NONE);
@@ -414,7 +414,7 @@ public class WordPicEditTool extends ApplicationWindow {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(625, 539);
+		return new Point(625, 547);
 	}
 	
 	/**

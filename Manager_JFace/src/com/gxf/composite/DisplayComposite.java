@@ -265,7 +265,7 @@ public class DisplayComposite extends Composite {
 				
 				@Override
 				public void modifyText(ModifyEvent arg0) {
-					editor_communityType.getItem().setText(3, 
+					editor_communityType.getItem().setText(4, 
 							combo_communityType.getItem(combo_communityType.getSelectionIndex()));
 					
 				}
